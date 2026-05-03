@@ -35,14 +35,11 @@ export const DeclaredToggle = memo(function DeclaredToggle({ type, disabled = fa
       const newState = !isDeclared;
       const periodFormatted = period.code.replace(/^(\d{4})(\d{2})$/, '$1/$2');
 
-      showSuccess(
-        newState ? 'Periodo marcado como declarado' : 'Periodo desmarcado',
-        {
-          description: newState
-            ? `El periodo ${periodFormatted} ha sido marcado como declarado a SUNAT`
-            : `El periodo ${periodFormatted} ha sido desmarcado`
-        }
-      );
+      showSuccess(newState ? 'Periodo marcado como declarado' : 'Periodo desmarcado', {
+        description: newState
+          ? `El periodo ${periodFormatted} ha sido marcado como declarado a SUNAT`
+          : `El periodo ${periodFormatted} ha sido desmarcado`
+      });
     } catch {
       showError('Error', {
         description: 'No se pudo actualizar el estado del periodo'
@@ -58,11 +55,7 @@ export const DeclaredToggle = memo(function DeclaredToggle({ type, disabled = fa
         {isDeclared && <CheckCircle2 className="h-4 w-4 text-green-600" />}
         <span className="text-sm font-medium text-muted-foreground">Declarado</span>
       </div>
-      <Switch
-        checked={isDeclared}
-        onCheckedChange={handleToggle}
-        disabled={disabled || isToggling}
-      />
+      <Switch checked={isDeclared} onCheckedChange={handleToggle} disabled={disabled || isToggling} />
     </div>
   );
 });

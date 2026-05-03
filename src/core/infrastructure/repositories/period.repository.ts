@@ -136,7 +136,6 @@ export class PeriodRepository implements PeriodRepositoryContract {
     recordCount: number,
     totalAmount: number
   ): Promise<void> {
-
     const now = getCurrentTimestamp();
     await this.db.execute(
       `INSERT INTO periods (company_id, code, type, has_data, record_count, total_amount, last_modified, updated_at)
@@ -150,7 +149,6 @@ export class PeriodRepository implements PeriodRepositoryContract {
          updated_at = excluded.updated_at`,
       [companyId, periodCode, type, recordCount, totalAmount.toFixed(2), now, now]
     );
-
   }
 
   /**
@@ -170,7 +168,6 @@ export class PeriodRepository implements PeriodRepositoryContract {
     type: 'sales' | 'purchases',
     declared: boolean
   ): Promise<void> {
-
     const now = getCurrentTimestamp();
     await this.db.execute(
       `UPDATE periods
@@ -178,7 +175,6 @@ export class PeriodRepository implements PeriodRepositoryContract {
        WHERE company_id = ? AND code = ? AND type = ?`,
       [declared ? 1 : 0, now, companyId, periodCode, type]
     );
-
   }
 
   /**

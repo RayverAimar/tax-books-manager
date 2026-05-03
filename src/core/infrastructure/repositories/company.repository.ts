@@ -33,10 +33,10 @@ export class CompanyRepository implements CompanyRepositoryContract {
     }
 
     try {
-      const result = await this.db.execute(
-        `INSERT INTO companies (ruc, business_name) VALUES (?, ?)`,
-        [dto.ruc, dto.businessName.trim()]
-      );
+      const result = await this.db.execute(`INSERT INTO companies (ruc, business_name) VALUES (?, ?)`, [
+        dto.ruc,
+        dto.businessName.trim()
+      ]);
 
       const newCompanyId = result.lastInsertId as number;
 
@@ -101,10 +101,7 @@ export class CompanyRepository implements CompanyRepositoryContract {
       throw new Error('Razón social inválida');
     }
 
-    await this.db.execute(
-      `UPDATE companies SET business_name = ? WHERE id = ?`,
-      [businessName.trim(), id]
-    );
+    await this.db.execute(`UPDATE companies SET business_name = ? WHERE id = ?`, [businessName.trim(), id]);
 
     return await this.getById(id);
   }
@@ -113,9 +110,7 @@ export class CompanyRepository implements CompanyRepositoryContract {
    * Checks if any company exists
    */
   async hasAnyCompany(): Promise<boolean> {
-    const result = await this.db.select<{ count: number }>(
-      `SELECT COUNT(*) as count FROM companies`
-    );
+    const result = await this.db.select<{ count: number }>(`SELECT COUNT(*) as count FROM companies`);
     return result[0].count > 0;
   }
 

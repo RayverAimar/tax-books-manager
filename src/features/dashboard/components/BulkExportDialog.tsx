@@ -1,29 +1,11 @@
 import React, { useState } from 'react';
 import { Download, FileArchive, Loader2 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { Button } from '@/shared/components/ui/button';
 import { Input } from '@/shared/components/ui/input';
 import { Label } from '@/shared/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/components/ui/select';
-import {
-  showError,
-  showInfo,
-  showWarning,
-  createShowInFolderAction,
-  showSuccess,
-} from '@/shared/lib/utils/toast';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
+import { showError, showInfo, showWarning, createShowInFolderAction, showSuccess } from '@/shared/lib/utils/toast';
 import { save } from '@tauri-apps/plugin-dialog';
 import { writeFile } from '@tauri-apps/plugin-fs';
 import { useCompany } from '@/core/presentation/contexts/company.context';
@@ -43,10 +25,7 @@ interface BulkExportDialogProps {
  * - Each folder contains files named YYYYMM.{format}
  * - Supports CSV, TXT, and Excel formats
  */
-export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({
-  open,
-  onOpenChange,
-}) => {
+export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({ open, onOpenChange }) => {
   const { company } = useCompany();
   const [isProcessing, setIsProcessing] = useState(false);
   const [fileName, setFileName] = useState('datos-historicos');
@@ -55,7 +34,7 @@ export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({
   const handleExport = async () => {
     if (!fileName.trim()) {
       showError('Nombre de archivo requerido', {
-        description: 'Por favor ingresa un nombre para el archivo ZIP',
+        description: 'Por favor ingresa un nombre para el archivo ZIP'
       });
       return;
     }
@@ -78,14 +57,11 @@ export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({
       ]);
 
       // Get unique period codes
-      const allPeriodCodes = new Set([
-        ...salesPeriods.map((p) => p.code),
-        ...purchasesPeriods.map((p) => p.code)
-      ]);
+      const allPeriodCodes = new Set([...salesPeriods.map((p) => p.code), ...purchasesPeriods.map((p) => p.code)]);
 
       if (allPeriodCodes.size === 0) {
         showWarning('No hay datos para exportar', {
-          description: 'No se encontraron registros de ventas o compras',
+          description: 'No se encontraron registros de ventas o compras'
         });
         setIsProcessing(false);
         return;
@@ -118,7 +94,7 @@ export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({
       if (!zipResult.success || !zipResult.zipBlob) {
         if (zipResult.errors.length > 0) {
           showError('Error al generar el archivo', {
-            description: zipResult.errors[0],
+            description: zipResult.errors[0]
           });
         }
         setIsProcessing(false);
@@ -152,7 +128,7 @@ export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({
           `${zipResult.periodsExported} períodos exportados ` +
           `(${zipResult.salesFilesCreated} ventas, ${zipResult.purchasesFilesCreated} compras)`,
         action: createShowInFolderAction(filePath),
-        duration: 5000,
+        duration: 5000
       });
 
       onOpenChange(false);
@@ -160,7 +136,7 @@ export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({
       setFormat('csv');
     } catch (error) {
       showError('Error al generar el archivo', {
-        description: error instanceof Error ? error.message : 'Error desconocido',
+        description: error instanceof Error ? error.message : 'Error desconocido'
       });
     } finally {
       setIsProcessing(false);
@@ -193,8 +169,12 @@ export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({
           <div className="rounded-md border p-4 bg-muted/30 space-y-2">
             <p className="text-sm font-semibold">El archivo ZIP contendrá:</p>
             <ul className="ml-4 space-y-1 text-sm text-muted-foreground">
-              <li>• Carpeta <strong>compras/</strong> con todos los registros de compras</li>
-              <li>• Carpeta <strong>ventas/</strong> con todos los registros de ventas</li>
+              <li>
+                • Carpeta <strong>compras/</strong> con todos los registros de compras
+              </li>
+              <li>
+                • Carpeta <strong>ventas/</strong> con todos los registros de ventas
+              </li>
               <li>• Archivos separados por período (YYYYMM.{format})</li>
               <li>• Formato oficial SUNAT</li>
             </ul>
@@ -230,25 +210,19 @@ export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({
                 <SelectItem value="csv">
                   <div className="flex items-center gap-2">
                     <span>CSV</span>
-                    <span className="text-xs text-muted-foreground">
-                      (Valores separados por comas)
-                    </span>
+                    <span className="text-xs text-muted-foreground">(Valores separados por comas)</span>
                   </div>
                 </SelectItem>
                 <SelectItem value="txt">
                   <div className="flex items-center gap-2">
                     <span>TXT</span>
-                    <span className="text-xs text-muted-foreground">
-                      (Archivo de texto plano)
-                    </span>
+                    <span className="text-xs text-muted-foreground">(Archivo de texto plano)</span>
                   </div>
                 </SelectItem>
                 <SelectItem value="excel">
                   <div className="flex items-center gap-2">
                     <span>Excel</span>
-                    <span className="text-xs text-muted-foreground">
-                      (Libro de Excel .xlsx)
-                    </span>
+                    <span className="text-xs text-muted-foreground">(Libro de Excel .xlsx)</span>
                   </div>
                 </SelectItem>
               </SelectContent>
@@ -268,17 +242,10 @@ export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({
 
         {/* Actions */}
         <div className="flex justify-end gap-2">
-          <Button
-            variant="outline"
-            onClick={handleCancel}
-            disabled={isProcessing}
-          >
+          <Button variant="outline" onClick={handleCancel} disabled={isProcessing}>
             Cancelar
           </Button>
-          <Button
-            onClick={handleExport}
-            disabled={!fileName.trim() || isProcessing}
-          >
+          <Button onClick={handleExport} disabled={!fileName.trim() || isProcessing}>
             {isProcessing ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

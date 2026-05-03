@@ -61,7 +61,7 @@ const MiniChart: React.FC<MiniChartProps> = ({
   dataKey,
   color,
   formatValue,
-  chartType = 'bar'  // Default to bar chart
+  chartType = 'bar' // Default to bar chart
 }) => {
   // Ensure we have 12 months of data with proper month labels
   const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -159,8 +159,8 @@ const MiniChart: React.FC<MiniChartProps> = ({
                 x2: 0,
                 y2: 1,
                 colorStops: [
-                  { offset: 0, color: `${color}40` },  // color with 25% opacity at top
-                  { offset: 1, color: `${color}10` }   // color with 6% opacity at bottom
+                  { offset: 0, color: `${color}40` }, // color with 25% opacity at top
+                  { offset: 1, color: `${color}10` } // color with 6% opacity at bottom
                 ]
               }
             }

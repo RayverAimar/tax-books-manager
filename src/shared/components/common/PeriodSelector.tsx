@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Calendar, CheckCircle2 } from 'lucide-react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/shared/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 import { Badge } from '@/shared/components/ui/badge';
 import { RepositoryFactory } from '@/core/infrastructure/repositories/repository.factory';
 import { PeriodUtils, type AvailablePeriod } from '@/core/domain/entities/period.entity';
@@ -46,14 +40,15 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
         const periods = await periodRepo.getAvailablePeriods(companyId, type);
 
         // If no periods exist yet, use the generated list
-        const allPeriods = periods.length > 0
-          ? periods
-          : PeriodUtils.getAvailablePeriods().map(p => ({
-              ...p,
-              hasData: false,
-              recordCount: undefined,
-              lastModified: undefined
-            }));
+        const allPeriods =
+          periods.length > 0
+            ? periods
+            : PeriodUtils.getAvailablePeriods().map((p) => ({
+                ...p,
+                hasData: false,
+                recordCount: undefined,
+                lastModified: undefined
+              }));
         setAvailablePeriods(allPeriods);
 
         // Set current period if no value provided
@@ -66,7 +61,7 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
         }
       } catch {
         // Fallback to generated periods
-        const fallbackPeriods = PeriodUtils.getAvailablePeriods().map(p => ({
+        const fallbackPeriods = PeriodUtils.getAvailablePeriods().map((p) => ({
           ...p,
           hasData: false,
           recordCount: undefined,
@@ -108,7 +103,7 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
     );
   }
 
-  const selectedPeriodData = availablePeriods.find(p => p.code === selectedPeriod);
+  const selectedPeriodData = availablePeriods.find((p) => p.code === selectedPeriod);
 
   return (
     <div className="flex items-center gap-4">
@@ -117,18 +112,12 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
         <span>Periodo:</span>
       </div>
 
-      <Select
-        value={selectedPeriod}
-        onValueChange={handlePeriodChange}
-        disabled={readonly}
-      >
+      <Select value={selectedPeriod} onValueChange={handlePeriodChange} disabled={readonly}>
         <SelectTrigger className="w-[220px]" disabled={readonly}>
           <SelectValue>
             <div className="flex items-center justify-between w-full gap-2">
               <div className="flex items-center gap-1.5">
-                <span className="font-medium">
-                  {PeriodUtils.formatPeriodLabel(selectedPeriod)}
-                </span>
+                <span className="font-medium">{PeriodUtils.formatPeriodLabel(selectedPeriod)}</span>
                 {selectedPeriodData?.declared && (
                   <div title="Declarado a SUNAT">
                     <CheckCircle2 className="h-4 w-4 text-green-600 flex-shrink-0" />
@@ -168,7 +157,8 @@ export const PeriodSelector: React.FC<PeriodSelectorProps> = ({
 
       {selectedPeriodData?.hasData && selectedPeriodData.lastModified && (
         <div className="text-xs text-muted-foreground">
-          Última actualización: {new Date(selectedPeriodData.lastModified).toLocaleDateString('es-PE', {
+          Última actualización:{' '}
+          {new Date(selectedPeriodData.lastModified).toLocaleDateString('es-PE', {
             day: '2-digit',
             month: 'short',
             hour: '2-digit',

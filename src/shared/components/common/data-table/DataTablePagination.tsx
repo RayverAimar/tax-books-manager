@@ -95,11 +95,7 @@ export function DataTablePagination<TData>({ table }: DataTablePaginationProps<T
                   {size}
                 </SelectItem>
               ))}
-              {totalRows > 0 && (
-                <SelectItem value="all">
-                  Todos ({totalRows})
-                </SelectItem>
-              )}
+              {totalRows > 0 && <SelectItem value="all">Todos ({totalRows})</SelectItem>}
             </SelectContent>
           </Select>
         </div>

@@ -184,10 +184,7 @@ export function useDashboardAnalytics(periodCode?: string): UseDashboardAnalytic
 /**
  * Hook for specific period comparison
  */
-export function usePeriodComparison(
-  periodCode: string,
-  type: 'sales' | 'purchases'
-) {
+export function usePeriodComparison(periodCode: string, type: 'sales' | 'purchases') {
   const { company: currentCompany } = useCompany();
   const [analyticsRepo] = useState<AnalyticsRepository>(() => RepositoryFactory.getAnalyticsRepository());
   const [comparison, setComparison] = useState<PeriodComparison | null>(null);
@@ -204,11 +201,7 @@ export function usePeriodComparison(
 
       setIsLoading(true);
       try {
-        const data = await analyticsRepo.getPeriodComparison(
-          currentCompany.id,
-          periodCode,
-          type
-        );
+        const data = await analyticsRepo.getPeriodComparison(currentCompany.id, periodCode, type);
         if (!cancelled) {
           setComparison(data);
         }

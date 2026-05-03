@@ -234,9 +234,7 @@ export function SalesInvoiceForm({ onSubmit, onCancel, defaultValues }: SalesInv
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="dueDate">
-              Fecha de Vencimiento/Pago
-            </Label>
+            <Label htmlFor="dueDate">Fecha de Vencimiento/Pago</Label>
             <Controller
               name="dueDate"
               control={control}
@@ -434,9 +432,7 @@ export function SalesInvoiceForm({ onSubmit, onCancel, defaultValues }: SalesInv
             <Button variant="ghost" className="flex w-full items-center justify-between p-0 hover:bg-transparent">
               <span className="text-sm font-semibold">Campos Adicionales</span>
               <ChevronDown
-                className={`h-4 w-4 transition-transform duration-200 ${
-                  isAdditionalFieldsOpen ? 'rotate-180' : ''
-                }`}
+                className={`h-4 w-4 transition-transform duration-200 ${isAdditionalFieldsOpen ? 'rotate-180' : ''}`}
               />
             </Button>
           </CollapsibleTrigger>
@@ -623,8 +619,8 @@ export function SalesInvoiceForm({ onSubmit, onCancel, defaultValues }: SalesInv
 
         <Alert className="bg-muted/50 border-muted-foreground/20">
           <AlertDescription className="text-xs text-muted-foreground">
-            💡 <strong>Tip:</strong> Puedes añadir o editar campos adicionales directamente en la tabla después de
-            crear el registro.
+            💡 <strong>Tip:</strong> Puedes añadir o editar campos adicionales directamente en la tabla después de crear
+            el registro.
           </AlertDescription>
         </Alert>
       </div>

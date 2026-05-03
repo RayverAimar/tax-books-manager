@@ -80,10 +80,7 @@ export function DataTableFooter<TData>({ table, totalsConfig }: DataTableFooterP
 
           // First column (checkbox/select) - empty
           if (index === 0) {
-            return (
-              <TableCell key={columnId} className="text-xs font-semibold text-primary-foreground">
-              </TableCell>
-            );
+            return <TableCell key={columnId} className="text-xs font-semibold text-primary-foreground"></TableCell>;
           }
 
           // Second column shows "TOTAL" label

@@ -7,9 +7,9 @@ import type { InvoiceType } from '@/shared/types/invoice.types';
  * Estructura completa del periodo con estado declared
  */
 interface PeriodData {
-  code: string;                  // "202401"
-  salesDeclared: boolean;        // Estado declared para ventas
-  purchasesDeclared: boolean;    // Estado declared para compras
+  code: string; // "202401"
+  salesDeclared: boolean; // Estado declared para ventas
+  purchasesDeclared: boolean; // Estado declared para compras
 }
 
 /**
@@ -80,11 +80,11 @@ export const PeriodProvider: React.FC<PeriodProviderProps> = ({ children }) => {
 
       // Query para sales
       const salesPeriods = await periodRepo.getAvailablePeriods(companyId, 'sales');
-      const salesPeriod = salesPeriods.find(p => p.code === periodCode);
+      const salesPeriod = salesPeriods.find((p) => p.code === periodCode);
 
       // Query para purchases
       const purchasesPeriods = await periodRepo.getAvailablePeriods(companyId, 'purchases');
-      const purchasesPeriod = purchasesPeriods.find(p => p.code === periodCode);
+      const purchasesPeriod = purchasesPeriods.find((p) => p.code === periodCode);
 
       // Construir periodo completo
       const periodData: PeriodData = {

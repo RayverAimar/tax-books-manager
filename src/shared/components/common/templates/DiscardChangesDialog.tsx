@@ -1,12 +1,6 @@
 import { AlertCircle, Save, X } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/shared/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 
 interface DiscardChangesDialogProps {
   isOpen: boolean;
@@ -43,23 +37,17 @@ export function DiscardChangesDialog({
             {changesSummary.added > 0 && ` ${changesSummary.added} agregados,`}
             {changesSummary.modified > 0 && ` ${changesSummary.modified} modificados,`}
             {changesSummary.deleted > 0 && ` ${changesSummary.deleted} eliminados.`}
-            <br /><br />
+            <br />
+            <br />
             ¿Qué deseas hacer?
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col sm:flex-row gap-2 mt-4">
-          <Button
-            variant="ghost"
-            onClick={onCancel}
-            className="sm:mr-auto"
-          >
+          <Button variant="ghost" onClick={onCancel} className="sm:mr-auto">
             Cancelar
           </Button>
           <div className="flex gap-2 justify-end">
-            <Button
-              variant="outline"
-              onClick={onDiscard}
-            >
+            <Button variant="outline" onClick={onDiscard}>
               <X className="h-4 w-4 mr-1" />
               Descartar
             </Button>

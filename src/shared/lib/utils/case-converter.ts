@@ -12,7 +12,7 @@
  * camelToSnake('vatAmount') // 'vat_amount'
  */
 export function camelToSnake(str: string): string {
-  return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+  return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
 }
 
 /**
@@ -34,9 +34,7 @@ export function snakeToCamel(str: string): string {
  * objectToSnakeCase({ ruc: '12345678901', businessName: 'ACME' })
  * // { ruc: '12345678901', business_name: 'ACME' }
  */
-export function objectToSnakeCase<T extends Record<string, unknown>>(
-  obj: T
-): Record<string, unknown> {
+export function objectToSnakeCase<T extends Record<string, unknown>>(obj: T): Record<string, unknown> {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(obj)) {
     result[camelToSnake(key)] = value;
@@ -52,9 +50,7 @@ export function objectToSnakeCase<T extends Record<string, unknown>>(
  * objectToCamelCase({ ruc: '12345678901', business_name: 'ACME' })
  * // { ruc: '12345678901', businessName: 'ACME' }
  */
-export function objectToCamelCase<T>(
-  obj: Record<string, unknown>
-): T {
+export function objectToCamelCase<T>(obj: Record<string, unknown>): T {
   const result: Record<string, unknown> = {};
   for (const [key, value] of Object.entries(obj)) {
     result[snakeToCamel(key)] = value;

@@ -5,11 +5,7 @@ import { cn } from '@/shared/lib/utils';
 const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
   ({ className, ...props }, ref) => (
     <div className="relative w-full h-full">
-      <table
-        ref={ref}
-        className={cn('w-full h-full caption-bottom text-sm', className)}
-        {...props}
-      />
+      <table ref={ref} className={cn('w-full h-full caption-bottom text-sm', className)} {...props} />
     </div>
   )
 );
@@ -24,11 +20,7 @@ TableHeader.displayName = 'TableHeader';
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, React.HTMLAttributes<HTMLTableSectionElement>>(
   ({ className, ...props }, ref) => (
-    <tbody
-      ref={ref}
-      className={cn('[&_tr:last-child]:border-0 h-full', className)}
-      {...props}
-    />
+    <tbody ref={ref} className={cn('[&_tr:last-child]:border-0 h-full', className)} {...props} />
   )
 );
 TableBody.displayName = 'TableBody';

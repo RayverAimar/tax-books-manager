@@ -40,9 +40,7 @@ export function ConfirmDiscardDialog({
             Estás a punto de eliminar {selectedCount} registro{selectedCount > 1 ? 's' : ''}.
             <br />
             <br />
-            <span className="font-semibold text-destructive">
-              Esta operación es irreversible.
-            </span>
+            <span className="font-semibold text-destructive">Esta operación es irreversible.</span>
             <br />
             <br />
             ¿Estás seguro de que deseas continuar?

@@ -38,11 +38,7 @@ export class SalesRepository implements ISalesRepository {
    * @param invoice - Sales invoice data (without id, createdAt, updatedAt)
    * @returns Created invoice with generated ID
    */
-  async create(
-    companyId: number,
-    periodCode: string,
-    invoice: CreatableSalesInvoice
-  ): Promise<SalesInvoice> {
+  async create(companyId: number, periodCode: string, invoice: CreatableSalesInvoice): Promise<SalesInvoice> {
     if (!PeriodUtils.isValidPeriodCode(periodCode)) {
       throw new Error('Código de periodo inválido');
     }
@@ -157,14 +153,12 @@ export class SalesRepository implements ISalesRepository {
       return;
     }
 
-
     const chunkSize = SALES_BATCH_SIZE;
 
     for (let i = 0; i < records.length; i += chunkSize) {
       const chunk = records.slice(i, i + chunkSize);
 
       if (chunk.length === 0) continue;
-
 
       // Build placeholders for this chunk
       const placeholders = chunk.map(() => `(${Array(SALES_RECORD_COLUMNS).fill('?').join(', ')})`).join(',');
@@ -240,7 +234,6 @@ export class SalesRepository implements ISalesRepository {
       );
     }
 
-
     // Invalidate cache once after all chunks are processed
     this.invalidateCache(companyId, periodCode);
   }
@@ -265,7 +258,6 @@ export class SalesRepository implements ISalesRepository {
    * await salesRepo.replacePeriodRecords(1, '202401', importedRecords);
    */
   async replacePeriodRecords(companyId: number, periodCode: string, records: SalesInvoice[]): Promise<void> {
-
     // Validate period
     if (!PeriodUtils.isValidPeriodCode(periodCode)) {
       throw new Error('Código de periodo inválido');
@@ -354,7 +346,6 @@ export class SalesRepository implements ISalesRepository {
     fieldName: string,
     value: string | number | null
   ): Promise<void> {
-
     const dbColumnName = camelToSnake(fieldName);
 
     // Validate field is allowed
@@ -418,7 +409,6 @@ export class SalesRepository implements ISalesRepository {
     recordId: number,
     fields: Record<string, string | number | null>
   ): Promise<void> {
-
     // Validate all fields are allowed
     const fieldNames = Object.keys(fields);
     for (const field of fieldNames) {
@@ -442,7 +432,6 @@ export class SalesRepository implements ISalesRepository {
        WHERE id = ? AND company_id = ? AND period = ?`,
       [...values, recordId, companyId, periodCode]
     );
-
 
     if (result.rowsAffected === 0) {
       throw new Error('Registro no encontrado o sin permisos para actualizarlo');

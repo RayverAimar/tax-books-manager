@@ -147,8 +147,7 @@ function toast({ ...props }: Toast) {
   const id = genId();
 
   // Set duration based on variant - errors last longer
-  const duration = props.duration ||
-    (props.variant === 'destructive' ? TOAST_ERROR_DELAY : TOAST_REMOVE_DELAY);
+  const duration = props.duration || (props.variant === 'destructive' ? TOAST_ERROR_DELAY : TOAST_REMOVE_DELAY);
 
   const update = (props: ToasterToast) =>
     dispatch({

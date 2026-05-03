@@ -10,14 +10,14 @@ import { RepositoryFactory } from '@/core/infrastructure/repositories/repository
 import { getActiveCompanyId } from '@/shared/lib/storage/local-storage';
 
 // Lazy load pages for better performance (code splitting)
-const Dashboard = lazy(() => import('@/features/dashboard/pages/Dashboard').then(m => ({ default: m.Dashboard })));
-const Sales = lazy(() => import('@/features/sales/pages/Sales').then(m => ({ default: m.Sales })));
-const Purchases = lazy(() => import('@/features/purchases/pages/Purchases').then(m => ({ default: m.Purchases })));
+const Dashboard = lazy(() => import('@/features/dashboard/pages/Dashboard').then((m) => ({ default: m.Dashboard })));
+const Sales = lazy(() => import('@/features/sales/pages/Sales').then((m) => ({ default: m.Sales })));
+const Purchases = lazy(() => import('@/features/purchases/pages/Purchases').then((m) => ({ default: m.Purchases })));
 const OnboardingFlow = lazy(() =>
-  import('@/features/onboarding/pages/OnboardingFlow').then(m => ({ default: m.OnboardingFlow }))
+  import('@/features/onboarding/pages/OnboardingFlow').then((m) => ({ default: m.OnboardingFlow }))
 );
 const CompanySelectionPage = lazy(() =>
-  import('@/features/onboarding/pages/CompanySelectionPage').then(m => ({ default: m.CompanySelectionPage }))
+  import('@/features/onboarding/pages/CompanySelectionPage').then((m) => ({ default: m.CompanySelectionPage }))
 );
 
 // Loading fallback
@@ -34,13 +34,8 @@ export function App() {
   const [isInitializing, setIsInitializing] = useState(true);
   const [appState, setAppState] = useState<'onboarding' | 'company-selection' | 'app'>('onboarding');
 
-  useEffect(() => {
-    initializeApp();
-  }, []);
-
   const initializeApp = async () => {
     try {
-
       // Initialize database
       const db = DatabaseService.getInstance();
       await db.initialize();
@@ -72,6 +67,10 @@ export function App() {
     }
   };
 
+  useEffect(() => {
+    initializeApp();
+  }, []);
+
   if (isInitializing) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -86,7 +85,6 @@ export function App() {
       </div>
     );
   }
-
 
   return (
     <ErrorBoundary>
