@@ -35,12 +35,8 @@ updates:
     # Security updates - always auto-merge
     versioning-strategy: increase-if-necessary
     ignore:
-      # Ignore major version updates for these packages (need manual review)
-      - dependency-name: "react"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "react-dom"
-        update-types: ["version-update:semver-major"]
-      - dependency-name: "@tauri-apps/*"
+      # Ignore all major version updates — require manual review
+      - dependency-name: "*"
         update-types: ["version-update:semver-major"]
 
   # GitHub Actions
