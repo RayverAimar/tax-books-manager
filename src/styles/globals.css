@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 48%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom animations for save indicator */
+@layer utilities {
+  @keyframes bounce-subtle {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-2px);
+    }
+  }
+
+  @keyframes shake-subtle {
+    0%, 100% {
+      transform: translateX(0);
+    }
+    25% {
+      transform: translateX(-2px);
+    }
+    75% {
+      transform: translateX(2px);
+    }
+  }
+
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
+
+  .animate-shake-subtle {
+    animation: shake-subtle 0.3s ease-in-out;
+  }
+}
+
+/* Toast success color */
+.success {
+  border-color: #008000 !important;
+  background-color: #008000 !important;
+}
+
+/* Custom scrollbar for select dropdowns */
+[data-radix-select-content] {
+  /* For Firefox */
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+}
+
+[data-radix-select-content]::-webkit-scrollbar {
+  display: none;
+  width: 0px;
+}
+
+[data-radix-select-content]::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-radix-select-content]::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 0px;
+}
+
+[data-radix-select-content]::-webkit-scrollbar-thumb:hover {
+  background-color: transparent;
+}
+
+/* Hide scroll arrows/buttons in select dropdown */
+[data-radix-select-viewport] {
+  scrollbar-width: none;
+}
+
+[data-radix-select-viewport]::-webkit-scrollbar {
+  display: none;
+}
+
+/* Remove navigation arrows from select dropdown */
+[data-radix-select-viewport] button {
+  display: none !important;
+}
+
+/* Hide any scroll buttons in select content */
+[data-radix-select-content] button[role="button"] {
+  display: none !important;
+}
+
+/* Remove any scroll area buttons */
+[data-radix-scroll-area-viewport] button {
+  display: none !important;
+}
+
+/* Hide ScrollArea scrollbars and buttons completely */
+[data-radix-scroll-area-scrollbar] {
+  display: none !important;
+}
+
+/* Hide all potential scroll controls */
+[data-radix-select-content] [data-radix-scroll-area-scrollbar] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Additional specificity for scroll buttons */
+[data-radix-scroll-area-scrollbar][data-orientation="vertical"],
+[data-radix-scroll-area-scrollbar][data-orientation="horizontal"] {
+  display: none !important;
+}
+
+/* Hide thumb and any child elements */
+[data-radix-scroll-area-thumb] {
+  display: none !important;
+}
+
+/* Sonner toast custom styles */
+[data-sonner-toast] {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem 1rem 1rem;
+}
+
+[data-sonner-toast] [data-icon] {
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+[data-sonner-toast] [data-content] {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+[data-sonner-toast] [data-title] {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: white;
+}
+
+[data-sonner-toast] [data-description] {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: white;
+  opacity: 0.95;
+}
+
+[data-sonner-toast] [data-button] {
+  margin-top: 0.5rem;
+  align-self: flex-end;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-weight: 500;
+}
+
+[data-sonner-toast] [data-button]:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+[data-sonner-toast] [data-close-button] {
+  position: absolute !important;
+  top: 1rem !important;
+  right: 0.75rem !important;
+  left: auto !important;
+  color: white !important;
+  opacity: 0.9 !important;
+  background: transparent !important;
+  border: none !important;
+  z-index: 10 !important;
+  width: 24px !important;
+  height: 24px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 4px !important;
+  padding: 0 !important;
+}
+
+[data-sonner-toast] [data-close-button] svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke-width: 2.5 !important;
+}
+
+[data-sonner-toast] [data-close-button]:hover {
+  opacity: 1 !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+  cursor: pointer !important;
+}
+
+[data-sonner-toast] [data-close-button]:active {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Remove arrows from all Select components */
+[data-radix-select-trigger] svg {
+  display: none !important;
+}
