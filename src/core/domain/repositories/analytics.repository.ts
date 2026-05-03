@@ -116,11 +116,7 @@ export interface AnalyticsRepository {
    * @param type - Invoice type ('sales' or 'purchases')
    * @returns Period summary or null if no data
    */
-  getPeriodSummary(
-    companyId: number,
-    periodCode: string,
-    type: InvoiceType
-  ): Promise<PeriodSummary | null>;
+  getPeriodSummary(companyId: number, periodCode: string, type: InvoiceType): Promise<PeriodSummary | null>;
 
   /**
    * Get period comparison with historical periods
@@ -130,11 +126,7 @@ export interface AnalyticsRepository {
    * @param type - Invoice type
    * @returns Comparison data with deltas
    */
-  getPeriodComparison(
-    companyId: number,
-    periodCode: string,
-    type: InvoiceType
-  ): Promise<PeriodComparison | null>;
+  getPeriodComparison(companyId: number, periodCode: string, type: InvoiceType): Promise<PeriodComparison | null>;
 
   /**
    * Get yearly summary (sales + purchases)
@@ -153,11 +145,7 @@ export interface AnalyticsRepository {
    * @param type - Invoice type
    * @returns Array of monthly summaries
    */
-  getMonthlyTrend(
-    companyId: number,
-    year: number,
-    type: InvoiceType
-  ): Promise<PeriodSummary[]>;
+  getMonthlyTrend(companyId: number, year: number, type: InvoiceType): Promise<PeriodSummary[]>;
 
   /**
    * Get complete dashboard metrics
@@ -167,11 +155,7 @@ export interface AnalyticsRepository {
    * @param type - Invoice type
    * @returns Dashboard metrics bundle
    */
-  getDashboardMetrics(
-    companyId: number,
-    periodCode: string,
-    type: InvoiceType
-  ): Promise<DashboardMetrics>;
+  getDashboardMetrics(companyId: number, periodCode: string, type: InvoiceType): Promise<DashboardMetrics>;
 
   /**
    * Get top clients by sales amount
@@ -201,11 +185,7 @@ export interface AnalyticsRepository {
    * @param type - Invoice type
    * @returns Array of document distributions
    */
-  getDocumentDistribution(
-    companyId: number,
-    periodCode: string,
-    type: InvoiceType
-  ): Promise<DocumentDistribution[]>;
+  getDocumentDistribution(companyId: number, periodCode: string, type: InvoiceType): Promise<DocumentDistribution[]>;
 
   /**
    * Get tax summary for a period
@@ -215,9 +195,5 @@ export interface AnalyticsRepository {
    * @param type - Invoice type
    * @returns Tax summary
    */
-  getTaxSummary(
-    companyId: number,
-    periodCode: string,
-    type: InvoiceType
-  ): Promise<TaxSummary | null>;
+  getTaxSummary(companyId: number, periodCode: string, type: InvoiceType): Promise<TaxSummary | null>;
 }

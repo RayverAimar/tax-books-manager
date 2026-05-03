@@ -20,30 +20,21 @@ interface QuickStatsCardProps {
  * Quick Stats Card Component
  * Shows a single statistic with trend comparison
  */
-export const QuickStatsCard: React.FC<QuickStatsCardProps> = ({
-  title,
-  value,
-  subtitle,
-  trend,
-  comparisonText
-}) => {
+export const QuickStatsCard: React.FC<QuickStatsCardProps> = ({ title, value, subtitle, trend, comparisonText }) => {
   return (
     <Card>
       <CardContent className="p-6">
         <div className="space-y-2">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
           <p className="text-3xl font-bold">{value}</p>
-          {subtitle && (
-            <p className="text-sm text-muted-foreground">{subtitle}</p>
-          )}
+          {subtitle && <p className="text-sm text-muted-foreground">{subtitle}</p>}
           {trend && (
             <div className="flex items-center gap-1 text-sm">
               <span className={trend.isPositive ? 'text-emerald-600' : 'text-rose-600'}>
-                {trend.isPositive ? '↑' : '↓'} {trend.percentage >= 0 ? '+' : ''}{trend.percentage.toFixed(1)}%
+                {trend.isPositive ? '↑' : '↓'} {trend.percentage >= 0 ? '+' : ''}
+                {trend.percentage.toFixed(1)}%
               </span>
-              <span className="text-muted-foreground">
-                vs {comparisonText || 'periodo anterior'}
-              </span>
+              <span className="text-muted-foreground">vs {comparisonText || 'periodo anterior'}</span>
             </div>
           )}
         </div>

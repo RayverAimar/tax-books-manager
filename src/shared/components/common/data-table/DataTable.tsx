@@ -133,7 +133,6 @@ function DataTableComponent<TData, TValue>({
     }
   });
 
-
   // Memoize row click handler to prevent recreating on every render
   const handleRowClick = useCallback(
     (rowData: TData) => {
@@ -284,15 +283,18 @@ function DataTableComponent<TData, TValue>({
     setEditingDataType('string');
   }, []);
 
-  const handleCellEditKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleCellEditSave();
-    } else if (e.key === 'Escape') {
-      e.preventDefault();
-      handleCellEditCancel();
-    }
-  }, [handleCellEditSave, handleCellEditCancel]);
+  const handleCellEditKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleCellEditSave();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        handleCellEditCancel();
+      }
+    },
+    [handleCellEditSave, handleCellEditCancel]
+  );
 
   // Get rows from table
   const rows = table.getRowModel().rows;
@@ -302,7 +304,6 @@ function DataTableComponent<TData, TValue>({
 
   // Enable virtualization for large datasets (>500 rows)
   const enableVirtualization = rows.length > VIRTUALIZATION_THRESHOLD;
-
 
   // Setup virtualizer for large datasets
   const rowVirtualizer = useVirtualizer({
@@ -327,10 +328,7 @@ function DataTableComponent<TData, TValue>({
         onDiscardSelected={onDiscardSelected}
       />
 
-      <div
-        ref={tableContainerRef}
-        className="mt-4 flex-1 overflow-y-auto overflow-x-scroll rounded-md border"
-      >
+      <div ref={tableContainerRef} className="mt-4 flex-1 overflow-y-auto overflow-x-scroll rounded-md border">
         <Table>
           <TableHeader className="sticky top-0 z-10 bg-primary">
             {table.getHeaderGroups().map((headerGroup) => (
@@ -349,8 +347,7 @@ function DataTableComponent<TData, TValue>({
                       style={{ width: header.getSize(), ...headerStyle }}
                       className={cn(
                         'whitespace-nowrap p-0',
-                        isSelectionColumn &&
-                          'sticky left-0 z-[15] bg-primary shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
+                        isSelectionColumn && 'sticky left-0 z-[15] bg-primary shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
                         headerClassName
                       )}
                     >
@@ -367,101 +364,98 @@ function DataTableComponent<TData, TValue>({
                 // VIRTUALIZED RENDERING (>500 rows)
                 <>
                   {/* Padding top for virtual scrolling */}
-                  {virtualRows.length > 0 && (
-                    <tr style={{ height: `${virtualRows[0].start}px` }} />
-                  )}
+                  {virtualRows.length > 0 && <tr style={{ height: `${virtualRows[0].start}px` }} />}
 
                   {/* Render only visible rows */}
                   {virtualRows.map((virtualRow) => {
                     const row = rows[virtualRow.index];
                     return (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && 'selected'}
-                  onClick={() => handleRowClick(row.original)}
-                  className="cursor-pointer transition-colors hover:bg-muted/50"
-                  style={{
-                    backgroundColor: row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined
-                  }}
-                  onMouseEnter={(e) => {
-                    if (row.getIsSelected()) {
-                      e.currentTarget.style.backgroundColor = 'rgb(125, 211, 252)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (row.getIsSelected()) {
-                      e.currentTarget.style.backgroundColor = 'rgb(186, 230, 253)';
-                    }
-                  }}
-                >
-                  {row.getVisibleCells().map((cell) => {
-                    const isSelectionColumn = cell.column.id === 'select';
-                    const rowData = row.original as any;
-                    const rowId = rowData.id || row.id;
-                    const columnId = cell.column.id;
-                    const isEditing = editingCell?.rowId === rowId && editingCell?.columnId === columnId;
-
-                    const cellMeta = cell.column.columnDef.meta as {
-                      cellClassName?: string;
-                      cellStyle?: React.CSSProperties;
-                    };
-                    const cellClassName = cellMeta?.cellClassName || '';
-                    const cellStyle = cellMeta?.cellStyle;
-
-                    return (
-                      <TableCell
-                        key={cell.id}
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && 'selected'}
+                        onClick={() => handleRowClick(row.original)}
+                        className="cursor-pointer transition-colors hover:bg-muted/50"
                         style={{
-                          width: cell.column.getSize(),
-                          backgroundColor:
-                            isSelectionColumn && row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined,
-                          position: isEditing ? 'relative' : undefined,
-                          ...cellStyle
+                          backgroundColor: row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined
                         }}
-                        className={cn(
-                          'overflow-visible whitespace-nowrap',
-                          isSelectionColumn &&
-                            'sticky left-0 z-[5] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
-                          isSelectionColumn && !row.getIsSelected() && 'bg-background',
-                          cellClassName
-                        )}
-                        onDoubleClick={(e) => {
-                          if (!isSelectionColumn) {
-                            e.stopPropagation();
-                            const cellValue = cell.getValue();
-                            handleCellDoubleClick(
-                              rowId,
-                              columnId,
-                              cellValue,
-                              cell.column.columnDef.meta as Record<string, unknown> | undefined
-                            );
+                        onMouseEnter={(e) => {
+                          if (row.getIsSelected()) {
+                            e.currentTarget.style.backgroundColor = 'rgb(125, 211, 252)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (row.getIsSelected()) {
+                            e.currentTarget.style.backgroundColor = 'rgb(186, 230, 253)';
                           }
                         }}
                       >
-                        {isEditing ? (
-                          <input
-                            type="text"
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            onKeyDown={handleCellEditKeyDown}
-                            onBlur={handleCellEditCancel}
-                            onClick={(e) => e.currentTarget.select()}
-                            autoFocus
-                            disabled={isSaving}
-                            className={
-                              'absolute inset-0 w-full h-full px-1 py-0.5 text-xs ' +
-                              'border-2 border-primary focus:outline-none box-border'
-                            }
-                            style={{ margin: 0 }}
-                          />
-                        ) : (
-                          flexRender(cell.column.columnDef.cell, cell.getContext())
-                        )}
-                      </TableCell>
+                        {row.getVisibleCells().map((cell) => {
+                          const isSelectionColumn = cell.column.id === 'select';
+                          const rowData = row.original as any;
+                          const rowId = rowData.id || row.id;
+                          const columnId = cell.column.id;
+                          const isEditing = editingCell?.rowId === rowId && editingCell?.columnId === columnId;
+
+                          const cellMeta = cell.column.columnDef.meta as {
+                            cellClassName?: string;
+                            cellStyle?: React.CSSProperties;
+                          };
+                          const cellClassName = cellMeta?.cellClassName || '';
+                          const cellStyle = cellMeta?.cellStyle;
+
+                          return (
+                            <TableCell
+                              key={cell.id}
+                              style={{
+                                width: cell.column.getSize(),
+                                backgroundColor:
+                                  isSelectionColumn && row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined,
+                                position: isEditing ? 'relative' : undefined,
+                                ...cellStyle
+                              }}
+                              className={cn(
+                                'overflow-visible whitespace-nowrap',
+                                isSelectionColumn && 'sticky left-0 z-[5] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
+                                isSelectionColumn && !row.getIsSelected() && 'bg-background',
+                                cellClassName
+                              )}
+                              onDoubleClick={(e) => {
+                                if (!isSelectionColumn) {
+                                  e.stopPropagation();
+                                  const cellValue = cell.getValue();
+                                  handleCellDoubleClick(
+                                    rowId,
+                                    columnId,
+                                    cellValue,
+                                    cell.column.columnDef.meta as Record<string, unknown> | undefined
+                                  );
+                                }
+                              }}
+                            >
+                              {isEditing ? (
+                                <input
+                                  type="text"
+                                  value={editValue}
+                                  onChange={(e) => setEditValue(e.target.value)}
+                                  onKeyDown={handleCellEditKeyDown}
+                                  onBlur={handleCellEditCancel}
+                                  onClick={(e) => e.currentTarget.select()}
+                                  autoFocus
+                                  disabled={isSaving}
+                                  className={
+                                    'absolute inset-0 w-full h-full px-1 py-0.5 text-xs ' +
+                                    'border-2 border-primary focus:outline-none box-border'
+                                  }
+                                  style={{ margin: 0 }}
+                                />
+                              ) : (
+                                flexRender(cell.column.columnDef.cell, cell.getContext())
+                              )}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
                     );
-                  })}
-                </TableRow>
-              );
                   })}
 
                   {/* Padding bottom for virtual scrolling */}
@@ -521,8 +515,7 @@ function DataTableComponent<TData, TValue>({
                             }}
                             className={cn(
                               'overflow-visible whitespace-nowrap',
-                              isSelectionColumn &&
-                                'sticky left-0 z-[5] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
+                              isSelectionColumn && 'sticky left-0 z-[5] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
                               isSelectionColumn && !row.getIsSelected() && 'bg-background',
                               cellClassName
                             )}

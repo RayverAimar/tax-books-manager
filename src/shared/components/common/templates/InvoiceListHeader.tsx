@@ -17,9 +17,7 @@ interface InvoiceListHeaderProps {
 export function InvoiceListHeader({ children }: InvoiceListHeaderProps) {
   return (
     <header className="border-b bg-card">
-      <div className="flex h-16 w-full items-center justify-between px-6">
-        {children}
-      </div>
+      <div className="flex h-16 w-full items-center justify-between px-6">{children}</div>
     </header>
   );
 }
@@ -59,9 +57,7 @@ InvoiceListHeader.Title = function HeaderTitle({ title, period, recordCount }: H
         {period && <> | {formatPeriod(period)}</>}
       </h1>
       {period && recordCount !== undefined && (
-        <p className="text-xs text-muted-foreground">
-          {recordCount.toLocaleString()} registros
-        </p>
+        <p className="text-xs text-muted-foreground">{recordCount.toLocaleString()} registros</p>
       )}
     </div>
   );

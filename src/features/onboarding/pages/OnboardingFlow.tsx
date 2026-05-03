@@ -34,7 +34,7 @@ export const OnboardingFlow: React.FC<{ onComplete: () => void }> = ({ onComplet
    * Handle welcome step completion
    */
   const handleWelcomeComplete = useCallback(() => {
-    setState(prev => ({ ...prev, step: 2 }));
+    setState((prev) => ({ ...prev, step: 2 }));
   }, []);
 
   /**
@@ -42,14 +42,14 @@ export const OnboardingFlow: React.FC<{ onComplete: () => void }> = ({ onComplet
    */
   const handleCompanyRegistration = useCallback(
     async (data: CreateCompanyDto) => {
-      setState(prev => ({ ...prev, isRegistering: true }));
+      setState((prev) => ({ ...prev, isRegistering: true }));
 
       try {
         // Create company in database
         await createCompany(data.ruc, data.businessName);
 
         // Show success animation
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           companyData: data,
           isRegistering: false,
@@ -68,12 +68,14 @@ export const OnboardingFlow: React.FC<{ onComplete: () => void }> = ({ onComplet
           onComplete();
         }, 2000);
       } catch (error: any) {
-        setState(prev => ({ ...prev, isRegistering: false }));
+        setState((prev) => ({ ...prev, isRegistering: false }));
 
         // Check for duplicate company error
-        if (error?.message?.includes('UNIQUE constraint failed') ||
-            error?.message?.includes('already exists') ||
-            error?.message?.includes('duplicate')) {
+        if (
+          error?.message?.includes('UNIQUE constraint failed') ||
+          error?.message?.includes('already exists') ||
+          error?.message?.includes('duplicate')
+        ) {
           toast({
             title: 'Empresa ya registrada',
             description: 'Esta empresa ya existe en el sistema. Por favor, verifica el RUC ingresado.',
@@ -95,7 +97,7 @@ export const OnboardingFlow: React.FC<{ onComplete: () => void }> = ({ onComplet
    * Go back to previous step
    */
   const handleBack = useCallback(() => {
-    setState(prev => ({
+    setState((prev) => ({
       ...prev,
       step: Math.max(1, prev.step - 1)
     }));
@@ -160,12 +162,8 @@ export const OnboardingFlow: React.FC<{ onComplete: () => void }> = ({ onComplet
               >
                 <CheckCircle className="h-12 w-12 text-green-600" />
               </motion.div>
-              <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">
-                ¡Bienvenido!
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400">
-                Redirigiendo al panel principal...
-              </p>
+              <h2 className="mb-2 text-2xl font-bold text-gray-900 dark:text-white">¡Bienvenido!</h2>
+              <p className="text-gray-600 dark:text-gray-400">Redirigiendo al panel principal...</p>
             </motion.div>
           )}
         </AnimatePresence>
@@ -173,7 +171,7 @@ export const OnboardingFlow: React.FC<{ onComplete: () => void }> = ({ onComplet
         {/* Progress indicator - only show 2 steps */}
         {!state.showSuccess && (
           <div className="fixed bottom-8 left-1/2 flex -translate-x-1/2 space-x-2">
-            {[1, 2].map(step => (
+            {[1, 2].map((step) => (
               <div
                 key={step}
                 className={cn(
@@ -181,8 +179,8 @@ export const OnboardingFlow: React.FC<{ onComplete: () => void }> = ({ onComplet
                   state.step === step
                     ? 'w-8 bg-primary'
                     : state.step > step
-                    ? 'bg-primary/60'
-                    : 'bg-gray-300 dark:bg-gray-600'
+                      ? 'bg-primary/60'
+                      : 'bg-gray-300 dark:bg-gray-600'
                 )}
               />
             ))}

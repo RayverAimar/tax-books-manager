@@ -1,16 +1,6 @@
 import React from 'react';
-import {
-  ShoppingCart,
-  Package,
-  Calendar
-} from 'lucide-react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/shared/components/ui/select';
+import { ShoppingCart, Package, Calendar } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 import { BookTypeCard } from './BookTypeCard';
 import { QuickStatsCard } from './QuickStatsCard';
 
@@ -40,7 +30,10 @@ interface PeriodMetricsSectionProps {
   onNavigateToSales: () => void;
   onNavigateToPurchases: () => void;
   formatCurrency: (amount: number) => string;
-  calculateTrend: (current: number, comparison: number) => {
+  calculateTrend: (
+    current: number,
+    comparison: number
+  ) => {
     value: number;
     percentage: number;
     isPositive: boolean;
@@ -62,15 +55,12 @@ export const PeriodMetricsSection: React.FC<PeriodMetricsSectionProps> = ({
   formatCurrency,
   calculateTrend
 }) => {
-
   if (!selectedPeriod) {
     return (
       <div className="flex flex-col items-center justify-center py-12">
         <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
         <h3 className="text-lg font-semibold mb-2">Selecciona un periodo</h3>
-        <p className="text-sm text-muted-foreground">
-          Usa el selector de periodo arriba para ver las métricas
-        </p>
+        <p className="text-sm text-muted-foreground">Usa el selector de periodo arriba para ver las métricas</p>
       </div>
     );
   }
@@ -110,28 +100,33 @@ export const PeriodMetricsSection: React.FC<PeriodMetricsSectionProps> = ({
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-muted-foreground">
-            Métricas del Periodo
-          </span>
+          <span className="bg-background px-2 text-muted-foreground">Métricas del Periodo</span>
         </div>
       </div>
 
       {/* Comparison Period Selector */}
       <div className="flex items-center justify-end gap-2">
         <span className="text-sm font-medium text-muted-foreground">Comparar con:</span>
-        <Select
-          value={comparisonOffset.toString()}
-          onValueChange={onComparisonOffsetChange}
-        >
+        <Select value={comparisonOffset.toString()} onValueChange={onComparisonOffsetChange}>
           <SelectTrigger className="w-[180px] cursor-pointer">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="1" className="cursor-pointer">1 mes atrás</SelectItem>
-            <SelectItem value="2" className="cursor-pointer">2 meses atrás</SelectItem>
-            <SelectItem value="3" className="cursor-pointer">3 meses atrás</SelectItem>
-            <SelectItem value="6" className="cursor-pointer">6 meses atrás</SelectItem>
-            <SelectItem value="12" className="cursor-pointer">1 año atrás</SelectItem>
+            <SelectItem value="1" className="cursor-pointer">
+              1 mes atrás
+            </SelectItem>
+            <SelectItem value="2" className="cursor-pointer">
+              2 meses atrás
+            </SelectItem>
+            <SelectItem value="3" className="cursor-pointer">
+              3 meses atrás
+            </SelectItem>
+            <SelectItem value="6" className="cursor-pointer">
+              6 meses atrás
+            </SelectItem>
+            <SelectItem value="12" className="cursor-pointer">
+              1 año atrás
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -145,17 +140,15 @@ export const PeriodMetricsSection: React.FC<PeriodMetricsSectionProps> = ({
               title="Total Ventas"
               value={formatCurrency(periodMetrics.totalSales)}
               subtitle={`${periodMetrics.salesCount} registros`}
-              trend={comparisonMetrics ?
-                calculateTrend(periodMetrics.totalSales, comparisonMetrics.totalSales)
-                : undefined}
+              trend={
+                comparisonMetrics ? calculateTrend(periodMetrics.totalSales, comparisonMetrics.totalSales) : undefined
+              }
             />
             <QuickStatsCard
               title="IGV Ventas"
               value={formatCurrency(periodMetrics.salesVat)}
               subtitle="IGV cobrado"
-              trend={comparisonMetrics ?
-                calculateTrend(periodMetrics.salesVat, comparisonMetrics.salesVat)
-                : undefined}
+              trend={comparisonMetrics ? calculateTrend(periodMetrics.salesVat, comparisonMetrics.salesVat) : undefined}
             />
           </div>
         </div>
@@ -170,14 +163,9 @@ export const PeriodMetricsSection: React.FC<PeriodMetricsSectionProps> = ({
               trend={
                 comparisonMetrics
                   ? {
-                      ...calculateTrend(
-                        periodMetrics.totalPurchases,
-                        comparisonMetrics.totalPurchases
-                      ),
-                      isPositive: !calculateTrend(
-                        periodMetrics.totalPurchases,
-                        comparisonMetrics.totalPurchases
-                      ).isPositive
+                      ...calculateTrend(periodMetrics.totalPurchases, comparisonMetrics.totalPurchases),
+                      isPositive: !calculateTrend(periodMetrics.totalPurchases, comparisonMetrics.totalPurchases)
+                        .isPositive
                     }
                   : undefined
               }
@@ -189,14 +177,8 @@ export const PeriodMetricsSection: React.FC<PeriodMetricsSectionProps> = ({
               trend={
                 comparisonMetrics
                   ? {
-                      ...calculateTrend(
-                        periodMetrics.purchasesVat,
-                        comparisonMetrics.purchasesVat
-                      ),
-                      isPositive: !calculateTrend(
-                        periodMetrics.purchasesVat,
-                        comparisonMetrics.purchasesVat
-                      ).isPositive
+                      ...calculateTrend(periodMetrics.purchasesVat, comparisonMetrics.purchasesVat),
+                      isPositive: !calculateTrend(periodMetrics.purchasesVat, comparisonMetrics.purchasesVat).isPositive
                     }
                   : undefined
               }
@@ -210,7 +192,7 @@ export const PeriodMetricsSection: React.FC<PeriodMetricsSectionProps> = ({
         <QuickStatsCard
           title="Balance Neto"
           value={formatCurrency(periodMetrics.netBalance)}
-          subtitle={periodMetrics.netBalance >= 0 ? "Ganancia" : "Pérdida"}
+          subtitle={periodMetrics.netBalance >= 0 ? 'Ganancia' : 'Pérdida'}
         />
         <QuickStatsCard
           title="IGV por Pagar"

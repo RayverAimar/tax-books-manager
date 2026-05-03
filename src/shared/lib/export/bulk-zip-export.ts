@@ -1,10 +1,5 @@
 import JSZip from 'jszip';
-import {
-  exportSalesCSV,
-  exportPurchasesCSV,
-  exportSalesTXT,
-  exportPurchasesTXT
-} from './generic-export';
+import { exportSalesCSV, exportPurchasesCSV, exportSalesTXT, exportPurchasesTXT } from './generic-export';
 import { exportSalesExcel, exportPurchasesExcel } from './excel-export';
 import type { SalesInvoice } from '@/features/sales/types/sales.types';
 import type { PurchaseInvoice } from '@/features/purchases/types/purchases.types';

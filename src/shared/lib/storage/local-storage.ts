@@ -13,7 +13,6 @@
  * - selected_period: If not found, use current period (YYYYMM where MM = current month - 1)
  */
 
-
 /**
  * Storage keys enum for type safety
  */

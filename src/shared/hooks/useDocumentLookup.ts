@@ -49,10 +49,7 @@ export function useDocumentLookup() {
    * @param docType - Type of document ('1' for DNI, '6' for RUC)
    * @returns Lookup result with name, or null if failed
    */
-  const lookupDocument = async (
-    docNumber: string,
-    docType: DocumentType
-  ): Promise<LookupResult | null> => {
+  const lookupDocument = async (docNumber: string, docType: DocumentType): Promise<LookupResult | null> => {
     // Validate input
     if (!docNumber || docNumber.trim() === '') {
       setLookupError('Ingrese un número de documento');

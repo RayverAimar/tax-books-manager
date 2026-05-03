@@ -211,11 +211,7 @@ export function validateDate(
     dateValue = new Date(year, month - 1, day);
 
     // Validate it's a real date (handles Feb 30, Apr 31, etc.)
-    if (
-      dateValue.getFullYear() !== year ||
-      dateValue.getMonth() !== month - 1 ||
-      dateValue.getDate() !== day
-    ) {
+    if (dateValue.getFullYear() !== year || dateValue.getMonth() !== month - 1 || dateValue.getDate() !== day) {
       return {
         isValid: false,
         errorMessage: 'Fecha inválida. Verifique día, mes y año'
@@ -259,13 +255,7 @@ export function validateString(
     allowNull?: boolean;
   }
 ): ValidationResult {
-  const {
-    minLength,
-    maxLength,
-    pattern,
-    patternDescription,
-    allowNull = true
-  } = options || {};
+  const { minLength, maxLength, pattern, patternDescription, allowNull = true } = options || {};
 
   // Handle null/undefined
   if (value === null || value === undefined || value === '') {
@@ -345,10 +335,7 @@ function formatDateDDMMYYYY(date: Date): string {
  * This function ensures that user inputs are converted to the correct type
  * before being stored in the database.
  */
-export function parseAndSanitizeValue(
-  value: unknown,
-  dataType: 'string' | 'integer' | 'float' | 'date'
-): unknown {
+export function parseAndSanitizeValue(value: unknown, dataType: 'string' | 'integer' | 'float' | 'date'): unknown {
   const result = validateByDataType(value, dataType);
 
   if (!result.isValid) {

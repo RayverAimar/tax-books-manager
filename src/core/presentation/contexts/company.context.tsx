@@ -242,11 +242,7 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
     [company, companies, isLoading, error, switchCompany, refreshCompanies, createCompany, updateCompany]
   );
 
-  return (
-    <CompanyContext.Provider value={contextValue}>
-      {children}
-    </CompanyContext.Provider>
-  );
+  return <CompanyContext.Provider value={contextValue}>{children}</CompanyContext.Provider>;
 };
 
 /**

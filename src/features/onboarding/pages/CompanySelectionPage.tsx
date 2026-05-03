@@ -94,8 +94,7 @@ export const CompanySelectionPage: React.FC = () => {
                           <div className="flex items-center gap-3 flex-1 text-left">
                             <div
                               className={
-                                'flex h-10 w-10 items-center justify-center ' +
-                                'rounded-lg bg-primary/10 flex-shrink-0'
+                                'flex h-10 w-10 items-center justify-center ' + 'rounded-lg bg-primary/10 flex-shrink-0'
                               }
                             >
                               <Building className="h-5 w-5 text-primary" />
@@ -114,11 +113,7 @@ export const CompanySelectionPage: React.FC = () => {
 
                 {/* Add New Company Button */}
                 <div className="pt-4 border-t">
-                  <Button
-                    variant="default"
-                    className="w-full gap-2"
-                    onClick={() => setShowAddCompany(true)}
-                  >
+                  <Button variant="default" className="w-full gap-2" onClick={() => setShowAddCompany(true)}>
                     <Plus className="h-4 w-4" />
                     Agregar Nueva Empresa
                   </Button>

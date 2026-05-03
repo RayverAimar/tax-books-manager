@@ -51,33 +51,24 @@ export function useAutoSaveInvoiceData<T extends InvoiceType>(_type: T) {
   /**
    * ADD - Add a new invoice (will be saved by caller)
    */
-  const addInvoice = useCallback(
-    (invoiceData: Omit<InvoiceMap<T>, 'id' | 'createdAt' | 'updatedAt'>) => {
-      const newInvoice = {
-        ...invoiceData,
-        id: generateInvoiceId(),
-        createdAt: new Date(),
-        updatedAt: new Date()
-      } as InvoiceMap<T>;
+  const addInvoice = useCallback((invoiceData: Omit<InvoiceMap<T>, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const newInvoice = {
+      ...invoiceData,
+      id: generateInvoiceId(),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    } as InvoiceMap<T>;
 
-      setInvoices((prev) => [...prev, newInvoice]);
-      return newInvoice;
-    },
-    []
-  );
+    setInvoices((prev) => [...prev, newInvoice]);
+    return newInvoice;
+  }, []);
 
   /**
    * UPDATE - Update a single invoice
    * Optimistic update: UI updates immediately, caller handles database save
    */
   const updateInvoice = useCallback((id: number, updates: Partial<InvoiceMap<T>>) => {
-    setInvoices((prev) =>
-      prev.map((inv) =>
-        inv.id === id
-          ? { ...inv, ...updates, updatedAt: new Date() }
-          : inv
-      )
-    );
+    setInvoices((prev) => prev.map((inv) => (inv.id === id ? { ...inv, ...updates, updatedAt: new Date() } : inv)));
   }, []);
 
   /**

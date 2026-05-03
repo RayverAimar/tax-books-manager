@@ -3,7 +3,6 @@
  * Reduces redundant database queries and improves performance
  */
 
-
 interface CacheEntry<T> {
   data: T;
   timestamp: number;
@@ -77,7 +76,7 @@ class QueryCache {
     }
 
     if (keysToDelete.length > 0) {
-      keysToDelete.forEach(key => {
+      keysToDelete.forEach((key) => {
         this.cache.delete(key);
       });
     }
@@ -158,7 +157,7 @@ class QueryCache {
       }
     }
 
-    keysToDelete.forEach(key => this.cache.delete(key));
+    keysToDelete.forEach((key) => this.cache.delete(key));
   }
 }
 
@@ -166,20 +165,20 @@ class QueryCache {
 export const queryCache = new QueryCache();
 
 // Auto cleanup every 2 minutes
-setInterval(() => {
-  queryCache.cleanup();
-}, 2 * 60 * 1000);
+setInterval(
+  () => {
+    queryCache.cleanup();
+  },
+  2 * 60 * 1000
+);
 
 /**
  * Helper function to generate cache keys
  */
-export function getCacheKey(
-  prefix: string,
-  params: Record<string, string | number>
-): string {
+export function getCacheKey(prefix: string, params: Record<string, string | number>): string {
   const sortedParams = Object.keys(params)
     .sort()
-    .map(key => `${key}:${params[key]}`)
+    .map((key) => `${key}:${params[key]}`)
     .join('|');
 
   return `${prefix}|${sortedParams}`;
@@ -188,11 +187,7 @@ export function getCacheKey(
 /**
  * Wrapper for cached queries
  */
-export async function cachedQuery<T>(
-  key: string,
-  queryFn: () => Promise<T>,
-  ttl?: number
-): Promise<T> {
+export async function cachedQuery<T>(key: string, queryFn: () => Promise<T>, ttl?: number): Promise<T> {
   // Check cache first
   const cached = queryCache.get<T>(key);
   if (cached !== null) {

@@ -1,28 +1,17 @@
 import React, { useState } from 'react';
 import { Upload, FileArchive, AlertCircle, CheckCircle2, Loader2, AlertTriangle } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/shared/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialogTitle
 } from '@/shared/components/ui/alert-dialog';
 import { Button } from '@/shared/components/ui/button';
 import { Alert, AlertDescription } from '@/shared/components/ui/alert';
-import {
-  showError,
-  showInfo,
-  showSuccess,
-  showWarning,
-} from '@/shared/lib/utils/toast';
+import { showError, showInfo, showSuccess, showWarning } from '@/shared/lib/utils/toast';
 import { useCompany } from '@/core/presentation/contexts/company.context';
 import {
   processZipFile,
@@ -48,10 +37,7 @@ interface BulkImportDialogProps {
  * 4. Periods must be >= 202408 and not in the future
  * 5. Files must have correct SUNAT format
  */
-export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
-  open,
-  onOpenChange,
-}) => {
+export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({ open, onOpenChange }) => {
   const { company } = useCompany();
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -68,7 +54,7 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
     // Validate file extension
     if (!file.name.toLowerCase().endsWith('.zip')) {
       showError('Formato de archivo inválido', {
-        description: 'Solo se aceptan archivos ZIP (.zip)',
+        description: 'Solo se aceptan archivos ZIP (.zip)'
       });
       return;
     }
@@ -95,10 +81,10 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
       if (!zipResult.success || !zipResult.validatedFiles || zipResult.validatedFiles.length === 0) {
         // Show all validation errors
         if (zipResult.errors.length > 0) {
-          zipResult.errors.forEach(err => {
+          zipResult.errors.forEach((err) => {
             showError(err.error, {
               description: err.filePath ? `Archivo: ${err.filePath}` : undefined,
-              duration: 5000,
+              duration: 5000
             });
           });
         }
@@ -122,10 +108,9 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
 
       // Step 3: No collisions, proceed with import
       await performImport(zipResult.validatedFiles);
-
     } catch (error) {
       showError('Error al procesar el archivo', {
-        description: error instanceof Error ? error.message : 'Error desconocido',
+        description: error instanceof Error ? error.message : 'Error desconocido'
       });
       setIsProcessing(false);
     }
@@ -164,19 +149,18 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
 
     try {
       showInfo('Importando datos...', {
-        description: `Procesando ${files.length} archivos`,
+        description: `Procesando ${files.length} archivos`
       });
 
       const importResult = await importValidatedFiles(files, company.id, collisionDecisions);
 
       if (importResult.errors.length > 0) {
-
         // Show first 3 errors as toasts
         const errorsToShow = importResult.errors.slice(0, 3);
-        errorsToShow.forEach(err => {
+        errorsToShow.forEach((err) => {
           showError(err.error, {
             description: err.filePath ? `Archivo: ${err.filePath}` : undefined,
-            duration: 8000,
+            duration: 8000
           });
         });
 
@@ -192,8 +176,7 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
       if (importResult.success) {
         showSuccess('Importación completada', {
           description:
-            `${importResult.recordsImported} registros importados de ` +
-            `${importResult.filesProcessed} archivos`,
+            `${importResult.recordsImported} registros importados de ` + `${importResult.filesProcessed} archivos`
         });
         onOpenChange(false);
         resetState();
@@ -254,8 +237,7 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
                       <span>
                         Debe contener <strong>dos carpetas</strong>:{' '}
                         <code className="px-1 py-0.5 bg-muted rounded">compras</code> y/o{' '}
-                        <code className="px-1 py-0.5 bg-muted rounded">ventas</code>{' '}
-                        (no distingue mayúsculas)
+                        <code className="px-1 py-0.5 bg-muted rounded">ventas</code> (no distingue mayúsculas)
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
@@ -287,7 +269,7 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
             <div className="rounded-md border p-4 bg-muted/30">
               <p className="text-sm font-semibold mb-2">Ejemplo de estructura:</p>
               <pre className="text-xs font-mono">
-{`datos-historicos.zip
+                {`datos-historicos.zip
 ├── compras/
 │   ├── 202408.csv
 │   ├── 202409.txt
@@ -331,17 +313,10 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
 
           {/* Actions */}
           <div className="flex justify-end gap-2">
-            <Button
-              variant="outline"
-              onClick={handleCancel}
-              disabled={isProcessing}
-            >
+            <Button variant="outline" onClick={handleCancel} disabled={isProcessing}>
               Cancelar
             </Button>
-            <Button
-              onClick={handleImport}
-              disabled={!selectedFile || isProcessing}
-            >
+            <Button onClick={handleImport} disabled={!selectedFile || isProcessing}>
               {isProcessing ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -371,8 +346,8 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
                 <div className="space-y-3">
                   <p>
                     El período <strong>{currentCollision.period}</strong> de{' '}
-                    <strong>{currentCollision.type === 'sales' ? 'ventas' : 'compras'}</strong> ya existe
-                    en la base de datos con <strong>{currentCollision.existingRecordCount}</strong> registros.
+                    <strong>{currentCollision.type === 'sales' ? 'ventas' : 'compras'}</strong> ya existe en la base de
+                    datos con <strong>{currentCollision.existingRecordCount}</strong> registros.
                   </p>
                   <p className="text-sm">
                     ¿Qué deseas hacer? ({currentCollisionIndex + 1} de {collisions.length})
@@ -391,10 +366,7 @@ export const BulkImportDialog: React.FC<BulkImportDialogProps> = ({
               >
                 Cancelar Todo
               </Button>
-              <Button
-                onClick={() => handleCollisionDecision('append')}
-                className="bg-blue-600 hover:bg-blue-700"
-              >
+              <Button onClick={() => handleCollisionDecision('append')} className="bg-blue-600 hover:bg-blue-700">
                 Agregar (Append)
               </Button>
               <Button

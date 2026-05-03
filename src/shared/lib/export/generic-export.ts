@@ -116,21 +116,16 @@ export interface FieldMapping {
  * // "15/01/2024","F001","00001","118.00"
  * // "16/01/2024","F001","00002","236.00"
  */
-export function exportToCSV<T>(
-  data: T[],
-  mappings: readonly FieldMapping[]
-): string {
+export function exportToCSV<T>(data: T[], mappings: readonly FieldMapping[]): string {
   if (!data || data.length === 0) {
     return '';
   }
 
   // Filter out columns marked as excludeFromExport
-  const exportMappings = mappings.filter(m => !m.excludeFromExport);
+  const exportMappings = mappings.filter((m) => !m.excludeFromExport);
 
   // Build header row
-  const headers = exportMappings.map(mapping =>
-    formatExportValue(mapping.sunatHeader, 'csv')
-  );
+  const headers = exportMappings.map((mapping) => formatExportValue(mapping.sunatHeader, 'csv'));
 
   // Build data rows
   const rows: string[] = [];
@@ -192,19 +187,16 @@ export function exportToCSV<T>(
  * // 15/01/2024|001|00001|118.00
  * // 16/01/2024|001|00002|236.00
  */
-export function exportToTXT<T>(
-  data: T[],
-  mappings: readonly FieldMapping[]
-): string {
+export function exportToTXT<T>(data: T[], mappings: readonly FieldMapping[]): string {
   if (!data || data.length === 0) {
     return '';
   }
 
   // Filter out columns marked as excludeFromExport
-  const exportMappings = mappings.filter(m => !m.excludeFromExport);
+  const exportMappings = mappings.filter((m) => !m.excludeFromExport);
 
   // Build header row
-  const headers = exportMappings.map(mapping => mapping.sunatHeader);
+  const headers = exportMappings.map((mapping) => mapping.sunatHeader);
 
   // Build data rows
   const rows: string[] = [];
@@ -237,9 +229,7 @@ export function exportToTXT<T>(
 /**
  * Factory function to create export functions
  */
-export function createExporter<T>(
-  mappings: readonly FieldMapping[]
-) {
+export function createExporter<T>(mappings: readonly FieldMapping[]) {
   return {
     toCSV: (data: T[]) => exportToCSV(data, mappings),
     toTXT: (data: T[]) => exportToTXT(data, mappings),
@@ -252,13 +242,13 @@ export function createExporter<T>(
       if (!data || data.length === 0) return '';
 
       // Filter out columns marked as excludeFromExport
-      const exportMappings = mappings.filter(m => !m.excludeFromExport);
+      const exportMappings = mappings.filter((m) => !m.excludeFromExport);
 
-      const headers = exportMappings.map(m => m.sunatHeader);
+      const headers = exportMappings.map((m) => m.sunatHeader);
       const rows = [headers.join(delimiter)];
 
-      data.forEach(item => {
-        const row = exportMappings.map(mapping => {
+      data.forEach((item) => {
+        const row = exportMappings.map((mapping) => {
           let value: unknown = '';
           if (mapping.tsField && mapping.tsField in (item as object)) {
             value = (item as Record<string, unknown>)[mapping.tsField];
@@ -284,13 +274,10 @@ export interface ExportDataset<T> {
   mappings: FieldMapping[];
 }
 
-export function batchExport<T>(
-  datasets: ExportDataset<T>[],
-  format: 'csv' | 'txt'
-): Record<string, string> {
+export function batchExport<T>(datasets: ExportDataset<T>[], format: 'csv' | 'txt'): Record<string, string> {
   const results: Record<string, string> = {};
 
-  datasets.forEach(dataset => {
+  datasets.forEach((dataset) => {
     if (format === 'csv') {
       results[dataset.name] = exportToCSV(dataset.data, dataset.mappings);
     } else {

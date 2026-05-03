@@ -78,7 +78,8 @@
 /* Custom animations for save indicator */
 @layer utilities {
   @keyframes bounce-subtle {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateY(0);
     }
     50% {
@@ -87,7 +88,8 @@
   }
 
   @keyframes shake-subtle {
-    0%, 100% {
+    0%,
+    100% {
       transform: translateX(0);
     }
     25% {
@@ -153,7 +155,7 @@
 }
 
 /* Hide any scroll buttons in select content */
-[data-radix-select-content] button[role="button"] {
+[data-radix-select-content] button[role='button'] {
   display: none !important;
 }
 
@@ -176,8 +178,8 @@
 }
 
 /* Additional specificity for scroll buttons */
-[data-radix-scroll-area-scrollbar][data-orientation="vertical"],
-[data-radix-scroll-area-scrollbar][data-orientation="horizontal"] {
+[data-radix-scroll-area-scrollbar][data-orientation='vertical'],
+[data-radix-scroll-area-scrollbar][data-orientation='horizontal'] {
   display: none !important;
 }
 

@@ -8,7 +8,7 @@ import {
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogTitle,
+  AlertDialogTitle
 } from '@/shared/components/ui/alert-dialog';
 import { PeriodUtils } from '@/core/domain/entities/period.entity';
 
@@ -76,17 +76,16 @@ export function DeclaredPeriodWarningDialog({
           </div>
           <AlertDialogDescription className="space-y-3 pt-2">
             <p>
-              El periodo <span className="font-semibold">{PeriodUtils.formatPeriodLabel(periodCode)}</span>{' '}
-              ha sido marcado como declarado a SUNAT.
+              El periodo <span className="font-semibold">{PeriodUtils.formatPeriodLabel(periodCode)}</span> ha sido
+              marcado como declarado a SUNAT.
             </p>
             <p>
               Estás intentando <span className="font-semibold">{getOperationLabel()}</span> en este periodo.
             </p>
             <div className="rounded-md bg-yellow-50 p-3 border border-yellow-200">
               <p className="text-sm text-yellow-800">
-                <span className="font-semibold">Importante:</span> Si continúas, el periodo se marcará
-                automáticamente como <span className="font-semibold">no declarado</span>, ya que los datos
-                declarados habrán cambiado.
+                <span className="font-semibold">Importante:</span> Si continúas, el periodo se marcará automáticamente
+                como <span className="font-semibold">no declarado</span>, ya que los datos declarados habrán cambiado.
               </p>
             </div>
             <p className="text-sm">

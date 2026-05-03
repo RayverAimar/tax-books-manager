@@ -122,12 +122,13 @@ function validateFileHeaders(
   }
 
   const headerLine = lines[0].trim();
-  const headers = headerLine.split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+  const headers = headerLine.split(',').map((h) => h.trim().replace(/^"|"$/g, ''));
 
   // Get expected headers
-  const expectedHeaders = type === 'sales'
-    ? SALES_SUNAT_COLUMNS_MAPPING.map(m => m.sunatHeader)
-    : PURCHASE_SUNAT_COLUMNS_MAPPING.map(m => m.sunatHeader);
+  const expectedHeaders =
+    type === 'sales'
+      ? SALES_SUNAT_COLUMNS_MAPPING.map((m) => m.sunatHeader)
+      : PURCHASE_SUNAT_COLUMNS_MAPPING.map((m) => m.sunatHeader);
 
   const expectedCount = type === 'sales' ? 40 : 80;
 
@@ -135,7 +136,8 @@ function validateFileHeaders(
   if (headers.length !== expectedCount) {
     return {
       valid: false,
-      error: `Archivo ${filePath} tiene ${headers.length} columnas, ` +
+      error:
+        `Archivo ${filePath} tiene ${headers.length} columnas, ` +
         `se esperaban ${expectedCount} columnas del formato SUNAT`
     };
   }
@@ -145,18 +147,14 @@ function validateFileHeaders(
   const extraHeaders: string[] = [];
 
   for (const expected of expectedHeaders) {
-    const found = headers.some(h =>
-      h.toLowerCase().trim() === expected.toLowerCase().trim()
-    );
+    const found = headers.some((h) => h.toLowerCase().trim() === expected.toLowerCase().trim());
     if (!found) {
       missingHeaders.push(expected);
     }
   }
 
   for (const header of headers) {
-    const found = expectedHeaders.some(e =>
-      e.toLowerCase().trim() === header.toLowerCase().trim()
-    );
+    const found = expectedHeaders.some((e) => e.toLowerCase().trim() === header.toLowerCase().trim());
     if (!found) {
       extraHeaders.push(header);
     }
@@ -207,7 +205,7 @@ export async function processZipFile(file: File): Promise<ZipValidationResult> {
       if (path.includes('/.') || path.startsWith('.')) continue;
 
       // Parse path: can be compras/YYYYMM.csv or parent-folder/compras/YYYYMM.csv
-      const pathParts = path.split('/').filter(p => p.length > 0);
+      const pathParts = path.split('/').filter((p) => p.length > 0);
 
       // Need at least 2 parts: folder/file or parent/folder/file
       if (pathParts.length < 2) {
@@ -313,10 +311,7 @@ export async function processZipFile(file: File): Promise<ZipValidationResult> {
 /**
  * Check for period collisions in the database
  */
-export async function checkPeriodCollisions(
-  files: ZipFileInfo[],
-  companyId: number
-): Promise<PeriodCollision[]> {
+export async function checkPeriodCollisions(files: ZipFileInfo[], companyId: number): Promise<PeriodCollision[]> {
   const periodRepo = RepositoryFactory.getPeriodRepository();
   const collisions: PeriodCollision[] = [];
 
@@ -325,7 +320,7 @@ export async function checkPeriodCollisions(
     const availablePeriods = await periodRepo.getAvailablePeriods(companyId, file.type);
 
     // Check if period exists and has data
-    const existingPeriod = availablePeriods.find(p => p.code === file.period && p.hasData);
+    const existingPeriod = availablePeriods.find((p) => p.code === file.period && p.hasData);
 
     if (existingPeriod) {
       collisions.push({
@@ -361,12 +356,10 @@ export async function importValidatedFiles(
   const salesRepo = RepositoryFactory.getSalesRepository();
   const purchasesRepo = RepositoryFactory.getPurchasesRepository();
 
-
   for (const file of files) {
     try {
       const fileKey = `${file.period}-${file.type}`;
       const userDecision = overwriteDecisions.get(fileKey);
-
 
       // If user chose 'append', we don't support it yet
       if (userDecision === 'append') {
@@ -398,7 +391,6 @@ export async function importValidatedFiles(
 
         // Emit data change event to notify Dashboard and other components
         emitDataImported('sales', file.period, importResult.data.length, 'bulk-zip');
-
       } else {
         const importResult = await importPurchasesCSV(file.content);
 
@@ -419,7 +411,6 @@ export async function importValidatedFiles(
       }
 
       result.filesProcessed++;
-
     } catch (error) {
       result.errors.push({
         filePath: file.path,
@@ -427,7 +418,6 @@ export async function importValidatedFiles(
       });
     }
   }
-
 
   result.success = result.errors.length === 0 && result.filesProcessed > 0;
   return result;

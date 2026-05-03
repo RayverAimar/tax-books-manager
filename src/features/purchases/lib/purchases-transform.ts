@@ -26,14 +26,10 @@ function convertToNumber(value: string | undefined | null): number | null {
  * Transform form data (strings) to CreateInvoiceData (proper types)
  * Uses PURCHASE_SUNAT_COLUMNS_MAPPING to identify float fields
  */
-export function transformPurchaseFormData(
-  data: Partial<PurchaseInvoiceFormData>
-): CreateInvoiceData<'purchases'> {
+export function transformPurchaseFormData(data: Partial<PurchaseInvoiceFormData>): CreateInvoiceData<'purchases'> {
   // Get numeric field names from mapping (single source of truth)
   const numericFields = new Set(
-    PURCHASE_SUNAT_COLUMNS_MAPPING
-      .filter(m => m.dataType === 'float')
-      .map(m => m.tsField)
+    PURCHASE_SUNAT_COLUMNS_MAPPING.filter((m) => m.dataType === 'float').map((m) => m.tsField)
   );
 
   const result: Record<string, unknown> = {};
@@ -44,7 +40,7 @@ export function transformPurchaseFormData(
     if (numericFields.has(fieldName)) {
       result[fieldName] = convertToNumber(value);
     } else {
-      result[fieldName] = (!value || value.trim() === '') ? null : value;
+      result[fieldName] = !value || value.trim() === '' ? null : value;
     }
   }
 

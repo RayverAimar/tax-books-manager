@@ -52,8 +52,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
             'group-[.toaster]:!bg-blue-500 group-[.toaster]:!text-white',
             'group-[.toaster]:!border-blue-600',
             'dark:group-[.toaster]:!bg-blue-600 dark:group-[.toaster]:!text-white'
-          ].join(' '),
-        },
+          ].join(' ')
+        }
       }}
       {...props}
     />

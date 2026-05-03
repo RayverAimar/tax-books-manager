@@ -95,7 +95,7 @@ export const FinancialSummary: React.FC<FinancialSummaryProps> = ({
           <QuickStatsCard
             title="Total Ventas"
             value={formatCurrency(salesMetrics.total)}
-            subtitle={salesMetrics.total > 0 ? "Ingresos totales" : "Sin actividad reciente"}
+            subtitle={salesMetrics.total > 0 ? 'Ingresos totales' : 'Sin actividad reciente'}
             trend={salesMetrics.trend}
             comparisonText={comparisonText}
           />
@@ -132,7 +132,7 @@ export const FinancialSummary: React.FC<FinancialSummaryProps> = ({
           <QuickStatsCard
             title="Total Compras"
             value={formatCurrency(purchasesMetrics.total)}
-            subtitle={purchasesMetrics.total > 0 ? "Importe total" : "Sin actividad reciente"}
+            subtitle={purchasesMetrics.total > 0 ? 'Importe total' : 'Sin actividad reciente'}
             trend={
               purchasesMetrics.trend
                 ? {
