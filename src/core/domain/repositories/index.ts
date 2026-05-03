@@ -10,11 +10,7 @@
 export type { CompanyRepository } from './company.repository';
 
 // Invoice repositories (Sales & Purchases)
-export type {
-  InvoiceRepository,
-  SalesRepository,
-  PurchasesRepository
-} from './invoice.repository';
+export type { InvoiceRepository, SalesRepository, PurchasesRepository } from './invoice.repository';
 
 // Analytics repository
 export type {

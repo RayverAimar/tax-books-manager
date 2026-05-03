@@ -42,9 +42,7 @@ export const InvoiceCard: React.FC<InvoiceCardProps> = ({
             <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${iconBg}`}>
               <Icon className={`h-6 w-6 ${iconColor}`} />
             </div>
-            <Badge className={`${badgeColor} text-white`}>
-              {isSales ? 'VENTAS' : 'COMPRAS'}
-            </Badge>
+            <Badge className={`${badgeColor} text-white`}>{isSales ? 'VENTAS' : 'COMPRAS'}</Badge>
             {declared && (
               <div className="flex items-center gap-1 rounded-md bg-green-50 px-2 py-1" title="Declarado a SUNAT">
                 <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />

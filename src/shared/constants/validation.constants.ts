@@ -24,7 +24,7 @@ export const DNI_PATTERN = /^\d{8}$/;
 export const BUSINESS = {
   // Business start date (when operations began)
   START_YEAR: 2024,
-  START_MONTH: 8, // August 2024
+  START_MONTH: 8 // August 2024
 } as const;
 
 /**

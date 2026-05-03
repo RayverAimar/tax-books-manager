@@ -15,10 +15,11 @@ export type InvoiceType = 'sales' | 'purchases';
  * Type mapping for invoice types
  * Import SalesInvoice and PurchaseInvoice from their respective feature modules
  */
-export type InvoiceMap<T extends InvoiceType> =
-  T extends 'sales' ? import('@/features/sales/types/sales.types').SalesInvoice :
-  T extends 'purchases' ? import('@/features/purchases/types/purchases.types').PurchaseInvoice :
-  never;
+export type InvoiceMap<T extends InvoiceType> = T extends 'sales'
+  ? import('@/features/sales/types/sales.types').SalesInvoice
+  : T extends 'purchases'
+    ? import('@/features/purchases/types/purchases.types').PurchaseInvoice
+    : never;
 
 /**
  * Represents data needed to create a new invoice (without auto-generated fields)
@@ -33,14 +34,14 @@ export type InvoiceMap<T extends InvoiceType> =
  * };
  * ```
  */
-export type CreateInvoiceData<T extends InvoiceType> =
-  Omit<InvoiceMap<T>, 'id' | 'createdAt' | 'updatedAt'>;
+export type CreateInvoiceData<T extends InvoiceType> = Omit<InvoiceMap<T>, 'id' | 'createdAt' | 'updatedAt'>;
 
 /**
  * Generic invoice union type
  */
-export type Invoice = import('@/features/sales/types/sales.types').SalesInvoice |
-                       import('@/features/purchases/types/purchases.types').PurchaseInvoice;
+export type Invoice =
+  | import('@/features/sales/types/sales.types').SalesInvoice
+  | import('@/features/purchases/types/purchases.types').PurchaseInvoice;
 
 /**
  * Export formats supported by the application

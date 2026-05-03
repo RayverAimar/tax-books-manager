@@ -62,7 +62,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
 
         if (apiKey) {
           // Has API key, skip to step 2 (RUC registration)
-          setState(prev => ({
+          setState((prev) => ({
             ...prev,
             hasApiKey: true,
             checkingApiKey: false,
@@ -70,7 +70,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
           }));
         } else {
           // No API key, start at step 1
-          setState(prev => ({
+          setState((prev) => ({
             ...prev,
             hasApiKey: false,
             checkingApiKey: false,
@@ -79,7 +79,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
         }
       } catch {
         // If error, assume no API key and show step 1
-        setState(prev => ({
+        setState((prev) => ({
           ...prev,
           hasApiKey: false,
           checkingApiKey: false,
@@ -101,13 +101,13 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
     }
 
     try {
-      setState(prev => ({ ...prev, savingApiKey: true }));
+      setState((prev) => ({ ...prev, savingApiKey: true }));
       const settingsRepo = new SettingsRepository();
       await settingsRepo.setApiKey(state.apiKey.trim());
 
       toast.success('API Key guardada correctamente');
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         savingApiKey: false,
         hasApiKey: true,
@@ -115,7 +115,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
       }));
     } catch {
       toast.error('Error al guardar la API Key');
-      setState(prev => ({ ...prev, savingApiKey: false }));
+      setState((prev) => ({ ...prev, savingApiKey: false }));
     }
   };
 
@@ -123,7 +123,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
    * Skip API key step and go to company registration
    */
   const handleSkipApiKey = () => {
-    setState(prev => ({ ...prev, step: 2 }));
+    setState((prev) => ({ ...prev, step: 2 }));
   };
 
   /**
@@ -136,7 +136,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
     }
 
     try {
-      setState(prev => ({ ...prev, isLoadingRuc: true }));
+      setState((prev) => ({ ...prev, isLoadingRuc: true }));
       setErrors({});
 
       // Get API key from database
@@ -145,20 +145,20 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
 
       if (!apiKey) {
         toast.error('No se ha configurado una API Key');
-        setState(prev => ({ ...prev, isLoadingRuc: false }));
+        setState((prev) => ({ ...prev, isLoadingRuc: false }));
         return;
       }
 
       const result = await ApiPeruService.queryRuc(state.ruc, apiKey);
 
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         businessName: result.razon_social,
         isLoadingRuc: false
       }));
       toast.success('Razón social encontrada');
     } catch {
-      setState(prev => ({ ...prev, isLoadingRuc: false }));
+      setState((prev) => ({ ...prev, isLoadingRuc: false }));
       toast.error('Error al buscar el RUC. Por favor, ingrese la razón social manualmente.');
     }
   }, [state.ruc]);
@@ -196,7 +196,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
     }
 
     try {
-      setState(prev => ({ ...prev, isRegistering: true }));
+      setState((prev) => ({ ...prev, isRegistering: true }));
 
       const companyData: CreateCompanyDto = {
         ruc: state.ruc,
@@ -206,7 +206,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
       await createCompany(companyData.ruc, companyData.businessName);
 
       // Show success
-      setState(prev => ({
+      setState((prev) => ({
         ...prev,
         isRegistering: false,
         showSuccess: true
@@ -219,7 +219,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
         onComplete();
       }, 2000);
     } catch (error: any) {
-      setState(prev => ({ ...prev, isRegistering: false }));
+      setState((prev) => ({ ...prev, isRegistering: false }));
 
       // Convert error to string for checking
       const errorMessage = error?.message || String(error);
@@ -286,7 +286,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
                   placeholder="Ingrese su API Key"
                   value={state.apiKey}
                   onChange={(e) => {
-                    setState(prev => ({ ...prev, apiKey: e.target.value }));
+                    setState((prev) => ({ ...prev, apiKey: e.target.value }));
                     if (errors.apiKey) setErrors({});
                   }}
                   disabled={state.savingApiKey}
@@ -309,8 +309,8 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
               <Alert className="bg-blue-50 dark:bg-blue-950/20">
                 <Key className="h-4 w-4 text-blue-600" />
                 <AlertDescription className="text-xs">
-                  <strong>Nota:</strong> La API Key permite buscar automáticamente la razón social de empresas.
-                  Este paso es opcional y puedes omitirlo.
+                  <strong>Nota:</strong> La API Key permite buscar automáticamente la razón social de empresas. Este
+                  paso es opcional y puedes omitirlo.
                 </AlertDescription>
               </Alert>
             </div>
@@ -325,10 +325,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
                 <Button type="button" variant="ghost" onClick={handleSkipApiKey}>
                   Omitir
                 </Button>
-                <Button
-                  onClick={handleSaveApiKey}
-                  disabled={state.savingApiKey || !state.apiKey.trim()}
-                >
+                <Button onClick={handleSaveApiKey} disabled={state.savingApiKey || !state.apiKey.trim()}>
                   {state.savingApiKey ? 'Guardando...' : 'Guardar y Continuar'}
                 </Button>
               </div>
@@ -369,7 +366,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
                     placeholder="12345678901"
                     value={state.ruc}
                     onChange={(e) => {
-                      setState(prev => ({ ...prev, ruc: e.target.value }));
+                      setState((prev) => ({ ...prev, ruc: e.target.value }));
                       if (errors.ruc) {
                         const { ruc: _ruc, ...rest } = errors;
                         setErrors(rest);
@@ -414,7 +411,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
                   placeholder="Nombre completo de la empresa"
                   value={state.businessName}
                   onChange={(e) => {
-                    setState(prev => ({ ...prev, businessName: e.target.value }));
+                    setState((prev) => ({ ...prev, businessName: e.target.value }));
                     if (errors.businessName) setErrors({});
                   }}
                   disabled={state.isRegistering || state.isLoadingRuc}
@@ -441,7 +438,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
                       onCancel();
                     } else {
                       // Go back to API key step
-                      setState(prev => ({ ...prev, step: 1 }));
+                      setState((prev) => ({ ...prev, step: 1 }));
                     }
                   }}
                   disabled={state.isRegistering}
@@ -506,7 +503,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
       {/* Progress Indicator - only show when not success */}
       {!state.showSuccess && !state.hasApiKey && (
         <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 space-x-2">
-          {[1, 2].map(step => (
+          {[1, 2].map((step) => (
             <div
               key={step}
               className={cn(
@@ -514,8 +511,8 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
                 state.step === step
                   ? 'w-8 bg-primary'
                   : state.step > step
-                  ? 'bg-primary/60'
-                  : 'bg-gray-300 dark:bg-gray-600'
+                    ? 'bg-primary/60'
+                    : 'bg-gray-300 dark:bg-gray-600'
               )}
             />
           ))}

@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Search } from 'lucide-react';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue
-} from '@/shared/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/components/ui/select';
 import { Button } from '@/shared/components/ui/button';
 import { cn } from '@/shared/lib/utils';
 
@@ -44,10 +38,7 @@ export const PeriodSelectorWithButton: React.FC<PeriodSelectorWithButtonProps> =
 }) => {
   // Generate years from 2024 to current year
   const currentYear = new Date().getFullYear();
-  const years = Array.from(
-    { length: currentYear - 2024 + 1 },
-    (_, i) => (2024 + i).toString()
-  );
+  const years = Array.from({ length: currentYear - 2024 + 1 }, (_, i) => (2024 + i).toString());
 
   // Initialize state from value prop (one-time initialization)
   const [selectedYear, setSelectedYear] = useState<string>(() =>
@@ -80,11 +71,7 @@ export const PeriodSelectorWithButton: React.FC<PeriodSelectorWithButtonProps> =
         <span className="text-sm font-medium text-muted-foreground">Periodo:</span>
 
         {/* Year Selector */}
-        <Select
-          value={selectedYear}
-          onValueChange={setSelectedYear}
-          disabled={disabled}
-        >
+        <Select value={selectedYear} onValueChange={setSelectedYear} disabled={disabled}>
           <SelectTrigger className="w-[110px]">
             <SelectValue placeholder="Año" />
           </SelectTrigger>
@@ -98,11 +85,7 @@ export const PeriodSelectorWithButton: React.FC<PeriodSelectorWithButtonProps> =
         </Select>
 
         {/* Month Selector */}
-        <Select
-          value={selectedMonth}
-          onValueChange={setSelectedMonth}
-          disabled={disabled}
-        >
+        <Select value={selectedMonth} onValueChange={setSelectedMonth} disabled={disabled}>
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Mes" />
           </SelectTrigger>
@@ -122,9 +105,7 @@ export const PeriodSelectorWithButton: React.FC<PeriodSelectorWithButtonProps> =
           onClick={handleApply}
           className={cn(
             'transition-all',
-            canSubmit && hasChanges
-              ? 'bg-primary hover:bg-primary/90'
-              : 'bg-muted text-muted-foreground'
+            canSubmit && hasChanges ? 'bg-primary hover:bg-primary/90' : 'bg-muted text-muted-foreground'
           )}
         >
           <Search className="h-4 w-4 mr-2" />
@@ -133,12 +114,7 @@ export const PeriodSelectorWithButton: React.FC<PeriodSelectorWithButtonProps> =
       </div>
 
       {/* Validation Message - Below selectors (always reserves space) */}
-      <span
-        className={cn(
-          "text-xs text-destructive min-h-[20px]",
-          (!isValid || meetsMinimum) && "invisible"
-        )}
-      >
+      <span className={cn('text-xs text-destructive min-h-[20px]', (!isValid || meetsMinimum) && 'invisible')}>
         El periodo debe ser desde agosto 2024
       </span>
     </div>

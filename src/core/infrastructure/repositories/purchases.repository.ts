@@ -40,11 +40,7 @@ export class PurchasesRepository implements IPurchasesRepository {
    * @param invoice - Purchase invoice data (without id, createdAt, updatedAt)
    * @returns Created invoice with generated ID
    */
-  async create(
-    companyId: number,
-    periodCode: string,
-    invoice: CreatablePurchaseInvoice
-  ): Promise<PurchaseInvoice> {
+  async create(companyId: number, periodCode: string, invoice: CreatablePurchaseInvoice): Promise<PurchaseInvoice> {
     if (!PeriodUtils.isValidPeriodCode(periodCode)) {
       throw new Error('Código de periodo inválido');
     }
@@ -218,7 +214,6 @@ export class PurchasesRepository implements IPurchasesRepository {
 
       if (chunk.length === 0) continue;
 
-
       const placeholders = chunk.map(() => `(${Array(PURCHASE_RECORD_COLUMNS).fill('?').join(', ')})`).join(',');
 
       const values: unknown[] = [];
@@ -340,9 +335,7 @@ export class PurchasesRepository implements IPurchasesRepository {
         ) VALUES ${placeholders}`,
         values
       );
-
     }
-
 
     // Invalidate cache once after all chunks are processed
     this.invalidateCache(companyId, periodCode);
@@ -378,7 +371,6 @@ export class PurchasesRepository implements IPurchasesRepository {
    * await purchasesRepo.replacePeriodRecords(1, '202401', importedRecords);
    */
   async replacePeriodRecords(companyId: number, periodCode: string, records: PurchaseInvoice[]): Promise<void> {
-
     // Validate period
     if (!PeriodUtils.isValidPeriodCode(periodCode)) {
       throw new Error('Código de periodo inválido');
@@ -458,7 +450,6 @@ export class PurchasesRepository implements IPurchasesRepository {
     fieldName: string,
     value: string | number | null
   ): Promise<void> {
-
     const dbColumnName = camelToSnake(fieldName);
 
     // Validate field is allowed
@@ -502,7 +493,6 @@ export class PurchasesRepository implements IPurchasesRepository {
     recordId: number,
     fields: Record<string, string | number | null>
   ): Promise<void> {
-
     // Validate all fields are allowed
     const fieldNames = Object.keys(fields);
     for (const field of fieldNames) {
@@ -526,7 +516,6 @@ export class PurchasesRepository implements IPurchasesRepository {
        WHERE id = ? AND company_id = ? AND period = ?`,
       [...values, recordId, companyId, periodCode]
     );
-
 
     if (result.rowsAffected === 0) {
       throw new Error('Registro no encontrado o sin permisos para actualizarlo');

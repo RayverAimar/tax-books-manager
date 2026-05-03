@@ -268,7 +268,7 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
   }, [initializeData]);
 
   // Performance logging - detailed profiling
-  const renderStart = useRef(performance.now());
+  const renderStart = useRef(0);
 
   useEffect(() => {
     renderStart.current = performance.now();

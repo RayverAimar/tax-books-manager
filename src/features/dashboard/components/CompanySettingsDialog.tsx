@@ -117,19 +117,6 @@ export const CompanySettingsDialog: React.FC<CompanySettingsDialogProps> = ({
   const hasUnsavedChanges = isCompanyDirty || isApiKeyDirty;
 
   /**
-   * Load company data when dialog opens
-   */
-  useEffect(() => {
-    if (open && company) {
-      resetCompany({
-        taxId: company.ruc,
-        businessName: company.businessName
-      });
-      loadApiKey();
-    }
-  }, [open, company, resetCompany]);
-
-  /**
    * Load API Key from database
    */
   const loadApiKey = async () => {
@@ -147,6 +134,19 @@ export const CompanySettingsDialog: React.FC<CompanySettingsDialogProps> = ({
       setIsLoadingApiKey(false);
     }
   };
+
+  /**
+   * Load company data when dialog opens
+   */
+  useEffect(() => {
+    if (open && company) {
+      resetCompany({
+        taxId: company.ruc,
+        businessName: company.businessName
+      });
+      loadApiKey();
+    }
+  }, [open, company, resetCompany]);
 
   /**
    * Handle dialog close with unsaved changes check

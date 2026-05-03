@@ -30,10 +30,7 @@ export const SaveIndicator = memo<SaveIndicatorProps>(
 
     return (
       <div
-        className={cn(
-          'flex items-center gap-2 text-sm transition-opacity duration-200',
-          className
-        )}
+        className={cn('flex items-center gap-2 text-sm transition-opacity duration-200', className)}
         role="status"
         aria-live="polite"
         aria-label={`Estado de guardado: ${status}`}
@@ -41,18 +38,11 @@ export const SaveIndicator = memo<SaveIndicatorProps>(
         {/* Saved state */}
         {status === 'saved' && (
           <>
-            <CheckCircle2
-              className="h-4 w-4 text-green-600 dark:text-green-400"
-              aria-hidden="true"
-            />
+            <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400" aria-hidden="true" />
             {!compact && (
               <span className="text-muted-foreground">
                 Todos los cambios guardados
-                {lastSaved && (
-                  <span className="ml-1 text-xs">
-                    ({formatTimeAgo(lastSaved)})
-                  </span>
-                )}
+                {lastSaved && <span className="ml-1 text-xs">({formatTimeAgo(lastSaved)})</span>}
               </span>
             )}
           </>
@@ -61,28 +51,16 @@ export const SaveIndicator = memo<SaveIndicatorProps>(
         {/* Saving state */}
         {status === 'saving' && (
           <>
-            <Loader2
-              className="h-4 w-4 animate-spin text-blue-600 dark:text-blue-400"
-              aria-hidden="true"
-            />
-            {!compact && (
-              <span className="text-blue-600 dark:text-blue-400">
-                Guardando...
-              </span>
-            )}
+            <Loader2 className="h-4 w-4 animate-spin text-blue-600 dark:text-blue-400" aria-hidden="true" />
+            {!compact && <span className="text-blue-600 dark:text-blue-400">Guardando...</span>}
           </>
         )}
 
         {/* Unsaved state */}
         {status === 'unsaved' && (
           <>
-            <AlertCircle
-              className="h-4 w-4 text-orange-600 dark:text-orange-400"
-              aria-hidden="true"
-            />
-            <span className="text-orange-600 dark:text-orange-400">
-              Cambios sin guardar
-            </span>
+            <AlertCircle className="h-4 w-4 text-orange-600 dark:text-orange-400" aria-hidden="true" />
+            <span className="text-orange-600 dark:text-orange-400">Cambios sin guardar</span>
             {onSaveNow && (
               <Button
                 size="sm"
@@ -101,13 +79,8 @@ export const SaveIndicator = memo<SaveIndicatorProps>(
         {/* Error state */}
         {status === 'error' && (
           <>
-            <AlertCircle
-              className="h-4 w-4 text-red-600 dark:text-red-400"
-              aria-hidden="true"
-            />
-            <span className="text-red-600 dark:text-red-400">
-              Error al guardar
-            </span>
+            <AlertCircle className="h-4 w-4 text-red-600 dark:text-red-400" aria-hidden="true" />
+            <span className="text-red-600 dark:text-red-400">Error al guardar</span>
             {onSaveNow && (
               <Button
                 size="sm"

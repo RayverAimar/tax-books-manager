@@ -30,6 +30,8 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-hooks/incompatible-library': 'off', // Allow TanStack Table and React Hook Form
+      'react-hooks/set-state-in-effect': 'off', // Too strict: flags valid init-from-storage and prop-sync patterns
+      'react-hooks/purity': 'off', // Too strict: flags valid impure calls outside render path
       'react-refresh/only-export-components': 'off', // Allow exporting utilities with components
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',

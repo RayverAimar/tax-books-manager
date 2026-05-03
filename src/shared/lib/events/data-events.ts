@@ -45,7 +45,7 @@ export const DATA_EVENTS = {
   DATA_DELETED: 'tax-books:data-deleted',
 
   /** Fired when invoice data is updated */
-  DATA_UPDATED: 'tax-books:data-updated',
+  DATA_UPDATED: 'tax-books:data-updated'
 } as const;
 
 /**
@@ -131,9 +131,7 @@ export function emitDataImported(
     source
   };
 
-  window.dispatchEvent(
-    new CustomEvent(DATA_EVENTS.DATA_IMPORTED, { detail })
-  );
+  window.dispatchEvent(new CustomEvent(DATA_EVENTS.DATA_IMPORTED, { detail }));
 }
 
 /**
@@ -143,20 +141,14 @@ export function emitDataImported(
  * @param period - Period code
  * @param recordCount - Number of records deleted
  */
-export function emitDataDeleted(
-  type: InvoiceType,
-  period: string,
-  recordCount: number
-): void {
+export function emitDataDeleted(type: InvoiceType, period: string, recordCount: number): void {
   const detail: DataDeletedDetail = {
     type,
     period,
     recordCount
   };
 
-  window.dispatchEvent(
-    new CustomEvent(DATA_EVENTS.DATA_DELETED, { detail })
-  );
+  window.dispatchEvent(new CustomEvent(DATA_EVENTS.DATA_DELETED, { detail }));
 }
 
 /**
@@ -166,20 +158,14 @@ export function emitDataDeleted(
  * @param period - Period code
  * @param recordCount - Number of records updated
  */
-export function emitDataUpdated(
-  type: InvoiceType,
-  period: string,
-  recordCount: number
-): void {
+export function emitDataUpdated(type: InvoiceType, period: string, recordCount: number): void {
   const detail: DataUpdatedDetail = {
     type,
     period,
     recordCount
   };
 
-  window.dispatchEvent(
-    new CustomEvent(DATA_EVENTS.DATA_UPDATED, { detail })
-  );
+  window.dispatchEvent(new CustomEvent(DATA_EVENTS.DATA_UPDATED, { detail }));
 }
 
 /**

@@ -137,8 +137,8 @@ export function useSalesColumns() {
                 }
               }}
               className={`inline-flex h-full w-full items-center justify-center whitespace-normal px-1 py-0 text-xs
-                leading-tight transition-all hover:bg-primary-foreground/10
-                hover:backdrop-brightness-110 ${isHighlighted ? 'text-yellow-50' : 'text-primary-foreground'}`}
+                leading-tight transition-all hover:bg-primary-foreground/10 hover:backdrop-brightness-110
+                ${isHighlighted ? 'text-yellow-50' : 'text-primary-foreground'}`}
             >
               <span className="block text-center">
                 {'sunatHeader' in mapping ? mapping.sunatHeader : mapping.displayLabel}
@@ -160,11 +160,7 @@ export function useSalesColumns() {
 
           // Format dates as DD/MM/YYYY
           if (mapping.dataType === 'date') {
-            return (
-              <div className={`text-xs ${contentClasses}`}>
-                {formatDate(value as Date | string)}
-              </div>
-            );
+            return <div className={`text-xs ${contentClasses}`}>{formatDate(value as Date | string)}</div>;
           }
 
           // Format percentage (% IGV) - show as "18%" not "18.00"
@@ -212,21 +208,15 @@ export function useSalesColumns() {
     });
 
     // Reorder: Move vatPercentage to be right before vatAmount (IGV / IPM)
-    const vatPercentageIndex = columns.findIndex(col =>
-      'accessorKey' in col && col.accessorKey === 'vatPercentage'
-    );
-    const vatAmountIndex = columns.findIndex(col =>
-      'accessorKey' in col && col.accessorKey === 'vatAmount'
-    );
+    const vatPercentageIndex = columns.findIndex((col) => 'accessorKey' in col && col.accessorKey === 'vatPercentage');
+    const vatAmountIndex = columns.findIndex((col) => 'accessorKey' in col && col.accessorKey === 'vatAmount');
 
     if (vatPercentageIndex !== -1 && vatAmountIndex !== -1 && vatPercentageIndex !== vatAmountIndex - 1) {
       // Remove vatPercentage from its current position
       const [vatPercentageColumn] = columns.splice(vatPercentageIndex, 1);
 
       // Find new position of vatAmount after removal
-      const newVatAmountIndex = columns.findIndex(col =>
-        'accessorKey' in col && col.accessorKey === 'vatAmount'
-      );
+      const newVatAmountIndex = columns.findIndex((col) => 'accessorKey' in col && col.accessorKey === 'vatAmount');
 
       // Insert vatPercentage right before vatAmount
       columns.splice(newVatAmountIndex, 0, vatPercentageColumn);

@@ -17,8 +17,8 @@ export const HIGHLIGHT_COLORS = {
   /**
    * Cell background colors
    */
-  CELL_YELLOW: '#ffff33',  // Default for most highlighted columns
-  CELL_ORANGE: '#ff9933',  // Special color for % IGV column
+  CELL_YELLOW: '#ffff33', // Default for most highlighted columns
+  CELL_ORANGE: '#ff9933', // Special color for % IGV column
 
   /**
    * Text color for highlighted cells

@@ -48,13 +48,15 @@ export function useImport<T extends InvoiceType>(type: T) {
       // Call appropriate import function based on type AND format
       // CSV files use comma delimiter, TXT files use pipe delimiter
       if (type === 'sales') {
-        result = format === 'csv'
-          ? (await importSalesCSV(textContent)) as ImportResult<InvoiceMap<T>>
-          : (await importSalesTXT(textContent)) as ImportResult<InvoiceMap<T>>;
+        result =
+          format === 'csv'
+            ? ((await importSalesCSV(textContent)) as ImportResult<InvoiceMap<T>>)
+            : ((await importSalesTXT(textContent)) as ImportResult<InvoiceMap<T>>);
       } else {
-        result = format === 'csv'
-          ? (await importPurchasesCSV(textContent)) as ImportResult<InvoiceMap<T>>
-          : (await importPurchasesTXT(textContent)) as ImportResult<InvoiceMap<T>>;
+        result =
+          format === 'csv'
+            ? ((await importPurchasesCSV(textContent)) as ImportResult<InvoiceMap<T>>)
+            : ((await importPurchasesTXT(textContent)) as ImportResult<InvoiceMap<T>>);
       }
 
       setProgress(100);

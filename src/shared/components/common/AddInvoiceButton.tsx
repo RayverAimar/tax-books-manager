@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/shared/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 
 interface AddInvoiceButtonProps<FormData> {
   label: string;
