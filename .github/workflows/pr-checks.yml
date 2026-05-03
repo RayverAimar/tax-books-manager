@@ -1,0 +1,141 @@
+name: PR Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  # Validate PR title follows conventional commits
+  pr-title:
+    name: Validate PR Title
+    runs-on: ubuntu-latest
+    steps:
+      - uses: amannn/action-semantic-pull-request@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          types: |
+            feat
+            fix
+            docs
+            style
+            refactor
+            perf
+            test
+            build
+            ci
+            chore
+            revert
+          requireScope: false
+
+  # Check PR size
+  pr-size:
+    name: Check PR Size
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check changed files
+        run: |
+          FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | wc -l)
+          LINES_CHANGED=$(git diff --stat origin/${{ github.base_ref }}...HEAD | tail -1 | awk '{print $4+$6}')
+
+          echo "Files changed: $FILES_CHANGED"
+          echo "Lines changed: $LINES_CHANGED"
+
+          if [ "$FILES_CHANGED" -gt 50 ]; then
+            echo "⚠️  Warning: PR changes more than 50 files ($FILES_CHANGED files)"
+            echo "Consider splitting into smaller PRs for easier review"
+          fi
+
+          if [ "$LINES_CHANGED" -gt 1000 ]; then
+            echo "⚠️  Warning: PR changes more than 1000 lines ($LINES_CHANGED lines)"
+            echo "Consider splitting into smaller PRs for easier review"
+          fi
+
+  # Lint commit messages
+  commitlint:
+    name: Lint Commit Messages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate commit messages
+        run: |
+          # Simple commit message validation
+          git log --format=%B origin/${{ github.base_ref }}..HEAD | while read -r msg; do
+            if [ -n "$msg" ]; then
+              # Check for minimum length
+              if [ ${#msg} -lt 10 ]; then
+                echo "❌ Commit message too short: '$msg'"
+                exit 1
+              fi
+
+              # Warn about fixup/squash commits in final PR
+              if [[ "$msg" =~ ^(fixup|squash)! ]]; then
+                echo "⚠️  Found fixup/squash commit - remember to squash before merge"
+              fi
+            fi
+          done
+
+          echo "✅ All commit messages look good"
+
+  # Check for TODOs in code
+  todos:
+    name: Check for TODOs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan for TODO comments
+        run: |
+          TODO_COUNT=$(grep -r "TODO" src/ --exclude-dir=node_modules --exclude-dir=dist || true | wc -l)
+          FIXME_COUNT=$(grep -r "FIXME" src/ --exclude-dir=node_modules --exclude-dir=dist || true | wc -l)
+
+          echo "Found $TODO_COUNT TODO comments"
+          echo "Found $FIXME_COUNT FIXME comments"
+
+          if [ "$TODO_COUNT" -gt 0 ] || [ "$FIXME_COUNT" -gt 0 ]; then
+            echo "⚠️  This PR contains TODO/FIXME comments. Please address them or create issues."
+            grep -rn "TODO\|FIXME" src/ --exclude-dir=node_modules --exclude-dir=dist || true
+          fi
+
+  # Check for console.log statements
+  no-console:
+    name: Check for console.log
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scan for console.log
+        run: |
+          # Exclude logger.ts and test files
+          CONSOLE_COUNT=$(grep -r "console\." src/ \
+            --exclude-dir=node_modules \
+            --exclude-dir=dist \
+            --exclude-dir=__tests__ \
+            --exclude="*.test.ts" \
+            --exclude="logger.ts" \
+            | grep -v "// console\." \
+            | wc -l || true)
+
+          if [ "$CONSOLE_COUNT" -gt 0 ]; then
+            echo "❌ Found console statements in production code:"
+            grep -rn "console\." src/ \
+              --exclude-dir=node_modules \
+              --exclude-dir=dist \
+              --exclude-dir=__tests__ \
+              --exclude="*.test.ts" \
+              --exclude="logger.ts" \
+              | grep -v "// console\." || true
+
+            echo ""
+            echo "Please use the logger utility instead of console.*"
+            exit 1
+          fi
+
+          echo "✅ No console statements found in production code"
