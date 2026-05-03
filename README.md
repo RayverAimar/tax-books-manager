@@ -21,6 +21,10 @@ A cross-platform desktop application (Windows, macOS, Linux) for registering and
 |---------|---------------------|
 | ![Welcome screen](docs/screenshots/screenshot-onboarding.png) | ![Company registration](docs/screenshots/screenshot-company-registration.png) |
 
+| Dashboard | Sales Book |
+|-----------|------------|
+| ![Dashboard](docs/screenshots/screenshot-dashboard.png) | ![Sales book](docs/screenshots/screenshot-sales.png) |
+
 ## Features
 
 - **Multi-company** — register and switch between multiple RUC companies

@@ -50,3 +50,6 @@ updates:
       - "github-actions"
     commit-message:
       prefix: "ci"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
