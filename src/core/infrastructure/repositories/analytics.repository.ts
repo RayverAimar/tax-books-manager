@@ -64,12 +64,12 @@ export class AnalyticsRepository implements IAnalyticsRepository {
   }
 
   async getSalesPeriodSummary(companyId: number, periodCode: string): Promise<PeriodSummary | null> {
-    const cacheKey = getCacheKey('sales_period_summary', { companyId, periodCode });
+    const cacheKey = getCacheKey('sales_period_summary', { company: companyId, period: periodCode });
     return cachedQuery(cacheKey, () => this.getPeriodSummary(companyId, periodCode, 'sales'));
   }
 
   async getPurchasesPeriodSummary(companyId: number, periodCode: string): Promise<PeriodSummary | null> {
-    const cacheKey = getCacheKey('purchases_period_summary', { companyId, periodCode });
+    const cacheKey = getCacheKey('purchases_period_summary', { company: companyId, period: periodCode });
     return cachedQuery(cacheKey, () => this.getPeriodSummary(companyId, periodCode, 'purchases'));
   }
 
@@ -78,6 +78,10 @@ export class AnalyticsRepository implements IAnalyticsRepository {
     periodCode: string,
     type: InvoiceType
   ): Promise<PeriodComparison | null> {
+    if (type !== 'sales' && type !== 'purchases') {
+      throw new Error(`Invalid invoice type: ${type}. Must be 'sales' or 'purchases'.`);
+    }
+
     const query = `
       WITH period_data AS (
         SELECT
@@ -134,59 +138,76 @@ export class AnalyticsRepository implements IAnalyticsRepository {
   }
 
   async getYearlySummary(companyId: number, year: number): Promise<YearlySummary | null> {
-    const cacheKey = getCacheKey('yearly_summary', { companyId, year });
+    const cacheKey = getCacheKey('yearly_summary', { company: companyId, year });
     return cachedQuery(cacheKey, () => this.getYearlySummaryUncached(companyId, year));
   }
 
   private async getYearlySummaryUncached(companyId: number, year: number): Promise<YearlySummary | null> {
-    const query = `
-      WITH yearly_sales AS (
-        SELECT
-          year,
-          COALESCE(SUM(total_amount), 0) as sales_total,
-          COALESCE(SUM(taxable_base), 0) as sales_taxable_base,
-          COALESCE(SUM(vat_amount), 0) as sales_vat,
-          COUNT(DISTINCT period) as sales_months
-        FROM sales_records
-        WHERE company_id = ? AND year = ?
-        GROUP BY year
-      ),
-      yearly_purchases AS (
-        SELECT
-          year,
-          COALESCE(SUM(total_amount), 0) as purchases_total,
-          COALESCE(SUM(
-            COALESCE(taxable_base_taxed, 0) +
-            COALESCE(taxable_base_mixed, 0) +
-            COALESCE(taxable_base_untaxed, 0)
-          ), 0) as purchases_taxable_base,
-          COALESCE(SUM(
-            COALESCE(vat_amount_taxed, 0) +
-            COALESCE(vat_amount_mixed, 0) +
-            COALESCE(vat_amount_untaxed, 0)
-          ), 0) as purchases_vat,
-          COUNT(DISTINCT period) as purchases_months
-        FROM purchase_records
-        WHERE company_id = ? AND year = ?
-        GROUP BY year
-      )
+    // SQLite does not support FULL OUTER JOIN, so run two separate queries and merge in TypeScript.
+    // Also, tables have no `year` column — filter by substr(period, 1, 4).
+    const salesQuery = `
       SELECT
-        COALESCE(s.year, p.year, ?) as year,
-        COALESCE(s.sales_total, 0) as salesTotal,
-        COALESCE(s.sales_taxable_base, 0) as salesTaxableBase,
-        COALESCE(s.sales_vat, 0) as salesVat,
-        COALESCE(s.sales_months, 0) as salesMonths,
-        COALESCE(p.purchases_total, 0) as purchasesTotal,
-        COALESCE(p.purchases_taxable_base, 0) as purchasesTaxableBase,
-        COALESCE(p.purchases_vat, 0) as purchasesVat,
-        COALESCE(p.purchases_months, 0) as purchasesMonths,
-        COALESCE(s.sales_total, 0) - COALESCE(p.purchases_total, 0) as netTotal
-      FROM yearly_sales s
-      FULL OUTER JOIN yearly_purchases p ON s.year = p.year
+        COALESCE(SUM(total_amount), 0) as sales_total,
+        COALESCE(SUM(taxable_base), 0) as sales_taxable_base,
+        COALESCE(SUM(vat_amount), 0) as sales_vat,
+        COUNT(DISTINCT period) as sales_months
+      FROM sales_records
+      WHERE company_id = ? AND CAST(substr(period, 1, 4) AS INTEGER) = ?
     `;
 
-    const results = await this.db.select<YearlySummary>(query, [companyId, year, companyId, year, year]);
-    return results.length > 0 ? results[0] : null;
+    const purchasesQuery = `
+      SELECT
+        COALESCE(SUM(total_amount), 0) as purchases_total,
+        COALESCE(SUM(
+          COALESCE(taxable_base_taxed, 0) +
+          COALESCE(taxable_base_mixed, 0) +
+          COALESCE(taxable_base_untaxed, 0)
+        ), 0) as purchases_taxable_base,
+        COALESCE(SUM(
+          COALESCE(vat_amount_taxed, 0) +
+          COALESCE(vat_amount_mixed, 0) +
+          COALESCE(vat_amount_untaxed, 0)
+        ), 0) as purchases_vat,
+        COUNT(DISTINCT period) as purchases_months
+      FROM purchase_records
+      WHERE company_id = ? AND CAST(substr(period, 1, 4) AS INTEGER) = ?
+    `;
+
+    const [salesRows, purchasesRows] = await Promise.all([
+      this.db.select<{
+        sales_total: number;
+        sales_taxable_base: number;
+        sales_vat: number;
+        sales_months: number;
+      }>(salesQuery, [companyId, year]),
+      this.db.select<{
+        purchases_total: number;
+        purchases_taxable_base: number;
+        purchases_vat: number;
+        purchases_months: number;
+      }>(purchasesQuery, [companyId, year])
+    ]);
+
+    const s = salesRows[0];
+    const p = purchasesRows[0];
+
+    if (!s && !p) return null;
+
+    const salesTotal = s?.sales_total ?? 0;
+    const purchasesTotal = p?.purchases_total ?? 0;
+
+    return {
+      year,
+      salesTotal,
+      salesTaxableBase: s?.sales_taxable_base ?? 0,
+      salesVat: s?.sales_vat ?? 0,
+      salesMonths: s?.sales_months ?? 0,
+      purchasesTotal,
+      purchasesTaxableBase: p?.purchases_taxable_base ?? 0,
+      purchasesVat: p?.purchases_vat ?? 0,
+      purchasesMonths: p?.purchases_months ?? 0,
+      netTotal: salesTotal - purchasesTotal
+    };
   }
 
   async getMonthlyTrend(companyId: number, year: number, type: InvoiceType): Promise<PeriodSummary[]> {
