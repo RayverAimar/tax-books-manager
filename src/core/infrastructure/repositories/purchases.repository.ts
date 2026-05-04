@@ -371,22 +371,20 @@ export class PurchasesRepository implements IPurchasesRepository {
    * await purchasesRepo.replacePeriodRecords(1, '202401', importedRecords);
    */
   async replacePeriodRecords(companyId: number, periodCode: string, records: PurchaseInvoice[]): Promise<void> {
-    // Validate period
     if (!PeriodUtils.isValidPeriodCode(periodCode)) {
       throw new Error('Código de periodo inválido');
     }
 
-    // Step 1: Delete all existing records for this period
-    await this.deleteByPeriod(companyId, periodCode);
+    await this.db.transaction(async () => {
+      await this.deleteByPeriod(companyId, periodCode);
 
-    // Step 2: Insert new records (if any)
-    if (records.length > 0) {
-      await this.bulkCreate(companyId, periodCode, records); // Invalidates cache internally
+      if (records.length > 0) {
+        await this.bulkCreate(companyId, periodCode, records);
 
-      // Step 3: Update period metadata
-      const totalAmount = records.reduce((sum, r) => sum + (r.totalAmount || 0), 0);
-      await this.periodRepo.update(companyId, periodCode, 'purchases', records.length, totalAmount);
-    }
+        const totalAmount = records.reduce((sum, r) => sum + (r.totalAmount || 0), 0);
+        await this.periodRepo.update(companyId, periodCode, 'purchases', records.length, totalAmount);
+      }
+    });
   }
 
   /**

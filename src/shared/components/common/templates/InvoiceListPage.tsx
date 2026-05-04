@@ -267,6 +267,9 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
     initializeDataRef.current = initializeData;
   }, [initializeData]);
 
+  // Stores the resolve function of the active declared-warning Promise so the cancel path can resolve it
+  const declaredWarningResolveRef = useRef<((value: boolean) => void) | null>(null);
+
   // Performance logging - detailed profiling
   const renderStart = useRef(0);
 
@@ -550,18 +553,22 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
 
       // Está declarado, mostrar warning dialog
       return new Promise((resolve) => {
+        declaredWarningResolveRef.current = resolve;
         setDeclaredWarning({
           isOpen: true,
           operationType,
           onConfirm: async () => {
             try {
-              // Usar la función del contexto
               await toggleDeclared(company.id, type);
-            } catch (error) {
-              console.error('Error toggling declared:', error);
+            } catch {
+              showError('Error', { description: 'No se pudo actualizar el estado del período.' });
+              declaredWarningResolveRef.current = null;
+              resolve(false);
+              return;
             }
 
             await operation();
+            declaredWarningResolveRef.current = null;
             resolve(true);
           }
         });
@@ -811,12 +818,12 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
 
     // Check if period is declared before proceeding
     await checkDeclaredAndExecute('delete', async () => {
+      // Compute before the optimistic state update — invoicesRef syncs via useEffect (after render)
+      const updatedInvoices = invoicesRef.current.filter((inv) => inv.id && !idsToRemove.includes(inv.id));
+
       // Optimistically update UI
       deleteMultipleInvoices(idsToRemove);
       setSelectedRows([]);
-
-      // Get the updated invoices after deletion
-      const updatedInvoices = invoicesRef.current.filter((inv) => inv.id && !idsToRemove.includes(inv.id));
 
       // Persist changes to database
       const saved = await autoSaveRecordsRef.current(updatedInvoices);
@@ -1096,8 +1103,12 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
         open={declaredWarning.isOpen}
         onOpenChange={(open) => {
           if (!open) {
-            // Dialog cancelled
             setDeclaredWarning({ isOpen: false, operationType: null, onConfirm: null });
+            // Resolve the pending Promise so callers don't hang
+            if (declaredWarningResolveRef.current) {
+              declaredWarningResolveRef.current(false);
+              declaredWarningResolveRef.current = null;
+            }
           }
         }}
         onConfirm={() => {

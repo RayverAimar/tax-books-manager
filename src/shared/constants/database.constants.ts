@@ -49,8 +49,10 @@ export const PURCHASE_RECORD_COLUMNS = 82;
  *
  * Note: The actual SQLite limit in Tauri may be higher, allowing these larger batches.
  */
-export const SALES_BATCH_SIZE = 100;
-export const PURCHASES_BATCH_SIZE = 50;
+// floor(999 / 42) = 23, use 20 for safety
+export const SALES_BATCH_SIZE = 20;
+// floor(999 / 82) = 12, use 12
+export const PURCHASES_BATCH_SIZE = 12;
 
 /**
  * Legacy constant - use SALES_BATCH_SIZE or PURCHASES_BATCH_SIZE instead
