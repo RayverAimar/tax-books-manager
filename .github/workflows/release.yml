@@ -40,6 +40,28 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # historia completa necesaria para `git log $PREVIOUS_TAG..HEAD`
+
+      - name: Generate changelog from commits
+        id: changelog
+        shell: bash
+        run: |
+          # Tag anterior al actual (excluyendo HEAD para evitar match con sí mismo)
+          PREVIOUS_TAG=$(git tag --sort=-v:refname --merged HEAD | grep -v "^${GITHUB_REF_NAME}$" | head -1 || echo "")
+          if [ -n "$PREVIOUS_TAG" ]; then
+            LOG=$(git log "$PREVIOUS_TAG..HEAD" --pretty=format:"- %s" --no-merges)
+            RANGE_HEADER="Cambios desde \`$PREVIOUS_TAG\`"
+          else
+            LOG=$(git log --pretty=format:"- %s" --no-merges | head -20)
+            RANGE_HEADER="Cambios recientes"
+          fi
+          {
+            echo "log<<EOF"
+            echo "$LOG"
+            echo "EOF"
+            echo "range_header=$RANGE_HEADER"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -86,22 +108,14 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: 'Registro de Libros Electrónicos ${{ github.ref_name }}'
+          # El body se mostrará tanto en la página del release como en el dialog
+          # de auto-update dentro de la app. Por eso lo mantenemos minimal:
+          # solo los commits desde el tag anterior. GitHub auto-lista los binarios
+          # como Assets debajo del body, no hace falta repetir instrucciones de install.
           releaseBody: |
-            ## Registro de Libros Electrónicos ${{ github.ref_name }}
+            ### ${{ steps.changelog.outputs.range_header }}
 
-            ### Instalación
-
-            Descarga el instalador correspondiente a tu sistema operativo:
-
-            | Plataforma | Archivo |
-            |-----------|---------|
-            | **Windows** | `.msi` o `.exe` |
-            | **macOS** | `.dmg` (Universal — Intel y Apple Silicon) |
-            | **Linux** | `.AppImage` o `.deb` |
-
-            ---
-
-            **Changelog completo**: https://github.com/${{ github.repository }}/commits/${{ github.ref_name }}
+            ${{ steps.changelog.outputs.log }}
           releaseDraft: true
           prerelease: ${{ contains(github.ref_name, '-') }}
           args: ${{ matrix.settings.args }}
