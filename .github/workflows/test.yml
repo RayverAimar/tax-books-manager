@@ -87,7 +87,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: 'pnpm'
+          # No cache: pnpm audit lee pnpm-lock.yaml directo, no necesita
+          # node_modules instalado, así que el cache nunca existe y daba warning
 
       - name: Check for critical vulnerabilities
         run: |
