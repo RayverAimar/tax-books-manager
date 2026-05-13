@@ -31,6 +31,17 @@ interface BaseSunatFieldMapping {
   dataType: SupportedDataType;
   /** Field description */
   description: string;
+  /**
+   * Si es true, al exportar este campo emite valor vacío sin importar lo que
+   * tenga en BD. Usar para posiciones SIRE que SUNAT completa automáticamente
+   * (RCE pos 38-41) — el archivo debe tener la columna pero vacía.
+   */
+  sireAutoFilled?: boolean;
+  /**
+   * Decimales a emitir al exportar valores numéricos. Por defecto 2 (importes).
+   * SIRE exige exactamente 3 para Tipo de Cambio (regex `^(?!0\.000)(\d\.\d{3})$`).
+   */
+  exportDecimals?: number;
 }
 
 /**
@@ -93,29 +104,32 @@ export interface PurchaseTableColumnMapping extends BaseTableColumnMapping {
 export type FieldMapping = SalesFieldMapping | PurchaseFieldMapping;
 
 /**
- * SALES SUNAT COLUMNS MAPPING (40 fields)
- * Based on SUNAT Electronic Sales and Income Registry (RVIE)
- * Used for CSV import/export - official SUNAT fields only
+ * SALES SUNAT COLUMNS MAPPING — RVIE (50 fields)
+ * Estructura conforme al Anexo 3 de la RS 112-2021/SUNAT
+ * Excel oficial: cpe.sunat.gob.pe/estructura-de-archivos (verificado 2026-05-12)
  *
- * IMPORTANT: SUNAT headers are case-sensitive and must match official format exactly
+ * IMPORTANTE: headers byte-a-byte como el Excel oficial (tildes, dobles espacios y todo)
  */
 export const SALES_SUNAT_COLUMNS_MAPPING: readonly SalesFieldMapping[] = [
-  // Issuer Information (4 fields)
+  // Datos del contribuyente (4 campos)
   {
-    sunatHeader: 'Ruc',
+    sunatHeader: 'RUC',
     tsField: 'ruc',
     dbColumn: 'ruc',
     displayLabel: 'RUC',
     dataType: 'string',
-    description: 'RUC - Registro Único del Contribuyente (11 digits)'
+    description: 'RUC del contribuyente emisor (11 dígitos)'
   },
   {
-    sunatHeader: 'Razon Social',
+    // TODO: SIRE define este campo como "ID" alfanumérico hasta 1500. Hoy
+    // mapeamos businessName por compatibilidad; cuando definamos la semántica
+    // (Task #7), cambiar a un campo dedicado.
+    sunatHeader: 'ID',
     tsField: 'businessName',
     dbColumn: 'business_name',
-    displayLabel: 'Razón Social',
+    displayLabel: 'ID',
     dataType: 'string',
-    description: 'Legal business name of the issuer'
+    description: 'ID alfanumérico hasta 1500 chars (SIRE pos 2 — semántica pendiente)'
   },
   {
     sunatHeader: 'Periodo',
@@ -202,12 +216,12 @@ export const SALES_SUNAT_COLUMNS_MAPPING: readonly SalesFieldMapping[] = [
     description: 'Customer identification document number'
   },
   {
-    sunatHeader: 'Apellidos Nombres/ Razón Social',
+    sunatHeader: 'Apellidos Nombres/ Razon  Social',
     tsField: 'customerName',
     dbColumn: 'customer_name',
     displayLabel: 'Apellidos Nombres/ Razón Social',
     dataType: 'string',
-    description: 'Customer full name or business name'
+    description: 'Nombre o razón social del cliente (SIRE: sin tilde y con doble espacio en header)'
   },
 
   // Export Operations (1 field)
@@ -238,12 +252,12 @@ export const SALES_SUNAT_COLUMNS_MAPPING: readonly SalesFieldMapping[] = [
     description: 'Discount on taxable base'
   },
   {
-    sunatHeader: 'IGV / IPM',
+    sunatHeader: 'IGV / IPM DG',
     tsField: 'vatAmount',
     dbColumn: 'vat_amount',
-    displayLabel: 'IGV / IPM',
+    displayLabel: 'IGV / IPM DG',
     dataType: 'float',
-    description: 'Value Added Tax or Municipal Promotion Tax amount'
+    description: 'IGV / IPM (Destinado a operaciones Gravadas)'
   },
   {
     sunatHeader: 'Dscto IGV / IPM',
@@ -332,22 +346,23 @@ export const SALES_SUNAT_COLUMNS_MAPPING: readonly SalesFieldMapping[] = [
     description: 'Currency code'
   },
   {
-    sunatHeader: 'Tipo Cambio',
+    sunatHeader: 'Tipo de Cambio',
     tsField: 'exchangeRate',
     dbColumn: 'exchange_rate',
-    displayLabel: 'Tipo Cambio',
+    displayLabel: 'Tipo de Cambio',
     dataType: 'float',
-    description: 'Exchange rate applied'
+    description: 'Tipo de cambio aplicado (1 entero + hasta 3 decimales)',
+    exportDecimals: 3
   },
 
   // Modified Voucher Reference (4 fields)
   {
-    sunatHeader: 'Fecha Emisión Doc Modificado',
+    sunatHeader: 'Fecha Emision Doc Modificado',
     tsField: 'modifiedVoucherDate',
     dbColumn: 'modified_voucher_date',
     displayLabel: 'Fecha Emisión Doc Modificado',
     dataType: 'date',
-    description: 'Issue date of the voucher being modified'
+    description: 'Fecha de emisión del doc modificado (SIRE: header sin tilde en "Emision")'
   },
   {
     sunatHeader: 'Tipo CP Modificado',
@@ -374,71 +389,32 @@ export const SALES_SUNAT_COLUMNS_MAPPING: readonly SalesFieldMapping[] = [
     description: 'Number of the voucher being modified'
   },
 
-  // Additional Classification (7 fields)
+  // ID de proyecto de operadores (1 campo, pos 33)
   {
     sunatHeader: 'ID Proyecto Operadores Atribución',
     tsField: 'attributionProjectId',
     dbColumn: 'attribution_project_id',
     displayLabel: 'ID Proyecto Operadores Atribución',
     dataType: 'string',
-    description: 'Attribution operators project ID'
+    description: 'ID del proyecto de operadores de atribución'
   },
-  {
-    sunatHeader: 'Tipo de Nota',
-    tsField: 'noteType',
-    dbColumn: 'note_type',
-    displayLabel: 'Tipo de Nota',
-    dataType: 'string',
-    description: 'Note type classification'
-  },
-  {
-    sunatHeader: 'Est. Comp',
-    tsField: 'voucherStatus',
-    dbColumn: 'voucher_status',
-    displayLabel: 'Est. Comp',
-    dataType: 'string',
-    description: 'Current status of the voucher'
-  },
-  {
-    sunatHeader: 'Valor FOB Embarcado',
-    tsField: 'fobShippedValue',
-    dbColumn: 'fob_shipped_value',
-    displayLabel: 'Valor FOB Embarcado',
-    dataType: 'float',
-    description: 'FOB shipped value for export operations'
-  },
-  {
-    sunatHeader: 'Valor OP Gratuitas',
-    tsField: 'freeOperationsValue',
-    dbColumn: 'free_operations_value',
-    displayLabel: 'Valor OP Gratuitas',
-    dataType: 'float',
-    description: 'Value of free operations'
-  },
-  {
-    sunatHeader: 'Tipo Operación',
-    tsField: 'operationType',
-    dbColumn: 'operation_type',
-    displayLabel: 'Tipo Operación',
-    dataType: 'string',
-    description: 'Operation type classification'
-  },
-  {
-    sunatHeader: 'DAM / CP',
-    tsField: 'damCp',
-    dbColumn: 'dam_cp',
-    displayLabel: 'DAM / CP',
-    dataType: 'string',
-    description: 'DAM / CP reference'
-  },
-  {
-    sunatHeader: 'CLU',
-    tsField: 'freeUseField',
-    dbColumn: 'free_use_field',
-    displayLabel: 'CLU',
-    dataType: 'string',
-    description: 'Free-use field for custom data'
-  }
+
+  // CLU1..CLU17 — campos de libre uso del contribuyente (pos 34-50)
+  // Nota: los campos PLE clásico (Tipo de Nota, Est. Comp, Valor FOB Embarcado,
+  // Valor OP Gratuitas, Tipo Operación, DAM/CP) no son parte de la estructura RVIE
+  // de SIRE — se mantienen en el tipo SunatSalesFields para compatibilidad pero
+  // no se exportan.
+  ...Array.from({ length: 17 }, (_, i) => {
+    const n = i + 1;
+    return {
+      sunatHeader: `CLU${n}`,
+      tsField: `freeUseField${n}` as keyof SalesInvoice,
+      dbColumn: `free_use_field_${n}`,
+      displayLabel: `CLU${n}`,
+      dataType: 'string' as const,
+      description: `Campo de libre uso ${n} (hasta 200 chars)`
+    };
+  })
 ] as const;
 
 /**
@@ -679,7 +655,8 @@ export const PURCHASE_SUNAT_COLUMNS_MAPPING: readonly PurchaseFieldMapping[] = [
     dbColumn: 'exchange_rate',
     displayLabel: 'Tipo de Cambio',
     dataType: 'float',
-    description: 'Exchange rate applied (for foreign currency transactions)'
+    description: 'Exchange rate applied (for foreign currency transactions)',
+    exportDecimals: 3
   },
 
   // Modified Voucher Reference (5 fields)
@@ -734,12 +711,12 @@ export const PURCHASE_SUNAT_COLUMNS_MAPPING: readonly PurchaseFieldMapping[] = [
     description: 'Goods and services classification'
   },
   {
-    sunatHeader: 'ID Proyecto Operadores',
+    sunatHeader: 'ID Proyecto Operadores/Participes',
     tsField: 'operatorsProjectId',
     dbColumn: 'operators_project_id',
-    displayLabel: 'ID Proyecto Operadores',
+    displayLabel: 'ID Proyecto Operadores/Participes',
     dataType: 'string',
-    description: 'Irregular societies operators project ID'
+    description: 'ID del proyecto de operadores/partícipes'
   },
   {
     sunatHeader: 'PorcPart',
@@ -758,44 +735,51 @@ export const PURCHASE_SUNAT_COLUMNS_MAPPING: readonly PurchaseFieldMapping[] = [
     description: 'Municipal bingo tax indicator'
   },
   {
-    sunatHeader: 'CAR Orig/ Ind E o I',
+    sunatHeader: 'CAR Orig',
     tsField: 'carExportImportIndicator',
     dbColumn: 'car_export_import_indicator',
-    displayLabel: 'CAR Orig/Ind E o I',
+    displayLabel: 'CAR Orig',
     dataType: 'string',
-    description: 'Original CAR / Export or import status indicator'
+    description: 'CAR original (referencia a comprobante original cuando se trata de NC/ND)'
   },
+  // SIRE pos 38-41: SUNAT los completa automáticamente con la propuesta. En TXT
+  // (sin cabecera) van como celdas vacías. En CSV (uso interno) usamos placeholders
+  // descriptivos para evitar que el parser deduplique columnas con header vacío.
   {
-    sunatHeader: 'Detracción',
+    sunatHeader: 'SIRE_AUTO_38',
     tsField: 'detraction',
     dbColumn: 'detraction',
-    displayLabel: 'Detracción',
+    displayLabel: '(SUNAT pos 38)',
     dataType: 'string',
-    description: 'Detraction indicator'
+    description: 'SIRE pos 38 — completado por SUNAT automáticamente',
+    sireAutoFilled: true
   },
   {
-    sunatHeader: 'Tipo de Nota',
+    sunatHeader: 'SIRE_AUTO_39',
     tsField: 'noteType',
     dbColumn: 'note_type',
-    displayLabel: 'Tipo de Nota',
+    displayLabel: '(SUNAT pos 39)',
     dataType: 'string',
-    description: 'Type of note (credit/debit)'
+    description: 'SIRE pos 39 — completado por SUNAT automáticamente',
+    sireAutoFilled: true
   },
   {
-    sunatHeader: 'Est. Comp.',
+    sunatHeader: 'SIRE_AUTO_40',
     tsField: 'voucherStatus',
     dbColumn: 'voucher_status',
-    displayLabel: 'Estado Comprobante',
+    displayLabel: '(SUNAT pos 40)',
     dataType: 'string',
-    description: 'Current status of the voucher'
+    description: 'SIRE pos 40 — completado por SUNAT automáticamente',
+    sireAutoFilled: true
   },
   {
-    sunatHeader: 'Incal',
+    sunatHeader: 'SIRE_AUTO_41',
     tsField: 'inconsistencyIndicator',
     dbColumn: 'inconsistency_indicator',
-    displayLabel: 'Indicador de Inconsistencia',
+    displayLabel: '(SUNAT pos 41)',
     dataType: 'string',
-    description: 'Inconsistencies or qualification indicator'
+    description: 'SIRE pos 41 — completado por SUNAT automáticamente',
+    sireAutoFilled: true
   },
 
   // Free-Use Codes (CLU1-CLU39) - 39 fields

@@ -4,6 +4,7 @@ import { Button } from '@/shared/components/ui/button';
 import { downloadSunatPeriodReport, type PeriodSummaryData } from '@/shared/lib/export/pdf-export';
 import { showSuccess, showInfo, showError, createShowInFolderAction } from '@/shared/lib/utils/toast';
 import { calculateSalesVatBreakdown, calculatePurchasesVatBreakdown } from '@/shared/lib/utils/invoice-calculations';
+import { nextPaint } from '@/shared/lib/utils/next-paint';
 import type { SalesInvoice } from '@/features/sales/types/sales.types';
 import type { PurchaseInvoice } from '@/features/purchases/types/purchases.types';
 
@@ -38,6 +39,8 @@ export const ExportPDFButton = memo(function ExportPDFButton({
 
   const handleExportPDF = async () => {
     setIsExporting(true);
+    // Let the "Descargando..." button repaint before the (synchronous) jsPDF work begins.
+    await nextPaint();
 
     try {
       // ✅ Calcular data solo cuando se hace click

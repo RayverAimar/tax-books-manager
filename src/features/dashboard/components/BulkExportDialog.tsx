@@ -219,12 +219,6 @@ export const BulkExportDialog: React.FC<BulkExportDialogProps> = ({ open, onOpen
                     <span className="text-xs text-muted-foreground">(Archivo de texto plano)</span>
                   </div>
                 </SelectItem>
-                <SelectItem value="excel">
-                  <div className="flex items-center gap-2">
-                    <span>Excel</span>
-                    <span className="text-xs text-muted-foreground">(Libro de Excel .xlsx)</span>
-                  </div>
-                </SelectItem>
               </SelectContent>
             </Select>
           </div>

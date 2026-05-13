@@ -1,0 +1,3734 @@
+{
+	"paises": [
+		{
+			"numero": "9001",
+			"descripcion": "BOUVET ISLAND"
+		},
+		{
+			"numero": "9002",
+			"descripcion": "COTE D'IVOIRE"
+		},
+		{
+			"numero": "9003",
+			"descripcion": "FALKLAND ISLANDS (MALVINAS)"
+		},
+		{
+			"numero": "9004",
+			"descripcion": "FRANCE, METROPOLITAN"
+		},
+		{
+			"numero": "9005",
+			"descripcion": "FRENCH SOUTHERN TERRITORIES"
+		},
+		{
+			"numero": "9006",
+			"descripcion": "HEARD AND MC DONALD ISLANDS"
+		},
+		{
+			"numero": "9007",
+			"descripcion": "MAYOTTE"
+		},
+		{
+			"numero": "9008",
+			"descripcion": "SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS"
+		},
+		{
+			"numero": "9009",
+			"descripcion": "SVALBARD AND JAN MAYEN ISLANDS"
+		},
+		{
+			"numero": "9010",
+			"descripcion": "UNITED STATES MINOR OUTLYING ISLANDS"
+		},
+		{
+			"numero": "9011",
+			"descripcion": "OTROS PAISES O LUGARES"
+		},
+		{
+			"numero": "9013",
+			"descripcion": "AFGANISTAN"
+		},
+		{
+			"numero": "9017",
+			"descripcion": "ALBANIA"
+		},
+		{
+			"numero": "9019",
+			"descripcion": "ALDERNEY"
+		},
+		{
+			"numero": "9023",
+			"descripcion": "ALEMANIA"
+		},
+		{
+			"numero": "9026",
+			"descripcion": "ARMENIA"
+		},
+		{
+			"numero": "9027",
+			"descripcion": "ARUBA"
+		},
+		{
+			"numero": "9028",
+			"descripcion": "ASCENCI?N"
+		},
+		{
+			"numero": "9029",
+			"descripcion": "BOSNIA-HERZEGOVINA"
+		},
+		{
+			"numero": "9031",
+			"descripcion": "BURKINA FASO"
+		},
+		{
+			"numero": "9037",
+			"descripcion": "ANDORRA"
+		},
+		{
+			"numero": "9040",
+			"descripcion": "ANGOLA"
+		},
+		{
+			"numero": "9041",
+			"descripcion": "ANGUILLA"
+		},
+		{
+			"numero": "9043",
+			"descripcion": "ANTIGUA Y BARBUDA"
+		},
+		{
+			"numero": "9047",
+			"descripcion": "ANTILLAS HOLANDESAS"
+		},
+		{
+			"numero": "9053",
+			"descripcion": "ARABIA SAUDITA"
+		},
+		{
+			"numero": "9059",
+			"descripcion": "ARGELIA"
+		},
+		{
+			"numero": "9063",
+			"descripcion": "ARGENTINA"
+		},
+		{
+			"numero": "9069",
+			"descripcion": "AUSTRALIA"
+		},
+		{
+			"numero": "9072",
+			"descripcion": "AUSTRIA"
+		},
+		{
+			"numero": "9074",
+			"descripcion": "AZERBAIJAN"
+		},
+		{
+			"numero": "9077",
+			"descripcion": "BAHAMAS"
+		},
+		{
+			"numero": "9080",
+			"descripcion": "BAHREIN"
+		},
+		{
+			"numero": "9081",
+			"descripcion": "BANGLADESH"
+		},
+		{
+			"numero": "9083",
+			"descripcion": "BARBADOS"
+		},
+		{
+			"numero": "9087",
+			"descripcion": "BELGICA"
+		},
+		{
+			"numero": "9088",
+			"descripcion": "BELICE"
+		},
+		{
+			"numero": "9090",
+			"descripcion": "BERMUDAS"
+		},
+		{
+			"numero": "9091",
+			"descripcion": "BELARUS"
+		},
+		{
+			"numero": "9093",
+			"descripcion": "MYANMAR"
+		},
+		{
+			"numero": "9097",
+			"descripcion": "BOLIVIA"
+		},
+		{
+			"numero": "9101",
+			"descripcion": "BOTSWANA"
+		},
+		{
+			"numero": "9105",
+			"descripcion": "BRASIL"
+		},
+		{
+			"numero": "9108",
+			"descripcion": "BRUNEI DARUSSALAM"
+		},
+		{
+			"numero": "9111",
+			"descripcion": "BULGARIA"
+		},
+		{
+			"numero": "9115",
+			"descripcion": "BURUNDI"
+		},
+		{
+			"numero": "9119",
+			"descripcion": "BUTAN"
+		},
+		{
+			"numero": "9127",
+			"descripcion": "CABO VERDE"
+		},
+		{
+			"numero": "9137",
+			"descripcion": "CAIMAN,ISLAS"
+		},
+		{
+			"numero": "9141",
+			"descripcion": "CAMBOYA"
+		},
+		{
+			"numero": "9145",
+			"descripcion": "CAMERUN,REPUBLICA UNIDA DEL"
+		},
+		{
+			"numero": "9147",
+			"descripcion": "CAMPIONE D?TALIA"
+		},
+		{
+			"numero": "9149",
+			"descripcion": "CANADA"
+		},
+		{
+			"numero": "9155",
+			"descripcion": "CANAL (NORMANDAS), ISLAS"
+		},
+		{
+			"numero": "9157",
+			"descripcion": "CANTON Y ENDERBURRY"
+		},
+		{
+			"numero": "9159",
+			"descripcion": "SANTA SEDE"
+		},
+		{
+			"numero": "9165",
+			"descripcion": "COCOS (KEELING),ISLAS"
+		},
+		{
+			"numero": "9169",
+			"descripcion": "COLOMBIA"
+		},
+		{
+			"numero": "9173",
+			"descripcion": "COMORAS"
+		},
+		{
+			"numero": "9177",
+			"descripcion": "CONGO"
+		},
+		{
+			"numero": "9183",
+			"descripcion": "COOK, ISLAS"
+		},
+		{
+			"numero": "9187",
+			"descripcion": "COREA (NORTE), REPUBLICA POPULAR DEMOCRATICA DE"
+		},
+		{
+			"numero": "9190",
+			"descripcion": "COREA (SUR), REPUBLICA DE"
+		},
+		{
+			"numero": "9193",
+			"descripcion": "COSTA DE MARFIL"
+		},
+		{
+			"numero": "9196",
+			"descripcion": "COSTA RICA"
+		},
+		{
+			"numero": "9198",
+			"descripcion": "CROACIA"
+		},
+		{
+			"numero": "9199",
+			"descripcion": "CUBA"
+		},
+		{
+			"numero": "9203",
+			"descripcion": "CHAD"
+		},
+		{
+			"numero": "9207",
+			"descripcion": "CHECOSLOVAQUIA"
+		},
+		{
+			"numero": "9211",
+			"descripcion": "CHILE"
+		},
+		{
+			"numero": "9215",
+			"descripcion": "CHINA"
+		},
+		{
+			"numero": "9218",
+			"descripcion": "TAIWAN (FORMOSA)"
+		},
+		{
+			"numero": "9221",
+			"descripcion": "CHIPRE"
+		},
+		{
+			"numero": "9229",
+			"descripcion": "BENIN"
+		},
+		{
+			"numero": "9232",
+			"descripcion": "DINAMARCA"
+		},
+		{
+			"numero": "9235",
+			"descripcion": "DOMINICA"
+		},
+		{
+			"numero": "9239",
+			"descripcion": "ECUADOR"
+		},
+		{
+			"numero": "9240",
+			"descripcion": "EGIPTO"
+		},
+		{
+			"numero": "9242",
+			"descripcion": "EL SALVADOR"
+		},
+		{
+			"numero": "9243",
+			"descripcion": "ERITREA"
+		},
+		{
+			"numero": "9244",
+			"descripcion": "EMIRATOS ARABES UNIDOS"
+		},
+		{
+			"numero": "9245",
+			"descripcion": "ESPA?A"
+		},
+		{
+			"numero": "9246",
+			"descripcion": "ESLOVAQUIA"
+		},
+		{
+			"numero": "9247",
+			"descripcion": "ESLOVENIA"
+		},
+		{
+			"numero": "9249",
+			"descripcion": "ESTADOS UNIDOS"
+		},
+		{
+			"numero": "9251",
+			"descripcion": "ESTONIA"
+		},
+		{
+			"numero": "9253",
+			"descripcion": "ETIOPIA"
+		},
+		{
+			"numero": "9259",
+			"descripcion": "FEROE, ISLAS"
+		},
+		{
+			"numero": "9267",
+			"descripcion": "FILIPINAS"
+		},
+		{
+			"numero": "9271",
+			"descripcion": "FINLANDIA"
+		},
+		{
+			"numero": "9275",
+			"descripcion": "FRANCIA"
+		},
+		{
+			"numero": "9281",
+			"descripcion": "GABON"
+		},
+		{
+			"numero": "9285",
+			"descripcion": "GAMBIA"
+		},
+		{
+			"numero": "9286",
+			"descripcion": "GAZA Y JERICO"
+		},
+		{
+			"numero": "9287",
+			"descripcion": "GEORGIA"
+		},
+		{
+			"numero": "9289",
+			"descripcion": "GHANA"
+		},
+		{
+			"numero": "9293",
+			"descripcion": "GIBRALTAR"
+		},
+		{
+			"numero": "9297",
+			"descripcion": "GRANADA"
+		},
+		{
+			"numero": "9301",
+			"descripcion": "GRECIA"
+		},
+		{
+			"numero": "9305",
+			"descripcion": "GROENLANDIA"
+		},
+		{
+			"numero": "9309",
+			"descripcion": "GUADALUPE"
+		},
+		{
+			"numero": "9313",
+			"descripcion": "GUAM"
+		},
+		{
+			"numero": "9317",
+			"descripcion": "GUATEMALA"
+		},
+		{
+			"numero": "9325",
+			"descripcion": "GUAYANA FRANCESA"
+		},
+		{
+			"numero": "9327",
+			"descripcion": "GUERNSEY"
+		},
+		{
+			"numero": "9329",
+			"descripcion": "GUINEA"
+		},
+		{
+			"numero": "9331",
+			"descripcion": "GUINEA ECUATORIAL"
+		},
+		{
+			"numero": "9334",
+			"descripcion": "GUINEA-BISSAU"
+		},
+		{
+			"numero": "9337",
+			"descripcion": "GUYANA"
+		},
+		{
+			"numero": "9341",
+			"descripcion": "HAITI"
+		},
+		{
+			"numero": "9345",
+			"descripcion": "HONDURAS"
+		},
+		{
+			"numero": "9348",
+			"descripcion": "HONDURAS BRITANICAS"
+		},
+		{
+			"numero": "9351",
+			"descripcion": "HONG KONG"
+		},
+		{
+			"numero": "9355",
+			"descripcion": "HUNGRIA"
+		},
+		{
+			"numero": "9361",
+			"descripcion": "INDIA"
+		},
+		{
+			"numero": "9365",
+			"descripcion": "INDONESIA"
+		},
+		{
+			"numero": "9369",
+			"descripcion": "IRAK"
+		},
+		{
+			"numero": "9372",
+			"descripcion": "IRAN, REPUBLICA ISLAMICA DEL"
+		},
+		{
+			"numero": "9375",
+			"descripcion": "IRLANDA (EIRE)"
+		},
+		{
+			"numero": "9377",
+			"descripcion": "ISLA AZORES"
+		},
+		{
+			"numero": "9378",
+			"descripcion": "ISLA DEL MAN"
+		},
+		{
+			"numero": "9379",
+			"descripcion": "ISLANDIA"
+		},
+		{
+			"numero": "9380",
+			"descripcion": "ISLAS CANARIAS"
+		},
+		{
+			"numero": "9381",
+			"descripcion": "ISLAS DE CHRISTMAS"
+		},
+		{
+			"numero": "9382",
+			"descripcion": "ISLAS QESHM"
+		},
+		{
+			"numero": "9383",
+			"descripcion": "ISRAEL"
+		},
+		{
+			"numero": "9386",
+			"descripcion": "ITALIA"
+		},
+		{
+			"numero": "9391",
+			"descripcion": "JAMAICA"
+		},
+		{
+			"numero": "9395",
+			"descripcion": "JONSTON, ISLAS"
+		},
+		{
+			"numero": "9399",
+			"descripcion": "JAPON"
+		},
+		{
+			"numero": "9401",
+			"descripcion": "JERSEY"
+		},
+		{
+			"numero": "9403",
+			"descripcion": "JORDANIA"
+		},
+		{
+			"numero": "9406",
+			"descripcion": "KAZAJSTAN"
+		},
+		{
+			"numero": "9410",
+			"descripcion": "KENIA"
+		},
+		{
+			"numero": "9411",
+			"descripcion": "KIRIBATI"
+		},
+		{
+			"numero": "9412",
+			"descripcion": "KIRGUIZISTAN"
+		},
+		{
+			"numero": "9413",
+			"descripcion": "KUWAIT"
+		},
+		{
+			"numero": "9418",
+			"descripcion": "LABUN"
+		},
+		{
+			"numero": "9420",
+			"descripcion": "LAOS, REPUBLICA POPULAR DEMOCRATICA DE"
+		},
+		{
+			"numero": "9426",
+			"descripcion": "LESOTHO"
+		},
+		{
+			"numero": "9429",
+			"descripcion": "LETONIA"
+		},
+		{
+			"numero": "9431",
+			"descripcion": "LIBANO"
+		},
+		{
+			"numero": "9434",
+			"descripcion": "LIBERIA"
+		},
+		{
+			"numero": "9438",
+			"descripcion": "LIBIA"
+		},
+		{
+			"numero": "9440",
+			"descripcion": "LIECHTENSTEIN"
+		},
+		{
+			"numero": "9443",
+			"descripcion": "LITUANIA"
+		},
+		{
+			"numero": "9445",
+			"descripcion": "LUXEMBURGO"
+		},
+		{
+			"numero": "9447",
+			"descripcion": "MACAO"
+		},
+		{
+			"numero": "9448",
+			"descripcion": "MACEDONIA"
+		},
+		{
+			"numero": "9450",
+			"descripcion": "MADAGASCAR"
+		},
+		{
+			"numero": "9453",
+			"descripcion": "MADEIRA"
+		},
+		{
+			"numero": "9455",
+			"descripcion": "MALAYSIA"
+		},
+		{
+			"numero": "9458",
+			"descripcion": "MALAWI"
+		},
+		{
+			"numero": "9461",
+			"descripcion": "MALDIVAS"
+		},
+		{
+			"numero": "9464",
+			"descripcion": "MALI"
+		},
+		{
+			"numero": "9467",
+			"descripcion": "MALTA"
+		},
+		{
+			"numero": "9469",
+			"descripcion": "MARIANAS DEL NORTE, ISLAS"
+		},
+		{
+			"numero": "9472",
+			"descripcion": "MARSHALL, ISLAS"
+		},
+		{
+			"numero": "9474",
+			"descripcion": "MARRUECOS"
+		},
+		{
+			"numero": "9477",
+			"descripcion": "MARTINICA"
+		},
+		{
+			"numero": "9485",
+			"descripcion": "MAURICIO"
+		},
+		{
+			"numero": "9488",
+			"descripcion": "MAURITANIA"
+		},
+		{
+			"numero": "9493",
+			"descripcion": "MEXICO"
+		},
+		{
+			"numero": "9494",
+			"descripcion": "MICRONESIA, ESTADOS FEDERADOS DE"
+		},
+		{
+			"numero": "9495",
+			"descripcion": "MIDWAY ISLAS"
+		},
+		{
+			"numero": "9496",
+			"descripcion": "MOLDAVIA"
+		},
+		{
+			"numero": "9497",
+			"descripcion": "MONGOLIA"
+		},
+		{
+			"numero": "9498",
+			"descripcion": "MONACO"
+		},
+		{
+			"numero": "9501",
+			"descripcion": "MONTSERRAT, ISLA"
+		},
+		{
+			"numero": "9505",
+			"descripcion": "MOZAMBIQUE"
+		},
+		{
+			"numero": "9507",
+			"descripcion": "NAMIBIA"
+		},
+		{
+			"numero": "9508",
+			"descripcion": "NAURU"
+		},
+		{
+			"numero": "9511",
+			"descripcion": "NAVIDAD (CHRISTMAS), ISLA"
+		},
+		{
+			"numero": "9517",
+			"descripcion": "NEPAL"
+		},
+		{
+			"numero": "9521",
+			"descripcion": "NICARAGUA"
+		},
+		{
+			"numero": "9525",
+			"descripcion": "NIGER"
+		},
+		{
+			"numero": "9528",
+			"descripcion": "NIGERIA"
+		},
+		{
+			"numero": "9531",
+			"descripcion": "NIUE, ISLA"
+		},
+		{
+			"numero": "9535",
+			"descripcion": "NORFOLK, ISLA"
+		},
+		{
+			"numero": "9538",
+			"descripcion": "NORUEGA"
+		},
+		{
+			"numero": "9542",
+			"descripcion": "NUEVA CALEDONIA"
+		},
+		{
+			"numero": "9545",
+			"descripcion": "PAPUASIA NUEVA GUINEA"
+		},
+		{
+			"numero": "9548",
+			"descripcion": "NUEVA ZELANDA"
+		},
+		{
+			"numero": "9551",
+			"descripcion": "VANUATU"
+		},
+		{
+			"numero": "9556",
+			"descripcion": "OMAN"
+		},
+		{
+			"numero": "9566",
+			"descripcion": "PACIFICO, ISLAS DEL"
+		},
+		{
+			"numero": "9573",
+			"descripcion": "PAISES BAJOS"
+		},
+		{
+			"numero": "9576",
+			"descripcion": "PAKISTAN"
+		},
+		{
+			"numero": "9578",
+			"descripcion": "PALAU, ISLAS"
+		},
+		{
+			"numero": "9579",
+			"descripcion": "TERRITORIO AUTONOMO DE PALESTINA."
+		},
+		{
+			"numero": "9580",
+			"descripcion": "PANAMA"
+		},
+		{
+			"numero": "9586",
+			"descripcion": "PARAGUAY"
+		},
+		{
+			"numero": "9589",
+			"descripcion": "PERU"
+		},
+		{
+			"numero": "9593",
+			"descripcion": "PITCAIRN, ISLA"
+		},
+		{
+			"numero": "9599",
+			"descripcion": "POLINESIA FRANCESA"
+		},
+		{
+			"numero": "9603",
+			"descripcion": "POLONIA"
+		},
+		{
+			"numero": "9607",
+			"descripcion": "PORTUGAL"
+		},
+		{
+			"numero": "9611",
+			"descripcion": "PUERTO RICO"
+		},
+		{
+			"numero": "9618",
+			"descripcion": "QATAR"
+		},
+		{
+			"numero": "9628",
+			"descripcion": "REINO UNIDO"
+		},
+		{
+			"numero": "9629",
+			"descripcion": "ESCOCIA"
+		},
+		{
+			"numero": "9633",
+			"descripcion": "REPUBLICA ARABE UNIDA"
+		},
+		{
+			"numero": "9640",
+			"descripcion": "REPUBLICA CENTROAFRICANA"
+		},
+		{
+			"numero": "9644",
+			"descripcion": "REPUBLICA CHECA"
+		},
+		{
+			"numero": "9645",
+			"descripcion": "REPUBLICA DE SWAZILANDIA"
+		},
+		{
+			"numero": "9646",
+			"descripcion": "REPUBLICA DE TUNEZ"
+		},
+		{
+			"numero": "9647",
+			"descripcion": "REPUBLICA DOMINICANA"
+		},
+		{
+			"numero": "9660",
+			"descripcion": "REUNION"
+		},
+		{
+			"numero": "9665",
+			"descripcion": "ZIMBABWE"
+		},
+		{
+			"numero": "9670",
+			"descripcion": "RUMANIA"
+		},
+		{
+			"numero": "9675",
+			"descripcion": "RUANDA"
+		},
+		{
+			"numero": "9676",
+			"descripcion": "RUSIA"
+		},
+		{
+			"numero": "9677",
+			"descripcion": "SALOMON, ISLAS"
+		},
+		{
+			"numero": "9685",
+			"descripcion": "SAHARA OCCIDENTAL"
+		},
+		{
+			"numero": "9687",
+			"descripcion": "SAMOA OCCIDENTAL"
+		},
+		{
+			"numero": "9690",
+			"descripcion": "SAMOA NORTEAMERICANA"
+		},
+		{
+			"numero": "9695",
+			"descripcion": "SAN CRISTOBAL Y NIEVES"
+		},
+		{
+			"numero": "9697",
+			"descripcion": "SAN MARINO"
+		},
+		{
+			"numero": "9700",
+			"descripcion": "SAN PEDRO Y MIQUELON"
+		},
+		{
+			"numero": "9705",
+			"descripcion": "SAN VICENTE Y LAS GRANADINAS"
+		},
+		{
+			"numero": "9710",
+			"descripcion": "SANTA ELENA"
+		},
+		{
+			"numero": "9715",
+			"descripcion": "SANTA LUCIA"
+		},
+		{
+			"numero": "9720",
+			"descripcion": "SANTO TOME Y PRINCIPE"
+		},
+		{
+			"numero": "9728",
+			"descripcion": "SENEGAL"
+		},
+		{
+			"numero": "9731",
+			"descripcion": "SEYCHELLES"
+		},
+		{
+			"numero": "9735",
+			"descripcion": "SIERRA LEONA"
+		},
+		{
+			"numero": "9741",
+			"descripcion": "SINGAPUR"
+		},
+		{
+			"numero": "9744",
+			"descripcion": "SIRIA, REPUBLICA ARABE DE"
+		},
+		{
+			"numero": "9748",
+			"descripcion": "SOMALIA"
+		},
+		{
+			"numero": "9750",
+			"descripcion": "SRI LANKA"
+		},
+		{
+			"numero": "9756",
+			"descripcion": "SUDAFRICA, REPUBLICA DE"
+		},
+		{
+			"numero": "9759",
+			"descripcion": "SUDAN"
+		},
+		{
+			"numero": "9764",
+			"descripcion": "SUECIA"
+		},
+		{
+			"numero": "9767",
+			"descripcion": "SUIZA"
+		},
+		{
+			"numero": "9770",
+			"descripcion": "SURINAM"
+		},
+		{
+			"numero": "9773",
+			"descripcion": "SAWSILANDIA"
+		},
+		{
+			"numero": "9774",
+			"descripcion": "TADJIKISTAN"
+		},
+		{
+			"numero": "9776",
+			"descripcion": "TAILANDIA"
+		},
+		{
+			"numero": "9780",
+			"descripcion": "TANZANIA, REPUBLICA UNIDA DE"
+		},
+		{
+			"numero": "9783",
+			"descripcion": "DJIBOUTI"
+		},
+		{
+			"numero": "9786",
+			"descripcion": "TERRITORIO ANTARTICO BRITANICO"
+		},
+		{
+			"numero": "9787",
+			"descripcion": "TERRITORIO BRITANICO DEL OCEANO INDICO"
+		},
+		{
+			"numero": "9788",
+			"descripcion": "TIMOR DEL ESTE"
+		},
+		{
+			"numero": "9800",
+			"descripcion": "TOGO"
+		},
+		{
+			"numero": "9805",
+			"descripcion": "TOKELAU"
+		},
+		{
+			"numero": "9810",
+			"descripcion": "TONGA"
+		},
+		{
+			"numero": "9815",
+			"descripcion": "TRINIDAD Y TOBAGO"
+		},
+		{
+			"numero": "9816",
+			"descripcion": "TRISTAN DA CUNHA"
+		},
+		{
+			"numero": "9820",
+			"descripcion": "TUNICIA"
+		},
+		{
+			"numero": "9823",
+			"descripcion": "TURCAS Y CAICOS, ISLAS"
+		},
+		{
+			"numero": "9825",
+			"descripcion": "TURKMENISTAN"
+		},
+		{
+			"numero": "9827",
+			"descripcion": "TURQUIA"
+		},
+		{
+			"numero": "9828",
+			"descripcion": "TUVALU"
+		},
+		{
+			"numero": "9830",
+			"descripcion": "UCRANIA"
+		},
+		{
+			"numero": "9833",
+			"descripcion": "UGANDA"
+		},
+		{
+			"numero": "9840",
+			"descripcion": "URSS"
+		},
+		{
+			"numero": "9845",
+			"descripcion": "URUGUAY"
+		},
+		{
+			"numero": "9847",
+			"descripcion": "UZBEKISTAN"
+		},
+		{
+			"numero": "9850",
+			"descripcion": "VENEZUELA"
+		},
+		{
+			"numero": "9855",
+			"descripcion": "VIET NAM"
+		},
+		{
+			"numero": "9858",
+			"descripcion": "VIETNAM (DEL NORTE)"
+		},
+		{
+			"numero": "9863",
+			"descripcion": "VIRGENES, ISLAS (BRITANICAS)"
+		},
+		{
+			"numero": "9866",
+			"descripcion": "VIRGENES, ISLAS (NORTEAMERICANAS)"
+		},
+		{
+			"numero": "9870",
+			"descripcion": "FIJI"
+		},
+		{
+			"numero": "9873",
+			"descripcion": "WAKE, ISLA"
+		},
+		{
+			"numero": "9875",
+			"descripcion": "WALLIS Y FORTUNA, ISLAS"
+		},
+		{
+			"numero": "9880",
+			"descripcion": "YEMEN"
+		},
+		{
+			"numero": "9885",
+			"descripcion": "YUGOSLAVIA"
+		},
+		{
+			"numero": "9888",
+			"descripcion": "ZAIRE"
+		},
+		{
+			"numero": "9890",
+			"descripcion": "ZAMBIA"
+		},
+		{
+			"numero": "9895",
+			"descripcion": "ZONA DEL CANAL DE PANAMA"
+		},
+		{
+			"numero": "9896",
+			"descripcion": "ZONA LIBRE OSTRAVA"
+		},
+		{
+			"numero": "9897",
+			"descripcion": "ZONA NEUTRAL (PALESTINA)"
+		}
+	],
+	"docIdentidad": [
+		{
+			"codigo": "",
+			"descripcion": "Seleccionar",
+			"longitud": 15,
+			"numerico": false,
+			"exactitud": false,
+			"modulo11": false
+		},
+		{
+			"codigo": "0",
+			"descripcion": "Doc.trib.no.dom.sin.ruc",
+			"longitud": 15,
+			"numerico": false,
+			"exactitud": false,
+			"modulo11": false
+		},
+		{
+			"codigo": "1",
+			"descripcion": "Doc. Nacional de identidad",
+			"longitud": 8,
+			"numerico": true,
+			"exactitud": true,
+			"modulo11": false
+		},
+		{
+			"codigo": "4",
+			"descripcion": "Carnet de extranjeria",
+			"longitud": 12,
+			"numerico": false,
+			"exactitud": false,
+			"modulo11": false
+		},
+		{
+			"codigo": "6",
+			"descripcion": "Registro Unico de contribuyentes",
+			"longitud": 11,
+			"numerico": true,
+			"exactitud": true,
+			"modulo11": true
+		},
+		{
+			"codigo": "7",
+			"descripcion": "Pasaporte",
+			"longitud": 12,
+			"numerico": false,
+			"exactitud": false,
+			"modulo11": false
+		},
+		{
+			"codigo": "A",
+			"descripcion": "Ced. Diplomatica de identidad",
+			"longitud": 15,
+			"numerico": true,
+			"exactitud": true,
+			"modulo11": false
+		},
+		{
+			"codigo": "B",
+			"descripcion": "Documento identidad pais residencia-no.d",
+			"longitud": 15,
+			"numerico": false,
+			"exactitud": false,
+			"modulo11": false
+		},
+		{
+			"codigo": "C",
+			"descripcion": "Tax Identificacion Number - TIN – Doc Trib PP.NN",
+			"longitud": 15,
+			"numerico": false,
+			"exactitud": false,
+			"modulo11": false
+		},
+		{
+			"codigo": "D",
+			"descripcion": "Identification Number - IN – Doc Trib PP. JJ",
+			"longitud": 15,
+			"numerico": false,
+			"exactitud": false,
+			"modulo11": false
+		},
+		{
+			"codigo": "E",
+			"descripcion": "TAM- Tarjeta Andina de Migracion",
+			"longitud": 15,
+			"numerico": false,
+			"exactitud": false,
+			"modulo11": false
+		},
+		{
+			"codigo": "F",
+			"descripcion": "Permiso Temporal de Permanencia PTP",
+			"longitud": 15,
+			"numerico": false,
+			"exactitud": false,
+			"modulo11": false
+		}
+	],
+	"comprobantes": [
+		{
+			"codigo": "00",
+			"descripcion": "Otros",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": false
+			}
+		},
+		{
+			"codigo": "01",
+			"descripcion": "Factura",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^[0-9]{4}$",
+				"validacionElectronico": "^E001|^F[A-Z0-9]{3}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 8,
+				"exactitud": false,
+				"validacion": "^(?!0{1,8})[0-9]{1,8}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "02",
+			"descripcion": "Recibo por Honorarios",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^[0-9]{4}$",
+				"validacionElectronico": "^E001$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 7,
+				"exactitud": false,
+				"validacion": "^(?!0{1,7})[0-9]{1,7}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "03",
+			"descripcion": "Boleta de Venta",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^[0-9]{4}$",
+				"validacionElectronico": "^EB01|^B[A-Z0-9]{3}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 8,
+				"exactitud": false,
+				"validacion": "^(?!0{1,[MAXIMO]})[0-9]{1,[MAXIMO]}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "04",
+			"descripcion": "Liquidacion de compra",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^[0-9]{4}$",
+				"validacionElectronico": "^E001|^L[A-Z0-9]{3}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 8,
+				"exactitud": false,
+				"validacion": "^(?!0{1,8})[0-9]{1,8}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "05",
+			"descripcion": "Boletos de Transporte Aereo",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 11,
+				"exactitud": false,
+				"validacionFisico": "^(?!0{1,11})[0-9]{1,11}$",
+				"validacionElectronico": "^(?!0{1,11})[0-9]{1,11}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 13,
+				"exactitud": false,
+				"validacion": "^(?!0{1,13})[0-9]{1,13}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "06",
+			"descripcion": "Carta de porte aereo",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^(?!0{4})[0-9]{4}$",
+				"validacionElectronico": "^(?!0{4})[0-9]{4}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 8,
+				"exactitud": false,
+				"validacion": "^(?!0{1,8})[0-9]{1,8}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "07",
+			"descripcion": "Nota de cr\u00e9dito",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^[0-9]{4}$",
+				"validacionElectronico": "^E001|^EB01|^F[A-Z0-9]{3}|^B[A-Z0-9]{3}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 8,
+				"exactitud": false,
+				"validacion": "^(?!0{1,8})[0-9]{1,8}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "08",
+			"descripcion": "Nota de debito",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^[0-9]{4}$",
+				"validacionElectronico": "^E001|^EB01|^F[A-Z0-9]{3}|^B[A-Z0-9]{3}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 8,
+				"exactitud": false,
+				"validacion": "^(?!0{1,8})[0-9]{1,8}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "10",
+			"descripcion": "Recibo por Arrendamiento o subarrendamiento (formulario N\u00B0 1683)",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^(1683)$",
+				"validacionElectronico": "^(1683)$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "11",
+			"descripcion": "Poliza emitida por las Bolsas de Valores",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 15,
+				"exactitud": true,
+				"validacion": "^(?!0{15})[0-9]{15}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "12",
+			"descripcion": "Ticket o cinta emitido por maquina registradora o (5) Ticket Pos",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^CF[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "13",
+			"descripcion": "Documentos emitidos por las empresas del sistema financiero y de seguros",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^([A-Z0-9]{1,20})$",
+				"numerico": false
+			}
+		},
+		{
+			"codigo": "14",
+			"descripcion": "Recibos emitidos por los servicios publicos de suministro de energia electrica y agua",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^(?!S{1,20})[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^(S{1,20})[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": false
+			}
+		},
+		{
+			"codigo": "15",
+			"descripcion": "Boletos emitidos por el servicio de transporte terrestre regular urbano de pasajeros",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": false
+			}
+		},
+		{
+			"codigo": "16",
+			"descripcion": "Boletos de viaje emitidos por las empresas de transporte nacional de pasajeros",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "17",
+			"descripcion": "Documento emitido por la Iglesia Catolica por el arrendamiento de bienes inmuebles",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "18",
+			"descripcion": "Documentos emitidos por las Administradoras Privadas de Fondos de Pensiones",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "19",
+			"descripcion": "Boletos numerados o entradas que se entreguen por atracciones o espectaculos publicos en general",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "21",
+			"descripcion": "Conocimiento de embarque por el servicio de transporte de carga aerea y maritima respectivamente",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": false
+			}
+		},
+		{
+			"codigo": "22",
+			"descripcion": "Formulario N\u00B0 820 - Comprobante por Operaciones No Habituales",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^(0820)$",
+				"validacionElectronico": "^(0820)$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "23",
+			"descripcion": "Polizas de Adjudicacion por remate o adjudicacion de bienes",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": false,
+				"validacionFisico": "^E[A-Z0-9]{1,3}$",
+				"validacionElectronico": "^E[A-Z0-9]{1,3}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 7,
+				"exactitud": false,
+				"validacion": "^(?!0{1,7})[0-9]{1,7}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "24",
+			"descripcion": "Certificado de pago de regalias emitidas por PERUPETRO S.A",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": false
+			}
+		},
+		{
+			"codigo": "25",
+			"descripcion": "Documento de Atribucion (Ley del Impuesto General a las Ventas e Impuesto Selectivo al Consumo, Art. 19º, ultimo parrafo, R.S. N\u00B0 022-98-SUNAT)",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": false,
+				"validacionFisico": "^[0-9]{4}$",
+				"validacionElectronico": "^[0-9]{4}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 7,
+				"exactitud": false,
+				"validacion": "^(?!0{1,7})[0-9]{1,7}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "27",
+			"descripcion": "Seguro Complementario de Trabajo de Riesgo",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "28",
+			"descripcion": "Documentos emitidos por los servicios aeroportuarios prestados a favor de los pasajeros por CORPAC S.A.",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "29",
+			"descripcion": "Documentos emitidos por la COFOPRI en calidad de oferta de venta de terrenos",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "30",
+			"descripcion": "Documentos emitidos por las empresas que desempe\u00f1an el rol adquirente en los sistemas de pago mediante tarjetas de credito y debito, emitidas por bancos e instituciones financieras o crediticias, domiciliados o no en el pais",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-EG-Z][A-Z0-9]{1,20}$",
+				"validacionElectronico": "^(F{1,20})[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "32",
+			"descripcion": "Documentos emitidos por las empresas recaudadoras de la denominada Garantia de Red Principal a la que hace referencia el numeral 7.6 del articulo 7 de la Ley Nº 27133 - Ley de Promocion del Desarrollo de la Industria del Gas Natural",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "34",
+			"descripcion": "Documento del Operador",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 7,
+				"exactitud": false,
+				"validacionFisico": "^\\s*(?!0{1,7}\\s*$)\\p{Nd}{1,7}\\s*$",
+				"validacionElectronico": "^F[A-Z0-9]{1,6}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 8,
+				"exactitud": false,
+				"validacion": "^(?!0{1,8})[0-9]{1,8}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "35",
+			"descripcion": "Documento del Participe",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 7,
+				"exactitud": false,				
+				"validacionFisico": "^\\s*(?!0{1,7}\\s*$)\\p{Nd}{1,7}\\s*$",
+        		"validacionElectronico": "^F[A-Z0-9]{1,6}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 8,
+				"exactitud": false,
+				"validacion": "^(?!0{1,8})[0-9]{1,8}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "36",
+			"descripcion": "Recibo de Distribucion de Gas Natural y Recibo Electronico SP",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^[0-9]{4}$",
+				"validacionElectronico": "^(S{1,20})[A-Z0-9]{3}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 8,
+				"exactitud": false,
+				"validacion": "^(?!0{1,8})[0-9]{1,8}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "37",
+			"descripcion": "Documentos que emitan los concesionarios del servicio de revisiones tecnicas vehiculares",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "42",
+			"descripcion": "Documentos emitidos por las empresas que desempe\u00f1an el rol adquiriente en los sistemas de pago mediante tarjetas de credito emitidas por ellas mismas",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^(?!F{1,20})[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^(F{1,20})[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "43",
+			"descripcion": "Boletos emitidos por las Compa\u00f1ias de Aviacion Comercial que prestan servicios de transporte aereo no regular de pasajeros y transporte aereo especial de pasajeros",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "44",
+			"descripcion": "Billetes de loteria, rifas y apuestas",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "45",
+			"descripcion": "Documentos emitidos por centros educativos y culturales reconocidos por el Ministerio de Educacion, universidades, asociaciones y fundaciones, en lo referente a sus actividades no gravadas con tributos administrados por la SUNAT",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "46",
+			"descripcion": "Formulario de Declaracion - pago o Boleta de pago de tributos Internos",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 5,
+				"exactitud": true,
+				"validacionFisico": "^[A-Z0-9]{1,5}$",
+				"validacionElectronico": "^[A-Z0-9]{1,5}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "48",
+			"descripcion": "Comprobante de Operaciones - Ley N\u00B0 29972",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^(?!0{4})[0-9]{4}$",
+				"validacionElectronico": "^(?!0{4})[0-9]{4}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 7,
+				"exactitud": false,
+				"validacion": "^(?!0{1,7})[0-9]{1,7}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "50",
+			"descripcion": "Declaracion Aduanera de Mercancias - Importacion definitiva",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 6,
+				"exactitud": false,
+				"validacionFisico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$",
+				"validacionElectronico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 10,
+				"exactitud": false,
+				"validacion": "^(?!0{1,10})[0-9]{1,10}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "51",
+			"descripcion": "Poliza o DUI Fraccionada",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 6,
+				"exactitud": false,
+				"validacionFisico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$",
+				"validacionElectronico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 10,
+				"exactitud": false,
+				"validacion": "^(?!0{1,10})[0-9]{1,10}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "52",
+			"descripcion": "Despacho Simplificado - Importacion Simplificada",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 6,
+				"exactitud": false,
+				"validacionFisico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$",
+				"validacionElectronico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 10,
+				"exactitud": false,
+				"validacion": "^(?!0{1,10})[0-9]{1,10}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "53",
+			"descripcion": "Declaracion de Mensajeria o Courier",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 6,
+				"exactitud": false,
+				"validacionFisico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$",
+				"validacionElectronico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 10,
+				"exactitud": false,
+				"validacion": "^(?!0{1,10})[0-9]{1,10}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "54",
+			"descripcion": "Liquidacion de Cobranza",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 3,
+				"exactitud": true,
+				"validacionFisico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$",
+				"validacionElectronico": "^(000|019|028|037|046|055|064|073|082|091|109|118|127|136|145|154|163|172|181|190|217|226|235|244|253|262|271|280|299|370|884|893|901|910|929|938|947|956|965|974)$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "55",
+			"descripcion": "BVME para transporte ferroviario de pasajeros",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 1,
+				"exactitud": true,
+				"validacionFisico": "^1|2$",
+				"validacionElectronico": "^1|2$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 11,
+				"exactitud": false,
+				"validacion": "^(?!0{1,11})[0-9]{1,11}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "56",
+			"descripcion": "Comprobante de pago SEAE",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^(?!0{4})[0-9]{4}$",
+				"validacionElectronico": "^(?!0{4})[0-9]{4}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 11,
+				"exactitud": false,
+				"validacion": "^(?!0{1,11})[0-9]{1,11}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "64",
+			"descripcion": "Documento emitido respecto de servicios prestados con ocasion de brindar el servicio de transporte aereo regular de pasajeros y por las empresas habilitadas a emitir el boleto referido en el literal a) del inciso 6.1 del articulo 4 del Reglamento de Comprobantes de pago",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "87",
+			"descripcion": "Nota de Credito Especial",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^F|^B|^S|^F[A-Z0-9]{1,19}$|^B[A-Z0-9]{1,19}$|^S[A-Z0-9]{1,19}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "88",
+			"descripcion": "Nota de Debito Especial",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^F|^B|^S|^F[A-Z0-9]{1,19}$|^B[A-Z0-9]{1,19}$|^S[A-Z0-9]{1,19}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^?[0-9]{1,20}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "89",
+			"descripcion": "Nota de Ajuste de Operaciones - Ley N\u00B0 29972",
+			"numSerie": {
+				"obligatorio": true,
+				"longitud": 4,
+				"exactitud": true,
+				"validacionFisico": "^(?!0{4})[0-9]{4}$",
+				"validacionElectronico": "^(?!0{4})[0-9]{4}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 7,
+				"exactitud": false,
+				"validacion": "(?!0{1,7})[0-9]{1,7}$",
+				"numerico": true
+			}
+		},
+		{
+			"codigo": "91",
+			"descripcion": "Comprobante de pago emitido por el sujeto no domiciliado",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": false
+			}
+		},
+		{
+			"codigo": "96",
+			"descripcion": "Exceso de credito fiscal por retiro de bienes",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": false
+			}
+		},
+		{
+			"codigo": "97",
+			"descripcion": "Nota de Credito - No Domiciliado",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": false
+			}
+		},
+		{
+			"codigo": "98",
+			"descripcion": "Nota de Debito - No Domiciliado",
+			"numSerie": {
+				"obligatorio": false,
+				"longitud": 20,
+				"exactitud": false,
+				"validacionFisico": "^[A-Z0-9]{1,20}$",
+				"validacionElectronico": "^[A-Z0-9]{1,20}$"
+			},
+			"numCp": {
+				"obligatorio": true,
+				"longitud": 20,
+				"exactitud": false,
+				"validacion": "^[A-Z0-9]{1,20}$",
+				"numerico": false
+			}
+		}
+	],
+	"monedas": [
+		{
+			"codigo": "AFN",
+			"descripcion": "Afghani",
+			"zona": "AFGHANISTAN"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "ALAND ISLANDS"
+		},
+		{
+			"codigo": "ALL",
+			"descripcion": "Lek",
+			"zona": "ALBANIA"
+		},
+		{
+			"codigo": "DZD",
+			"descripcion": "Algerian Dinar",
+			"zona": "ALGERIA"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "AMERICAN SAMOA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "ANDORRA"
+		},
+		{
+			"codigo": "AOA",
+			"descripcion": "Kwanza",
+			"zona": "ANGOLA"
+		},
+		{
+			"codigo": "XCD",
+			"descripcion": "East Caribbean Dollar",
+			"zona": "ANGUILLA"
+		},
+		{
+			"codigo": "XCD",
+			"descripcion": "East Caribbean Dollar",
+			"zona": "ANTIGUA AND BARBUDA"
+		},
+		{
+			"codigo": "ARS",
+			"descripcion": "Argentine Peso",
+			"zona": "ARGENTINA"
+		},
+		{
+			"codigo": "AMD",
+			"descripcion": "Armenian Dram",
+			"zona": "ARMENIA"
+		},
+		{
+			"codigo": "AWG",
+			"descripcion": "Aruban Florin",
+			"zona": "ARUBA"
+		},
+		{
+			"codigo": "AUD",
+			"descripcion": "Australian Dollar",
+			"zona": "AUSTRALIA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "AUSTRIA"
+		},
+		{
+			"codigo": "AZN",
+			"descripcion": "Azerbaijan Manat",
+			"zona": "AZERBAIJAN"
+		},
+		{
+			"codigo": "BSD",
+			"descripcion": "Bahamian Dollar",
+			"zona": "BAHAMAS (THE)"
+		},
+		{
+			"codigo": "BHD",
+			"descripcion": "Bahraini Dinar",
+			"zona": "BAHRAIN"
+		},
+		{
+			"codigo": "BDT",
+			"descripcion": "Taka",
+			"zona": "BANGLADESH"
+		},
+		{
+			"codigo": "BBD",
+			"descripcion": "Barbados Dollar",
+			"zona": "BARBADOS"
+		},
+		{
+			"codigo": "BYN",
+			"descripcion": "Belarusian Ruble",
+			"zona": "BELARUS"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "BELGIUM"
+		},
+		{
+			"codigo": "BZD",
+			"descripcion": "Belize Dollar",
+			"zona": "BELIZE"
+		},
+		{
+			"codigo": "XOF",
+			"descripcion": "CFA Franc BCEAO",
+			"zona": "BENIN"
+		},
+		{
+			"codigo": "BMD",
+			"descripcion": "Bermudian Dollar",
+			"zona": "BERMUDA"
+		},
+		{
+			"codigo": "INR",
+			"descripcion": "Indian Rupee",
+			"zona": "BHUTAN"
+		},
+		{
+			"codigo": "BTN",
+			"descripcion": "Ngultrum",
+			"zona": "BHUTAN"
+		},
+		{
+			"codigo": "BOB",
+			"descripcion": "Boliviano",
+			"zona": "BOLIVIA (PLURINATIONAL STATE OF)"
+		},
+		{
+			"codigo": "BOV",
+			"descripcion": "Mvdol",
+			"zona": "BOLIVIA (PLURINATIONAL STATE OF)"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "BONAIRE, SINT EUSTATIUS AND SABA"
+		},
+		{
+			"codigo": "BAM",
+			"descripcion": "Convertible Mark",
+			"zona": "BOSNIA AND HERZEGOVINA"
+		},
+		{
+			"codigo": "BWP",
+			"descripcion": "Pula",
+			"zona": "BOTSWANA"
+		},
+		{
+			"codigo": "NOK",
+			"descripcion": "Norwegian Krone",
+			"zona": "BOUVET ISLAND"
+		},
+		{
+			"codigo": "BRL",
+			"descripcion": "Brazilian Real",
+			"zona": "BRAZIL"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "BRITISH INDIAN OCEAN TERRITORY (THE)"
+		},
+		{
+			"codigo": "BND",
+			"descripcion": "Brunei Dollar",
+			"zona": "BRUNEI DARUSSALAM"
+		},
+		{
+			"codigo": "BGN",
+			"descripcion": "Bulgarian Lev",
+			"zona": "BULGARIA"
+		},
+		{
+			"codigo": "XOF",
+			"descripcion": "CFA Franc BCEAO",
+			"zona": "BURKINA FASO"
+		},
+		{
+			"codigo": "BIF",
+			"descripcion": "Burundi Franc",
+			"zona": "BURUNDI"
+		},
+		{
+			"codigo": "CVE",
+			"descripcion": "Cabo Verde Escudo",
+			"zona": "CABO VERDE"
+		},
+		{
+			"codigo": "KHR",
+			"descripcion": "Riel",
+			"zona": "CAMBODIA"
+		},
+		{
+			"codigo": "XAF",
+			"descripcion": "CFA Franc BEAC",
+			"zona": "CAMEROON"
+		},
+		{
+			"codigo": "CAD",
+			"descripcion": "Canadian Dollar",
+			"zona": "CANADA"
+		},
+		{
+			"codigo": "KYD",
+			"descripcion": "Cayman Islands Dollar",
+			"zona": "CAYMAN ISLANDS (THE)"
+		},
+		{
+			"codigo": "XAF",
+			"descripcion": "CFA Franc BEAC",
+			"zona": "CENTRAL AFRICAN REPUBLIC (THE)"
+		},
+		{
+			"codigo": "XAF",
+			"descripcion": "CFA Franc BEAC",
+			"zona": "CHAD"
+		},
+		{
+			"codigo": "CLP",
+			"descripcion": "Chilean Peso",
+			"zona": "CHILE"
+		},
+		{
+			"codigo": "CLF",
+			"descripcion": "Unidad de Fomento",
+			"zona": "CHILE"
+		},
+		{
+			"codigo": "CNY",
+			"descripcion": "Yuan Renminbi",
+			"zona": "CHINA"
+		},
+		{
+			"codigo": "AUD",
+			"descripcion": "Australian Dollar",
+			"zona": "CHRISTMAS ISLAND"
+		},
+		{
+			"codigo": "AUD",
+			"descripcion": "Australian Dollar",
+			"zona": "COCOS (KEELING) ISLANDS (THE)"
+		},
+		{
+			"codigo": "COP",
+			"descripcion": "Colombian Peso",
+			"zona": "COLOMBIA"
+		},
+		{
+			"codigo": "COU",
+			"descripcion": "Unidad de Valor Real",
+			"zona": "COLOMBIA"
+		},
+		{
+			"codigo": "KMF",
+			"descripcion": "Comorian Franc ",
+			"zona": "COMOROS (THE)"
+		},
+		{
+			"codigo": "CDF",
+			"descripcion": "Congolese Franc",
+			"zona": "CONGO (THE DEMOCRATIC REPUBLIC OF THE)"
+		},
+		{
+			"codigo": "XAF",
+			"descripcion": "CFA Franc BEAC",
+			"zona": "CONGO (THE)"
+		},
+		{
+			"codigo": "NZD",
+			"descripcion": "New Zealand Dollar",
+			"zona": "COOK ISLANDS (THE)"
+		},
+		{
+			"codigo": "CRC",
+			"descripcion": "Costa Rican Colon",
+			"zona": "COSTA RICA"
+		},
+		{
+			"codigo": "XOF",
+			"descripcion": "CFA Franc BCEAO",
+			"zona": "COTE D'IVOIRE"
+		},
+		{
+			"codigo": "HRK",
+			"descripcion": "Kuna",
+			"zona": "CROATIA"
+		},
+		{
+			"codigo": "CUP",
+			"descripcion": "Cuban Peso",
+			"zona": "CUBA"
+		},
+		{
+			"codigo": "CUC",
+			"descripcion": "Peso Convertible",
+			"zona": "CUBA"
+		},
+		{
+			"codigo": "ANG",
+			"descripcion": "Netherlands Antillean Guilder",
+			"zona": "CURACAO"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "CYPRUS"
+		},
+		{
+			"codigo": "CZK",
+			"descripcion": "Czech Koruna",
+			"zona": "CZECHIA"
+		},
+		{
+			"codigo": "DKK",
+			"descripcion": "Danish Krone",
+			"zona": "DENMARK"
+		},
+		{
+			"codigo": "DJF",
+			"descripcion": "Djibouti Franc",
+			"zona": "DJIBOUTI"
+		},
+		{
+			"codigo": "XCD",
+			"descripcion": "East Caribbean Dollar",
+			"zona": "DOMINICA"
+		},
+		{
+			"codigo": "DOP",
+			"descripcion": "Dominican Peso",
+			"zona": "DOMINICAN REPUBLIC (THE)"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "ECUADOR"
+		},
+		{
+			"codigo": "EGP",
+			"descripcion": "Egyptian Pound",
+			"zona": "EGYPT"
+		},
+		{
+			"codigo": "SVC",
+			"descripcion": "El Salvador Colon",
+			"zona": "EL SALVADOR"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "EL SALVADOR"
+		},
+		{
+			"codigo": "XAF",
+			"descripcion": "CFA Franc BEAC",
+			"zona": "EQUATORIAL GUINEA"
+		},
+		{
+			"codigo": "ERN",
+			"descripcion": "Nakfa",
+			"zona": "ERITREA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "ESTONIA"
+		},
+		{
+			"codigo": "SZL",
+			"descripcion": "Lilangeni",
+			"zona": "ESWATINI"
+		},
+		{
+			"codigo": "ETB",
+			"descripcion": "Ethiopian Birr",
+			"zona": "ETHIOPIA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "EUROPEAN UNION"
+		},
+		{
+			"codigo": "FKP",
+			"descripcion": "Falkland Islands Pound",
+			"zona": "FALKLAND ISLANDS (THE) [MALVINAS]"
+		},
+		{
+			"codigo": "DKK",
+			"descripcion": "Danish Krone",
+			"zona": "FAROE ISLANDS (THE)"
+		},
+		{
+			"codigo": "FJD",
+			"descripcion": "Fiji Dollar",
+			"zona": "FIJI"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "FINLAND"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "FRANCE"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "FRENCH GUIANA"
+		},
+		{
+			"codigo": "XPF",
+			"descripcion": "CFP Franc",
+			"zona": "FRENCH POLYNESIA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "FRENCH SOUTHERN TERRITORIES (THE)"
+		},
+		{
+			"codigo": "XAF",
+			"descripcion": "CFA Franc BEAC",
+			"zona": "GABON"
+		},
+		{
+			"codigo": "GMD",
+			"descripcion": "Dalasi",
+			"zona": "GAMBIA (THE)"
+		},
+		{
+			"codigo": "GEL",
+			"descripcion": "Lari",
+			"zona": "GEORGIA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "GERMANY"
+		},
+		{
+			"codigo": "GHS",
+			"descripcion": "Ghana Cedi",
+			"zona": "GHANA"
+		},
+		{
+			"codigo": "GIP",
+			"descripcion": "Gibraltar Pound",
+			"zona": "GIBRALTAR"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "GREECE"
+		},
+		{
+			"codigo": "DKK",
+			"descripcion": "Danish Krone",
+			"zona": "GREENLAND"
+		},
+		{
+			"codigo": "XCD",
+			"descripcion": "East Caribbean Dollar",
+			"zona": "GRENADA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "GUADELOUPE"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "GUAM"
+		},
+		{
+			"codigo": "GTQ",
+			"descripcion": "Quetzal",
+			"zona": "GUATEMALA"
+		},
+		{
+			"codigo": "GBP",
+			"descripcion": "Pound Sterling",
+			"zona": "GUERNSEY"
+		},
+		{
+			"codigo": "GNF",
+			"descripcion": "Guinean Franc",
+			"zona": "GUINEA"
+		},
+		{
+			"codigo": "XOF",
+			"descripcion": "CFA Franc BCEAO",
+			"zona": "GUINEA-BISSAU"
+		},
+		{
+			"codigo": "GYD",
+			"descripcion": "Guyana Dollar",
+			"zona": "GUYANA"
+		},
+		{
+			"codigo": "HTG",
+			"descripcion": "Gourde",
+			"zona": "HAITI"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "HAITI"
+		},
+		{
+			"codigo": "AUD",
+			"descripcion": "Australian Dollar",
+			"zona": "HEARD ISLAND AND McDONALD ISLANDS"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "HOLY SEE (THE)"
+		},
+		{
+			"codigo": "HNL",
+			"descripcion": "Lempira",
+			"zona": "HONDURAS"
+		},
+		{
+			"codigo": "HKD",
+			"descripcion": "Hong Kong Dollar",
+			"zona": "HONG KONG"
+		},
+		{
+			"codigo": "HUF",
+			"descripcion": "Forint",
+			"zona": "HUNGARY"
+		},
+		{
+			"codigo": "ISK",
+			"descripcion": "Iceland Krona",
+			"zona": "ICELAND"
+		},
+		{
+			"codigo": "INR",
+			"descripcion": "Indian Rupee",
+			"zona": "INDIA"
+		},
+		{
+			"codigo": "IDR",
+			"descripcion": "Rupiah",
+			"zona": "INDONESIA"
+		},
+		{
+			"codigo": "XDR",
+			"descripcion": "SDR (Special Drawing Right)",
+			"zona": "INTERNATIONAL MONETARY FUND (IMF)"
+		},
+		{
+			"codigo": "IRR",
+			"descripcion": "Iranian Rial",
+			"zona": "IRAN (ISLAMIC REPUBLIC OF)"
+		},
+		{
+			"codigo": "IQD",
+			"descripcion": "Iraqi Dinar",
+			"zona": "IRAQ"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "IRELAND"
+		},
+		{
+			"codigo": "GBP",
+			"descripcion": "Pound Sterling",
+			"zona": "ISLE OF MAN"
+		},
+		{
+			"codigo": "ILS",
+			"descripcion": "New Israeli Sheqel",
+			"zona": "ISRAEL"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "ITALY"
+		},
+		{
+			"codigo": "JMD",
+			"descripcion": "Jamaican Dollar",
+			"zona": "JAMAICA"
+		},
+		{
+			"codigo": "JPY",
+			"descripcion": "Yen",
+			"zona": "JAPAN"
+		},
+		{
+			"codigo": "GBP",
+			"descripcion": "Pound Sterling",
+			"zona": "JERSEY"
+		},
+		{
+			"codigo": "JOD",
+			"descripcion": "Jordanian Dinar",
+			"zona": "JORDAN"
+		},
+		{
+			"codigo": "KZT",
+			"descripcion": "Tenge",
+			"zona": "KAZAKHSTAN"
+		},
+		{
+			"codigo": "KES",
+			"descripcion": "Kenyan Shilling",
+			"zona": "KENYA"
+		},
+		{
+			"codigo": "AUD",
+			"descripcion": "Australian Dollar",
+			"zona": "KIRIBATI"
+		},
+		{
+			"codigo": "KPW",
+			"descripcion": "North Korean Won",
+			"zona": "KOREA (THE DEMOCRATIC PEOPLE'S REPUBLIC OF)"
+		},
+		{
+			"codigo": "KRW",
+			"descripcion": "Won",
+			"zona": "KOREA (THE REPUBLIC OF)"
+		},
+		{
+			"codigo": "KWD",
+			"descripcion": "Kuwaiti Dinar",
+			"zona": "KUWAIT"
+		},
+		{
+			"codigo": "KGS",
+			"descripcion": "Som",
+			"zona": "KYRGYZSTAN"
+		},
+		{
+			"codigo": "LAK",
+			"descripcion": "Lao Kip",
+			"zona": "LAO PEOPLES DEMOCRATIC REPUBLIC (THE)"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "LATVIA"
+		},
+		{
+			"codigo": "LBP",
+			"descripcion": "Lebanese Pound",
+			"zona": "LEBANON"
+		},
+		{
+			"codigo": "LSL",
+			"descripcion": "Loti",
+			"zona": "LESOTHO"
+		},
+		{
+			"codigo": "ZAR",
+			"descripcion": "Rand",
+			"zona": "LESOTHO"
+		},
+		{
+			"codigo": "LRD",
+			"descripcion": "Liberian Dollar",
+			"zona": "LIBERIA"
+		},
+		{
+			"codigo": "LYD",
+			"descripcion": "Libyan Dinar",
+			"zona": "LIBYA"
+		},
+		{
+			"codigo": "CHF",
+			"descripcion": "Swiss Franc",
+			"zona": "LIECHTENSTEIN"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "LITHUANIA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "LUXEMBOURG"
+		},
+		{
+			"codigo": "MOP",
+			"descripcion": "Pataca",
+			"zona": "MACAO"
+		},
+		{
+			"codigo": "MKD",
+			"descripcion": "Denar",
+			"zona": "NORTH MACEDONIA"
+		},
+		{
+			"codigo": "MGA",
+			"descripcion": "Malagasy Ariary",
+			"zona": "MADAGASCAR"
+		},
+		{
+			"codigo": "MWK",
+			"descripcion": "Malawi Kwacha",
+			"zona": "MALAWI"
+		},
+		{
+			"codigo": "MYR",
+			"descripcion": "Malaysian Ringgit",
+			"zona": "MALAYSIA"
+		},
+		{
+			"codigo": "MVR",
+			"descripcion": "Rufiyaa",
+			"zona": "MALDIVES"
+		},
+		{
+			"codigo": "XOF",
+			"descripcion": "CFA Franc BCEAO",
+			"zona": "MALI"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "MALTA"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "MARSHALL ISLANDS (THE)"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "MARTINIQUE"
+		},
+		{
+			"codigo": "MRU",
+			"descripcion": "Ouguiya",
+			"zona": "MAURITANIA"
+		},
+		{
+			"codigo": "MUR",
+			"descripcion": "Mauritius Rupee",
+			"zona": "MAURITIUS"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "MAYOTTE"
+		},
+		{
+			"codigo": "XUA",
+			"descripcion": "ADB Unit of Account",
+			"zona": "MEMBER COUNTRIES OF THE AFRICAN DEVELOPMENT BANK GROUP"
+		},
+		{
+			"codigo": "MXN",
+			"descripcion": "Mexican Peso",
+			"zona": "MEXICO"
+		},
+		{
+			"codigo": "MXV",
+			"descripcion": "Mexican Unidad de Inversion (UDI)",
+			"zona": "MEXICO"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "MICRONESIA (FEDERATED STATES OF)"
+		},
+		{
+			"codigo": "MDL",
+			"descripcion": "Moldovan Leu",
+			"zona": "MOLDOVA (THE REPUBLIC OF)"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "MONACO"
+		},
+		{
+			"codigo": "MNT",
+			"descripcion": "Tugrik",
+			"zona": "MONGOLIA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "MONTENEGRO"
+		},
+		{
+			"codigo": "XCD",
+			"descripcion": "East Caribbean Dollar",
+			"zona": "MONTSERRAT"
+		},
+		{
+			"codigo": "MAD",
+			"descripcion": "Moroccan Dirham",
+			"zona": "MOROCCO"
+		},
+		{
+			"codigo": "MZN",
+			"descripcion": "Mozambique Metical",
+			"zona": "MOZAMBIQUE"
+		},
+		{
+			"codigo": "MMK",
+			"descripcion": "Kyat",
+			"zona": "MYANMAR"
+		},
+		{
+			"codigo": "NAD",
+			"descripcion": "Namibia Dollar",
+			"zona": "NAMIBIA"
+		},
+		{
+			"codigo": "ZAR",
+			"descripcion": "Rand",
+			"zona": "NAMIBIA"
+		},
+		{
+			"codigo": "AUD",
+			"descripcion": "Australian Dollar",
+			"zona": "NAURU"
+		},
+		{
+			"codigo": "NPR",
+			"descripcion": "Nepalese Rupee",
+			"zona": "NEPAL"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "NETHERLANDS (THE)"
+		},
+		{
+			"codigo": "XPF",
+			"descripcion": "CFP Franc",
+			"zona": "NEW CALEDONIA"
+		},
+		{
+			"codigo": "NZD",
+			"descripcion": "New Zealand Dollar",
+			"zona": "NEW ZEALAND"
+		},
+		{
+			"codigo": "NIO",
+			"descripcion": "Cordoba Oro",
+			"zona": "NICARAGUA"
+		},
+		{
+			"codigo": "XOF",
+			"descripcion": "CFA Franc BCEAO",
+			"zona": "NIGER (THE)"
+		},
+		{
+			"codigo": "NGN",
+			"descripcion": "Naira",
+			"zona": "NIGERIA"
+		},
+		{
+			"codigo": "NZD",
+			"descripcion": "New Zealand Dollar",
+			"zona": "NIUE"
+		},
+		{
+			"codigo": "AUD",
+			"descripcion": "Australian Dollar",
+			"zona": "NORFOLK ISLAND"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "NORTHERN MARIANA ISLANDS (THE)"
+		},
+		{
+			"codigo": "NOK",
+			"descripcion": "Norwegian Krone",
+			"zona": "NORWAY"
+		},
+		{
+			"codigo": "OMR",
+			"descripcion": "Rial Omani",
+			"zona": "OMAN"
+		},
+		{
+			"codigo": "PKR",
+			"descripcion": "Pakistan Rupee",
+			"zona": "PAKISTAN"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "PALAU"
+		},
+		{
+			"descripcion": "No universal currency",
+			"zona": "PALESTINE, STATE OF"
+		},
+		{
+			"codigo": "PAB",
+			"descripcion": "Balboa",
+			"zona": "PANAMA"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "PANAMA"
+		},
+		{
+			"codigo": "PGK",
+			"descripcion": "Kina",
+			"zona": "PAPUA NEW GUINEA"
+		},
+		{
+			"codigo": "PYG",
+			"descripcion": "Guarani",
+			"zona": "PARAGUAY"
+		},
+		{
+			"codigo": "PEN",
+			"descripcion": "Sol",
+			"zona": "PERU"
+		},
+		{
+			"codigo": "PHP",
+			"descripcion": "Philippine Peso",
+			"zona": "PHILIPPINES (THE)"
+		},
+		{
+			"codigo": "NZD",
+			"descripcion": "New Zealand Dollar",
+			"zona": "PITCAIRN"
+		},
+		{
+			"codigo": "PLN",
+			"descripcion": "Zloty",
+			"zona": "POLAND"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "PORTUGAL"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "PUERTO RICO"
+		},
+		{
+			"codigo": "QAR",
+			"descripcion": "Qatari Rial",
+			"zona": "QATAR"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "R\u00c9UNION"
+		},
+		{
+			"codigo": "RON",
+			"descripcion": "Romanian Leu",
+			"zona": "ROMANIA"
+		},
+		{
+			"codigo": "RUB",
+			"descripcion": "Russian Ruble",
+			"zona": "RUSSIAN FEDERATION (THE)"
+		},
+		{
+			"codigo": "RWF",
+			"descripcion": "Rwanda Franc",
+			"zona": "RWANDA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "SAINT BARTH\u00c9LEMY"
+		},
+		{
+			"codigo": "SHP",
+			"descripcion": "Saint Helena Pound",
+			"zona": "SAINT HELENA, ASCENSION AND TRISTAN DA CUNHA"
+		},
+		{
+			"codigo": "XCD",
+			"descripcion": "East Caribbean Dollar",
+			"zona": "SAINT KITTS AND NEVIS"
+		},
+		{
+			"codigo": "XCD",
+			"descripcion": "East Caribbean Dollar",
+			"zona": "SAINT LUCIA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "SAINT MARTIN (FRENCH PART)"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "SAINT PIERRE AND MIQUELON"
+		},
+		{
+			"codigo": "XCD",
+			"descripcion": "East Caribbean Dollar",
+			"zona": "SAINT VINCENT AND THE GRENADINES"
+		},
+		{
+			"codigo": "WST",
+			"descripcion": "Tala",
+			"zona": "SAMOA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "SAN MARINO"
+		},
+		{
+			"codigo": "STN",
+			"descripcion": "Dobra",
+			"zona": "SAO TOME AND PRINCIPE"
+		},
+		{
+			"codigo": "SAR",
+			"descripcion": "Saudi Riyal",
+			"zona": "SAUDI ARABIA"
+		},
+		{
+			"codigo": "XOF",
+			"descripcion": "CFA Franc BCEAO",
+			"zona": "SENEGAL"
+		},
+		{
+			"codigo": "RSD",
+			"descripcion": "Serbian Dinar",
+			"zona": "SERBIA"
+		},
+		{
+			"codigo": "SCR",
+			"descripcion": "Seychelles Rupee",
+			"zona": "SEYCHELLES"
+		},
+		{
+			"codigo": "SLL",
+			"descripcion": "Leone",
+			"zona": "SIERRA LEONE"
+		},
+		{
+			"codigo": "SGD",
+			"descripcion": "Singapore Dollar",
+			"zona": "SINGAPORE"
+		},
+		{
+			"codigo": "ANG",
+			"descripcion": "Netherlands Antillean Guilder",
+			"zona": "SINT MAARTEN (DUTCH PART)"
+		},
+		{
+			"codigo": "XSU",
+			"descripcion": "Sucre",
+			"zona": "SISTEMA UNITARIO DE COMPENSACION REGIONAL DE PAGOS \"SUCRE\""
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "SLOVAKIA"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "SLOVENIA"
+		},
+		{
+			"codigo": "SBD",
+			"descripcion": "Solomon Islands Dollar",
+			"zona": "SOLOMON ISLANDS"
+		},
+		{
+			"codigo": "SOS",
+			"descripcion": "Somali Shilling",
+			"zona": "SOMALIA"
+		},
+		{
+			"codigo": "ZAR",
+			"descripcion": "Rand",
+			"zona": "SOUTH AFRICA"
+		},
+		{
+			"codigo": "SSP",
+			"descripcion": "South Sudanese Pound",
+			"zona": "SOUTH SUDAN"
+		},
+		{
+			"codigo": "EUR",
+			"descripcion": "Euro",
+			"zona": "SPAIN"
+		},
+		{
+			"codigo": "LKR",
+			"descripcion": "Sri Lanka Rupee",
+			"zona": "SRI LANKA"
+		},
+		{
+			"codigo": "SDG",
+			"descripcion": "Sudanese Pound",
+			"zona": "SUDAN (THE)"
+		},
+		{
+			"codigo": "SRD",
+			"descripcion": "Surinam Dollar",
+			"zona": "SURINAME"
+		},
+		{
+			"codigo": "NOK",
+			"descripcion": "Norwegian Krone",
+			"zona": "SVALBARD AND JAN MAYEN"
+		},
+		{
+			"codigo": "SEK",
+			"descripcion": "Swedish Krona",
+			"zona": "SWEDEN"
+		},
+		{
+			"codigo": "CHF",
+			"descripcion": "Swiss Franc",
+			"zona": "SWITZERLAND"
+		},
+		{
+			"codigo": "CHE",
+			"descripcion": "WIR Euro",
+			"zona": "SWITZERLAND"
+		},
+		{
+			"codigo": "CHW",
+			"descripcion": "WIR Franc",
+			"zona": "SWITZERLAND"
+		},
+		{
+			"codigo": "SYP",
+			"descripcion": "Syrian Pound",
+			"zona": "SYRIAN ARAB REPUBLIC"
+		},
+		{
+			"codigo": "TWD",
+			"descripcion": "New Taiwan Dollar",
+			"zona": "TAIWAN (PROVINCE OF CHINA)"
+		},
+		{
+			"codigo": "TJS",
+			"descripcion": "Somoni",
+			"zona": "TAJIKISTAN"
+		},
+		{
+			"codigo": "TZS",
+			"descripcion": "Tanzanian Shilling",
+			"zona": "TANZANIA, UNITED REPUBLIC OF"
+		},
+		{
+			"codigo": "THB",
+			"descripcion": "Baht",
+			"zona": "THAILAND"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "TIMOR-LESTE"
+		},
+		{
+			"codigo": "XOF",
+			"descripcion": "CFA Franc BCEAO",
+			"zona": "TOGO"
+		},
+		{
+			"codigo": "NZD",
+			"descripcion": "New Zealand Dollar",
+			"zona": "TOKELAU"
+		},
+		{
+			"codigo": "TOP",
+			"descripcion": "Paanga",
+			"zona": "TONGA"
+		},
+		{
+			"codigo": "TTD",
+			"descripcion": "Trinidad and Tobago Dollar",
+			"zona": "TRINIDAD AND TOBAGO"
+		},
+		{
+			"codigo": "TND",
+			"descripcion": "Tunisian Dinar",
+			"zona": "TUNISIA"
+		},
+		{
+			"codigo": "TRY",
+			"descripcion": "Turkish Lira",
+			"zona": "TURKEY"
+		},
+		{
+			"codigo": "TMT",
+			"descripcion": "Turkmenistan New Manat",
+			"zona": "TURKMENISTAN"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "TURKS AND CAICOS ISLANDS (THE)"
+		},
+		{
+			"codigo": "AUD",
+			"descripcion": "Australian Dollar",
+			"zona": "TUVALU"
+		},
+		{
+			"codigo": "UGX",
+			"descripcion": "Uganda Shilling",
+			"zona": "UGANDA"
+		},
+		{
+			"codigo": "UAH",
+			"descripcion": "Hryvnia",
+			"zona": "UKRAINE"
+		},
+		{
+			"codigo": "AED",
+			"descripcion": "UAE Dirham",
+			"zona": "UNITED ARAB EMIRATES (THE)"
+		},
+		{
+			"codigo": "GBP",
+			"descripcion": "Pound Sterling",
+			"zona": "UNITED KINGDOM OF GREAT BRITAIN AND NORTHERN IRELAND (THE)"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "UNITED STATES MINOR OUTLYING ISLANDS (THE)"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "UNITED STATES OF AMERICA (THE)"
+		},
+		{
+			"codigo": "USN",
+			"descripcion": "US Dollar (Next day)",
+			"zona": "UNITED STATES OF AMERICA (THE)"
+		},
+		{
+			"codigo": "UYU",
+			"descripcion": "Peso Uruguayo",
+			"zona": "URUGUAY"
+		},
+		{
+			"codigo": "UYI",
+			"descripcion": "Uruguay Peso en Unidades Indexadas (UI)",
+			"zona": "URUGUAY"
+		},
+		{
+			"codigo": "UYW",
+			"descripcion": "Unidad Previsional",
+			"zona": "URUGUAY"
+		},
+		{
+			"codigo": "UZS",
+			"descripcion": "Uzbekistan Sum",
+			"zona": "UZBEKISTAN"
+		},
+		{
+			"codigo": "VUV",
+			"descripcion": "Vatu",
+			"zona": "VANUATU"
+		},
+		{
+			"codigo": "VES",
+			"descripcion": "Bolivar Soberano",
+			"zona": "VENEZUELA (BOLIVARIAN REPUBLIC OF)"
+		},
+		{
+			"codigo": "VND",
+			"descripcion": "Dong",
+			"zona": "VIET NAM"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "VIRGIN ISLANDS (BRITISH)"
+		},
+		{
+			"codigo": "USD",
+			"descripcion": "US Dollar",
+			"zona": "VIRGIN ISLANDS (U.S.)"
+		},
+		{
+			"codigo": "XPF",
+			"descripcion": "CFP Franc",
+			"zona": "WALLIS AND FUTUNA"
+		},
+		{
+			"codigo": "MAD",
+			"descripcion": "Moroccan Dirham",
+			"zona": "WESTERN SAHARA"
+		},
+		{
+			"codigo": "YER",
+			"descripcion": "Yemeni Rial",
+			"zona": "YEMEN"
+		},
+		{
+			"codigo": "ZMW",
+			"descripcion": "Zambian Kwacha",
+			"zona": "ZAMBIA"
+		},
+		{
+			"codigo": "ZWL",
+			"descripcion": "Zimbabwe Dollar",
+			"zona": "ZIMBABWE"
+		},
+		{
+			"codigo": "XBA",
+			"descripcion": "Bond Markets Unit European Composite Unit (EURCO)",
+			"zona": "ZZ01_Bond Markets Unit European_EURCO"
+		},
+		{
+			"codigo": "XBB",
+			"descripcion": "Bond Markets Unit European Monetary Unit (E.M.U.-6)",
+			"zona": "ZZ02_Bond Markets Unit European_EMU-6"
+		},
+		{
+			"codigo": "XBC",
+			"descripcion": "Bond Markets Unit European Unit of Account 9 (E.U.A.-9)",
+			"zona": "ZZ03_Bond Markets Unit European_EUA-9"
+		},
+		{
+			"codigo": "XBD",
+			"descripcion": "Bond Markets Unit European Unit of Account 17 (E.U.A.-17)",
+			"zona": "ZZ04_Bond Markets Unit European_EUA-17"
+		},
+		{
+			"codigo": "XTS",
+			"descripcion": "Codes specifically reserved for testing purposes",
+			"zona": "ZZ06_Testing_Code"
+		},
+		{
+			"codigo": "XXX",
+			"descripcion": "The codes assigned for transactions where no currency is involved",
+			"zona": "ZZ07_No_Currency"
+		},
+		{
+			"codigo": "XAU",
+			"descripcion": "Gold",
+			"zona": "ZZ08_Gold"
+		},
+		{
+			"codigo": "XPD",
+			"descripcion": "Palladium",
+			"zona": "ZZ09_Palladium"
+		},
+		{
+			"codigo": "XPT",
+			"descripcion": "Platinum",
+			"zona": "ZZ10_Platinum"
+		},
+		{
+			"codigo": "XAG",
+			"descripcion": "Silver",
+			"zona": "ZZ11_Silver"
+		}
+	],
+	"aduanas": [
+		{
+			"codigo": "000",
+			"descripcion": "SEDE CENTRAL - CHUCUITO"
+		},
+		{
+			"codigo": "019",
+			"descripcion": "TUMBES"
+		},
+		{
+			"codigo": "028",
+			"descripcion": "TALARA"
+		},
+		{
+			"codigo": "037",
+			"descripcion": "SULLANA"
+		},
+		{
+			"codigo": "046",
+			"descripcion": "PAITA"
+		},
+		{
+			"codigo": "055",
+			"descripcion": "CHICLAYO"
+		},
+		{
+			"codigo": "064",
+			"descripcion": "ETEN"
+		},
+		{
+			"codigo": "073",
+			"descripcion": "PACASMAYO"
+		},
+		{
+			"codigo": "082",
+			"descripcion": "SALAVERRY"
+		},
+		{
+			"codigo": "091",
+			"descripcion": "CHIMBOTE"
+		},
+		{
+			"codigo": "109",
+			"descripcion": "HUACHO"
+		},
+		{
+			"codigo": "118",
+			"descripcion": "MARITIMA DEL CALLAO"
+		},
+		{
+			"codigo": "127",
+			"descripcion": "PISCO"
+		},
+		{
+			"codigo": "136",
+			"descripcion": "SAN JUAN"
+		},
+		{
+			"codigo": "145",
+			"descripcion": "MOLLENDO MATARANI"
+		},
+		{
+			"codigo": "154",
+			"descripcion": "AREQUIPA"
+		},
+		{
+			"codigo": "163",
+			"descripcion": "ILO"
+		},
+		{
+			"codigo": "172",
+			"descripcion": "TACNA"
+		},
+		{
+			"codigo": "181",
+			"descripcion": "PUNO"
+		},
+		{
+			"codigo": "190",
+			"descripcion": "CUZCO"
+		},
+		{
+			"codigo": "217",
+			"descripcion": "PUCALLPA"
+		},
+		{
+			"codigo": "226",
+			"descripcion": "IQUITOS"
+		},
+		{
+			"codigo": "235",
+			"descripcion": "AEREA DEL CALLAO"
+		},
+		{
+			"codigo": "244",
+			"descripcion": "POSTAL DE LIMA"
+		},
+		{
+			"codigo": "253",
+			"descripcion": "PUESTO DE CONTROL DE TARAPORTO"
+		},
+		{
+			"codigo": "262",
+			"descripcion": "DESAGUADERO"
+		},
+		{
+			"codigo": "271",
+			"descripcion": "TARAPOTO"
+		},
+		{
+			"codigo": "280",
+			"descripcion": "PUERTO MALDONADO"
+		},
+		{
+			"codigo": "299",
+			"descripcion": "LA TINA"
+		},
+		{
+			"codigo": "884",
+			"descripcion": "DEPENDENCIA FERROVIARIA TACNA"
+		},
+		{
+			"codigo": "893",
+			"descripcion": "DEPENDENCIA POSTAL TACNA"
+		},
+		{
+			"codigo": "901",
+			"descripcion": "OFICINA POSTAL DE LINCE"
+		},
+		{
+			"codigo": "910",
+			"descripcion": "DEPENDENCIA POSTAL AREQUIPA"
+		},
+		{
+			"codigo": "929",
+			"descripcion": "COMPLEJO FRONTERIZO STA ROSA TACNA"
+		},
+		{
+			"codigo": "938",
+			"descripcion": "TERMINAL TERRESTRE TACNA"
+		},
+		{
+			"codigo": "947",
+			"descripcion": "AEROPUERTO TACNA"
+		},
+		{
+			"codigo": "956",
+			"descripcion": "CETICOS TACNA"
+		},
+		{
+			"codigo": "965",
+			"descripcion": "DEPENDENCIA POSTAL DE SALAVERRY"
+		},
+		{
+			"codigo": "974",
+			"descripcion": "ALMACEN SANTA ANITA"
+		}
+	],
+	"clasifBssSss": [
+		{
+			"codigo": "1",
+			"descripcion": "Mercaderia, Materia Prima, Suministro, Envases y Embalajes"
+		},
+		{
+			"codigo": "2",
+			"descripcion": "Adquisiciones de Activo fijo"
+		},
+		{
+			"codigo": "3",
+			"descripcion": "Otros activos no considerados en el numeral 2"
+		},
+		{
+			"codigo": "4",
+			"descripcion": "Gastos de educaci\u00f3n, recreaci\u00f3n, salud, culturales, representaci\u00f3n, capacitaci\u00f3n, de viaje, mantenimiento de veh\u00edculo y premios"
+		},
+		{
+			"codigo": "5",
+			"descripcion": "Otros gastos no incluidos en el numeral 4"
+		}
+	]
+}

@@ -9,19 +9,16 @@ import {
 } from '@/shared/components/ui/dropdown-menu';
 
 interface ExportButtonProps {
-  onExport: (format: 'csv' | 'txt' | 'excel') => void;
+  onExport: (format: 'csv' | 'txt') => void;
   isExporting: boolean;
   disabled?: boolean;
 }
 
 export const ExportButton = memo(function ExportButton({ onExport, isExporting, disabled = false }: ExportButtonProps) {
-  // Simple computed value - no need for memoization
   const isDisabled = isExporting || disabled;
 
-  // Simple handlers - no need for useCallback
   const handleExportCSV = () => onExport('csv');
   const handleExportTXT = () => onExport('txt');
-  const handleExportExcel = () => onExport('excel');
 
   return (
     <DropdownMenu>
@@ -37,9 +34,6 @@ export const ExportButton = memo(function ExportButton({ onExport, isExporting, 
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleExportTXT} className="cursor-pointer">
           Exportar como TXT
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleExportExcel} className="cursor-pointer">
-          Exportar como Excel
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
