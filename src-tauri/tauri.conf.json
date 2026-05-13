@@ -26,7 +26,18 @@
       }
     ],
     "security": {
-      "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://peruapi.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+      "csp": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://peruapi.com https://github.com https://*.githubusercontent.com; font-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/rayver/tax-books-manager/releases/latest/download/latest.json"
+      ],
+      "pubkey": "REPLACE_ME_AFTER_TAURI_SIGNER_GENERATE",
+      "windows": {
+        "installMode": "passive"
+      }
     }
   },
   "bundle": {

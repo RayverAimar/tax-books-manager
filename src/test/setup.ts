@@ -62,6 +62,15 @@ vi.mock('@tauri-apps/plugin-process', () => ({
   relaunch: vi.fn(async () => undefined)
 }));
 
+vi.mock('@tauri-apps/plugin-updater', () => ({
+  check: vi.fn(async () => null) // por defecto: no hay update — el dialog no aparece
+}));
+
+vi.mock('@tauri-apps/api/app', () => ({
+  getVersion: vi.fn(async () => '0.1.0'),
+  getName: vi.fn(async () => 'Registro de Libros Electrónicos')
+}));
+
 vi.mock('@tauri-apps/plugin-shell', () => ({
   open: vi.fn(async () => undefined)
 }));
