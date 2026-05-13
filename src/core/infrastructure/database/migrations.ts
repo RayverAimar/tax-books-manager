@@ -33,15 +33,14 @@ export const migrations: Migration[] = [
       -- ============================================================================
       -- APPLICATION SETTINGS TABLE
       -- ============================================================================
-      -- SECURITY TODO: API Key Storage
-      -- CURRENT: API keys stored in PLAIN TEXT in the 'value' column
-      -- TODO: Implement cryptographic encryption before production release
-      --       Recommended: XOR cipher with machine-uid based key derivation
-      --       Dependencies: machine-uid, sha2, base64
+      -- La API key de PeruAPI se guarda CIFRADA con AES-GCM (ver
+      -- src/shared/lib/crypto/secret-storage.ts). La KEK vive en un archivo
+      -- separado del .sqlite (plugin-store), de modo que el contenido de esta
+      -- columna no es recuperable solo con el archivo de DB.
       -- ============================================================================
       CREATE TABLE IF NOT EXISTS app_settings (
         key TEXT PRIMARY KEY,
-        value TEXT,  -- SECURITY: Stores sensitive data (API keys) in plain text - encrypt before production
+        value TEXT,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       );
 
@@ -330,6 +329,38 @@ export const migrations: Migration[] = [
 
       INSERT OR REPLACE INTO app_settings (key, value) VALUES ('schema_version', '002');
       INSERT OR REPLACE INTO app_settings (key, value) VALUES ('app_version', '1.0.0');
+    `
+  },
+  {
+    version: 2,
+    name: 'export_history',
+    sql: `
+      -- ============================================================================
+      -- EXPORT_HISTORY — registro auditable de archivos generados para SUNAT.
+      -- Cada vez que el usuario exporta un TXT SIRE (o CSV), se inserta una fila.
+      -- file_hash es SHA-256 del contenido — permite probar ante SUNAT qué archivo
+      -- exacto se subió en caso de impugnación.
+      -- ============================================================================
+      CREATE TABLE IF NOT EXISTS export_history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        company_id INTEGER NOT NULL,
+        type TEXT NOT NULL CHECK(type IN ('sales', 'purchases')),
+        period TEXT NOT NULL CHECK(length(period) = 6),
+        format TEXT NOT NULL CHECK(format IN ('csv', 'txt')),
+        opportunity TEXT,
+        correlative TEXT,
+        record_count INTEGER NOT NULL,
+        file_name TEXT NOT NULL,
+        file_path TEXT NOT NULL,
+        file_hash TEXT NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_export_history_lookup
+        ON export_history(company_id, type, period, created_at DESC);
+
+      INSERT OR REPLACE INTO app_settings (key, value) VALUES ('schema_version', '003');
     `
   }
 ];

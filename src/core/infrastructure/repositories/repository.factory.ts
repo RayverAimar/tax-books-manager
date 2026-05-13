@@ -4,7 +4,8 @@ import type {
   PurchasesRepository,
   AnalyticsRepository,
   PeriodRepository,
-  SettingsRepository
+  SettingsRepository,
+  ExportHistoryRepository
 } from '@/core/domain/repositories';
 
 import { CompanyRepository as CompanyRepositoryImpl } from './company.repository';
@@ -13,6 +14,7 @@ import { PurchasesRepository as PurchasesRepositoryImpl } from './purchases.repo
 import { AnalyticsRepository as AnalyticsRepositoryImpl } from './analytics.repository';
 import { PeriodRepository as PeriodRepositoryImpl } from './period.repository';
 import { SettingsRepository as SettingsRepositoryImpl } from './settings.repository';
+import { ExportHistoryRepository as ExportHistoryRepositoryImpl } from './export-history.repository';
 
 /**
  * Repository mode type
@@ -46,6 +48,7 @@ export class RepositoryFactory {
   private static analyticsRepoInstance: AnalyticsRepository | null = null;
   private static periodRepoInstance: PeriodRepository | null = null;
   private static settingsRepoInstance: SettingsRepository | null = null;
+  private static exportHistoryRepoInstance: ExportHistoryRepository | null = null;
 
   /**
    * Set the repository mode
@@ -85,6 +88,7 @@ export class RepositoryFactory {
     this.analyticsRepoInstance = null;
     this.periodRepoInstance = null;
     this.settingsRepoInstance = null;
+    this.exportHistoryRepoInstance = null;
   }
 
   /**
@@ -193,5 +197,19 @@ export class RepositoryFactory {
 
     this.settingsRepoInstance = new SettingsRepositoryImpl();
     return this.settingsRepoInstance;
+  }
+
+  /**
+   * Get Export History Repository instance
+   */
+  static getExportHistoryRepository(): ExportHistoryRepository {
+    if (this.exportHistoryRepoInstance) {
+      return this.exportHistoryRepoInstance;
+    }
+    if (this.mode === 'api') {
+      throw new Error('API mode not implemented');
+    }
+    this.exportHistoryRepoInstance = new ExportHistoryRepositoryImpl();
+    return this.exportHistoryRepoInstance;
   }
 }

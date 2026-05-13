@@ -1,5 +1,6 @@
 import { DatabaseService } from '../database/database.service';
 import type { SettingsRepository as SettingsRepositoryContract } from '@/core/domain/repositories';
+import { encryptSecret, decryptSecret, isEncrypted } from '@/shared/lib/crypto/secret-storage';
 
 /**
  * Settings Repository (SQLite Implementation)
@@ -65,21 +66,33 @@ export class SettingsRepository implements SettingsRepositoryContract {
   // ============================================================================
 
   /**
-   * Gets the Peru API key
-   * SECURITY: Currently returns plain text - should decrypt in production
+   * Obtiene la API key de PeruAPI ya descifrada. Si encontramos un valor en
+   * plaintext (instalación previa a esta encripción), lo re-guardamos cifrado
+   * de manera transparente — el usuario no nota nada.
+   *
+   * Ver `secret-storage.ts` para el modelo de amenaza concreto.
    */
   async getApiKey(): Promise<string | null> {
-    return this.get('peru_api_key');
+    const stored = await this.get('peru_api_key');
+    if (!stored) return null;
+    const plaintext = await decryptSecret(stored);
+    // Migración perezosa: si lo que leímos era plaintext legacy, lo re-encriptamos.
+    if (!isEncrypted(stored) && plaintext) {
+      const reEncrypted = await encryptSecret(plaintext);
+      await this.set('peru_api_key', reEncrypted);
+    }
+    return plaintext;
   }
 
   /**
-   * Saves the Peru API key
-   * SECURITY: Currently stores plain text - should encrypt before production
+   * Guarda la API key encriptada con AES-GCM. La KEK vive fuera del .sqlite
+   * (ver `secret-storage.ts`).
    */
   async setApiKey(apiKey: string): Promise<void> {
     if (!apiKey || apiKey.trim() === '') {
       throw new Error('API Key no puede estar vacía');
     }
-    await this.set('peru_api_key', apiKey.trim());
+    const encrypted = await encryptSecret(apiKey.trim());
+    await this.set('peru_api_key', encrypted);
   }
 }
