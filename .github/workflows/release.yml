@@ -74,6 +74,12 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Auto-update signing. Las keys se generan una vez con
+          # `npx @tauri-apps/cli signer generate -w ~/.tauri/registro-libros.key`
+          # y se guardan como secrets en GitHub: Settings → Secrets → Actions.
+          # tauri-action firma cada binario y genera latest.json automáticamente.
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           tagName: ${{ github.ref_name }}
           releaseName: 'Registro de Libros Electrónicos ${{ github.ref_name }}'

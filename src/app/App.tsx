@@ -8,6 +8,7 @@ import { PeriodProvider } from '@/core/presentation/contexts/period.context';
 import { DatabaseService } from '@/core/infrastructure/database/database.service';
 import { RepositoryFactory } from '@/core/infrastructure/repositories/repository.factory';
 import { getActiveCompanyId } from '@/shared/lib/storage/local-storage';
+import { UpdateChecker } from './components/UpdateChecker';
 
 // Lazy load pages for better performance (code splitting)
 const Dashboard = lazy(() => import('@/features/dashboard/pages/Dashboard').then((m) => ({ default: m.Dashboard })));
@@ -131,6 +132,9 @@ export function App() {
                 </Routes>
               </Suspense>
               <Toaster />
+              {/* Chequea auto-update al iniciar la app. Solo se muestra UI si
+                  hay nueva versión publicada en GitHub Releases con latest.json. */}
+              <UpdateChecker />
             </BrowserRouter>
           </PeriodProvider>
         </CompanyProvider>
