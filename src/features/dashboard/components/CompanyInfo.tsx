@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Building, Settings, LogOut } from 'lucide-react';
+import { Building, Settings, LogOut, History } from 'lucide-react';
 import { Button } from '@/shared/components/ui/button';
 import { useCompany } from '@/core/presentation/contexts/company.context';
 import { CompanySettingsDialog } from './CompanySettingsDialog';
+import { ExportHistoryDialog } from './ExportHistoryDialog';
 
 interface CompanyInfoProps {
   showActions?: boolean;
@@ -17,6 +18,7 @@ interface CompanyInfoProps {
 export const CompanyInfo: React.FC<CompanyInfoProps> = ({ showActions = false }) => {
   const { company, isLoading } = useCompany();
   const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [showHistoryDialog, setShowHistoryDialog] = useState(false);
 
   const handleLogout = () => {
     // Clear active company and reload to show company selection page
@@ -63,6 +65,17 @@ export const CompanyInfo: React.FC<CompanyInfoProps> = ({ showActions = false })
           </div>
         </div>
 
+        {/* Export History Button */}
+        <Button
+          variant="outline"
+          size="icon"
+          className="h-[56px] w-[56px] flex-shrink-0 [&_svg]:h-5 [&_svg]:w-5"
+          onClick={() => setShowHistoryDialog(true)}
+          title="Historial de exports SIRE"
+        >
+          <History />
+        </Button>
+
         {/* Settings Button */}
         <Button
           variant="outline"
@@ -92,6 +105,9 @@ export const CompanyInfo: React.FC<CompanyInfoProps> = ({ showActions = false })
         onOpenChange={setShowSettingsDialog}
         showBulkActions={showActions}
       />
+
+      {/* Export History Dialog */}
+      <ExportHistoryDialog open={showHistoryDialog} onOpenChange={setShowHistoryDialog} />
     </>
   );
 };
