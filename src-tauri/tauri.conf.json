@@ -58,6 +58,14 @@
       "providerShortName": null,
       "signingIdentity": null,
       "minimumSystemVersion": "10.13"
+    },
+    "windows": {
+      "wix": {
+        "language": "es-ES"
+      },
+      "nsis": {
+        "languages": ["Spanish"]
+      }
     }
   }
 }
