@@ -4,7 +4,10 @@ import type {
   YearlySummary,
   PeriodSummary,
   PeriodComparison,
-  AnalyticsRepository
+  AnalyticsRepository,
+  TaxSummary,
+  TopEntity,
+  DocumentDistribution
 } from '@/core/domain/repositories';
 import { RepositoryFactory } from '@/core/infrastructure/repositories/repository.factory';
 import { useCompany } from '@/core/presentation/contexts/company.context';
@@ -23,16 +26,16 @@ interface UseDashboardAnalyticsReturn {
   purchasesTrend: PeriodSummary[];
 
   // Tax summaries
-  salesTaxSummary: any;
-  purchasesTaxSummary: any;
+  salesTaxSummary: TaxSummary | null;
+  purchasesTaxSummary: TaxSummary | null;
 
   // Top entities
-  topClients: any[];
-  topSuppliers: any[];
+  topClients: TopEntity[];
+  topSuppliers: TopEntity[];
 
   // Document distributions
-  salesDocumentTypes: any[];
-  purchasesDocumentTypes: any[];
+  salesDocumentTypes: DocumentDistribution[];
+  purchasesDocumentTypes: DocumentDistribution[];
 
   // Loading states
   isLoading: boolean;
@@ -54,12 +57,12 @@ export function useDashboardAnalytics(periodCode?: string): UseDashboardAnalytic
   const [purchasesComparison, setPurchasesComparison] = useState<PeriodComparison | null>(null);
   const [salesTrend, setSalesTrend] = useState<PeriodSummary[]>([]);
   const [purchasesTrend, setPurchasesTrend] = useState<PeriodSummary[]>([]);
-  const [salesTaxSummary, setSalesTaxSummary] = useState<any>(null);
-  const [purchasesTaxSummary, setPurchasesTaxSummary] = useState<any>(null);
-  const [topClients, setTopClients] = useState<any[]>([]);
-  const [topSuppliers, setTopSuppliers] = useState<any[]>([]);
-  const [salesDocumentTypes, setSalesDocumentTypes] = useState<any[]>([]);
-  const [purchasesDocumentTypes, setPurchasesDocumentTypes] = useState<any[]>([]);
+  const [salesTaxSummary, setSalesTaxSummary] = useState<TaxSummary | null>(null);
+  const [purchasesTaxSummary, setPurchasesTaxSummary] = useState<TaxSummary | null>(null);
+  const [topClients, setTopClients] = useState<TopEntity[]>([]);
+  const [topSuppliers, setTopSuppliers] = useState<TopEntity[]>([]);
+  const [salesDocumentTypes, setSalesDocumentTypes] = useState<DocumentDistribution[]>([]);
+  const [purchasesDocumentTypes, setPurchasesDocumentTypes] = useState<DocumentDistribution[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { getSelectedPeriod, setSelectedPeriod as saveSelectedPeriod } from '@/shared/lib/storage/local-storage';
 import { RepositoryFactory } from '@/core/infrastructure/repositories/repository.factory';
+import { resetInvoiceIdCounter } from '@/shared/lib/utils/invoice';
 import type { InvoiceType } from '@/shared/types/invoice.types';
 
 /**
@@ -75,6 +76,8 @@ export const PeriodProvider: React.FC<PeriodProviderProps> = ({ children }) => {
    * Se llama cuando el usuario hace click en "Buscar" en el Dashboard
    */
   const loadPeriod = useCallback(async (periodCode: string, companyId: number): Promise<void> => {
+    // Drop any unsaved (negative) ids from the previous period.
+    resetInvoiceIdCounter();
     try {
       const periodRepo = RepositoryFactory.getPeriodRepository();
 

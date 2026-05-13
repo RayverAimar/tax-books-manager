@@ -20,7 +20,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/components/ui
 import { useCompany } from '@/core/presentation/contexts/company.context';
 import { BulkImportDialog } from './BulkImportDialog';
 import { BulkExportDialog } from './BulkExportDialog';
-import { toast } from 'sonner';
+import { showSuccess, showError } from '@/shared/lib/utils/toast';
 import { SettingsRepository } from '@/core/infrastructure/repositories/settings.repository';
 
 interface CompanySettingsDialogProps {
@@ -188,10 +188,10 @@ export const CompanySettingsDialog: React.FC<CompanySettingsDialogProps> = ({
       // Update company via context (this will also refresh the company state)
       await updateCompany(company.id, data.businessName);
 
-      toast.success('Datos de empresa actualizados correctamente');
+      showSuccess('Datos de empresa actualizados correctamente');
       resetCompany(data);
     } catch {
-      toast.error('Error al actualizar la empresa');
+      showError('Error al actualizar la empresa');
     } finally {
       setIsSubmitting(false);
     }
@@ -202,7 +202,7 @@ export const CompanySettingsDialog: React.FC<CompanySettingsDialogProps> = ({
    */
   const handleSaveApiKey = async () => {
     if (!apiKey.trim()) {
-      toast.error('Por favor ingrese una API Key válida');
+      showError('Por favor ingrese una API Key válida');
       return;
     }
 
@@ -212,9 +212,9 @@ export const CompanySettingsDialog: React.FC<CompanySettingsDialogProps> = ({
       await settingsRepo.setApiKey(apiKey.trim());
       setInitialApiKey(apiKey.trim());
       setHasUserKey(true);
-      toast.success('API Key guardada correctamente');
+      showSuccess('API Key guardada correctamente');
     } catch {
-      toast.error('Error al guardar la API Key');
+      showError('Error al guardar la API Key');
     } finally {
       setIsSubmitting(false);
     }

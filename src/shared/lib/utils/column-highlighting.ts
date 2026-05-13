@@ -11,25 +11,12 @@
 import { HIGHLIGHT_COLORS } from '@/shared/constants/colors';
 import type { InvoiceType } from '@/shared/types/invoice.types';
 
-/**
- * Column highlighting configuration
- * Lists field names that should be highlighted for each invoice type
- */
-const HIGHLIGHTED_COLUMNS = {
-  sales: [
-    'taxableBase', // `BI Gravada`
-    'vatPercentage', // `% IGV`
-    'vatAmount', // `IGV/IPM`
-    'totalAmount' // `Total CP`
-  ],
-  purchases: [
-    'taxableBaseTaxed', // `BI Gravado DG`
-    'vatPercentage', // `% IGV`
-    'vatAmountTaxed', // `IGV/IPM DG`
-    'nonTaxableValue', // `Valor Adq. NG`
-    'totalAmount' // `Total CP`
-  ]
-} as const;
+// Sets en lugar de arrays: shouldHighlightColumn corre por celda
+// (N filas × ~80 columnas por render). O(1) en lugar de O(k) `.includes`.
+const HIGHLIGHTED_COLUMNS: Record<InvoiceType, ReadonlySet<string>> = {
+  sales: new Set(['taxableBase', 'vatPercentage', 'vatAmount', 'totalAmount']),
+  purchases: new Set(['taxableBaseTaxed', 'vatPercentage', 'vatAmountTaxed', 'nonTaxableValue', 'totalAmount'])
+};
 
 /**
  * Special column that uses orange highlighting in cells
@@ -50,7 +37,7 @@ const ORANGE_HIGHLIGHTED_COLUMN = 'vatPercentage';
  * shouldHighlightColumn('purchases', 'vatAmountTaxed') // true
  */
 export function shouldHighlightColumn(type: InvoiceType, fieldName: string): boolean {
-  return (HIGHLIGHTED_COLUMNS[type] as readonly string[]).includes(fieldName);
+  return HIGHLIGHTED_COLUMNS[type].has(fieldName);
 }
 
 /**

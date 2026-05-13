@@ -10,7 +10,7 @@ interface CacheEntry<T> {
 }
 
 class QueryCache {
-  private cache: Map<string, CacheEntry<any>> = new Map();
+  private cache: Map<string, CacheEntry<unknown>> = new Map();
   private defaultTTL = 5 * 60 * 1000; // 5 minutes
 
   /**
@@ -164,13 +164,32 @@ class QueryCache {
 // Singleton instance
 export const queryCache = new QueryCache();
 
-// Auto cleanup every 2 minutes
-setInterval(
-  () => {
-    queryCache.cleanup();
-  },
-  2 * 60 * 1000
-);
+const CLEANUP_INTERVAL_MS = 2 * 60 * 1000;
+let cleanupIntervalId: ReturnType<typeof setInterval> | null = null;
+
+/**
+ * Start the periodic cleanup of expired cache entries.
+ * Idempotent — calling twice does not start two intervals.
+ */
+export function startQueryCacheCleanup(intervalMs: number = CLEANUP_INTERVAL_MS): void {
+  if (cleanupIntervalId !== null) return;
+  cleanupIntervalId = setInterval(() => queryCache.cleanup(), intervalMs);
+}
+
+/**
+ * Stop the periodic cleanup. Useful for tests and HMR reloads.
+ */
+export function stopQueryCacheCleanup(): void {
+  if (cleanupIntervalId !== null) {
+    clearInterval(cleanupIntervalId);
+    cleanupIntervalId = null;
+  }
+}
+
+// Auto-start in the app runtime, but never inside tests (vitest sets NODE_ENV=test by default).
+if (typeof process === 'undefined' || process.env?.NODE_ENV !== 'test') {
+  startQueryCacheCleanup();
+}
 
 /**
  * Helper function to generate cache keys

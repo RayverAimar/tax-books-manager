@@ -130,7 +130,7 @@ function validateFileHeaders(
       ? SALES_SUNAT_COLUMNS_MAPPING.map((m) => m.sunatHeader)
       : PURCHASE_SUNAT_COLUMNS_MAPPING.map((m) => m.sunatHeader);
 
-  const expectedCount = type === 'sales' ? 40 : 80;
+  const expectedCount = expectedHeaders.length;
 
   // Check column count
   if (headers.length !== expectedCount) {

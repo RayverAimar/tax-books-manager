@@ -1,45 +1,14 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { InvoiceType, InvoiceMap } from '@/shared/types/invoice.types';
 import { generateInvoiceId } from '@/shared/lib/utils/invoice';
 
 /**
- * React hook for managing invoice data with CRUD operations
- *
- * This hook manages invoice state with optimistic updates.
- * Provides CRUD operations (Create, Read, Update, Delete) for invoice data.
- *
- * Key features:
- * - Optimistic UI updates
- * - Simple state management with single data array
- * - CRUD operations for invoice management
- * - Efficient state updates with refs
- *
- * Performance: Optimized for datasets up to ~10,000 records.
- * Uses individual UPDATE operations for edits (more efficient than replace-all).
- *
- * @param type - The type of invoice to manage ('sales' or 'purchases')
- * @returns Object containing invoice data and CRUD functions
- *
- * @example
- * const {
- *   invoices,
- *   setInvoices,
- *   addInvoice,
- *   updateInvoice,
- *   deleteInvoice
- * } = useInvoiceData('sales');
+ * Hook genérico para CRUD de facturas con updates optimistas. El parámetro `_type`
+ * solo dirige el tipo genérico de retorno (`InvoiceMap<T>`), no se usa en runtime.
+ * Optimizado para ~10k filas — usa UPDATE individual en lugar de replace-all.
  */
 export function useInvoiceData<T extends InvoiceType>(_type: T) {
-  // Current data (loaded from database)
   const [invoices, setInvoices] = useState<InvoiceMap<T>[]>([]);
-
-  // Ref to access current values without re-creating callbacks
-  const invoicesRef = useRef<InvoiceMap<T>[]>(invoices);
-
-  // Keep ref in sync with state
-  useEffect(() => {
-    invoicesRef.current = invoices;
-  }, [invoices]);
 
   /**
    * Initialize with data from database
