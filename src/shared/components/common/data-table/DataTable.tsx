@@ -9,8 +9,9 @@ import {
   type ColumnFiltersState,
   type RowSelectionState
 } from '@tanstack/react-table';
-import { useState, useCallback, memo, useMemo, useEffect, useRef } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { DevProfiler } from '@/shared/lib/utils/perf-debug';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui/table';
 import { DataTableToolbar } from './DataTableToolbar';
 import { DataTableFooter, type FooterTotalConfig } from './DataTableFooter';
@@ -19,9 +20,6 @@ import { cn } from '@/shared/lib/utils';
 import { formatDate } from '@/shared/lib/formatters/date';
 import { showError } from '@/shared/lib/utils/toast';
 import { validateInteger, validateFloat, validateDate } from '@/shared/lib/validators/data-type.validators';
-
-// Virtualization threshold: Enable when row count exceeds this number
-const VIRTUALIZATION_THRESHOLD = 500;
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -33,9 +31,11 @@ interface DataTableProps<TData, TValue> {
   onCellEdit?: (rowId: number, columnId: string, newValue: unknown) => Promise<void>;
   editableColumns?: string[]; // Optional: list of editable column IDs, if not provided all are editable except 'select'
   totalsConfig?: FooterTotalConfig[]; // Optional: configuration for footer column totals
+  /** Override del overscan automático. Solo uso dev (perf harness). */
+  overscanOverride?: number;
 }
 
-function DataTableComponent<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
   onRowClick,
@@ -44,7 +44,8 @@ function DataTableComponent<TData, TValue>({
   enableSelection = true,
   onCellEdit,
   editableColumns,
-  totalsConfig
+  totalsConfig,
+  overscanOverride
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -52,13 +53,11 @@ function DataTableComponent<TData, TValue>({
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
   const [editingCell, setEditingCell] = useState<{ rowId: number; columnId: string } | null>(null);
   const [editValue, setEditValue] = useState<string>('');
-  const [originalEditValue, setOriginalEditValue] = useState<string>(''); // Store original value for rollback
-  // Track data type being edited
+  const [originalEditValue, setOriginalEditValue] = useState<string>('');
   const [editingDataType, setEditingDataType] = useState<'string' | 'integer' | 'float' | 'date'>('string');
   const [isSaving, setIsSaving] = useState(false);
 
-  // Create selection column
-  const selectionColumn: ColumnDef<TData, any> = useMemo(
+  const selectionColumn: ColumnDef<TData, unknown> = useMemo(
     () => ({
       id: 'select',
       header: ({ table }) => (
@@ -77,7 +76,7 @@ function DataTableComponent<TData, TValue>({
             checked={row.getIsSelected()}
             onCheckedChange={(value) => row.toggleSelected(!!value)}
             aria-label="Select row"
-            onClick={(e) => e.stopPropagation()} // Prevent row click when checking
+            onClick={(e) => e.stopPropagation()}
           />
         </div>
       ),
@@ -88,7 +87,6 @@ function DataTableComponent<TData, TValue>({
     []
   );
 
-  // Combine columns with selection column
   const tableColumns = useMemo(() => {
     if (enableSelection) {
       return [selectionColumn, ...columns];
@@ -111,15 +109,20 @@ function DataTableComponent<TData, TValue>({
       rowSelection
     },
     enableRowSelection: true,
+    // getRowId estable: cuando ordenamos/filtramos, los rowSelection keys siguen
+    // refiriéndose a la misma fila (no al índice). Sin esto, ordenar invalida
+    // toda la selección y obliga a remount.
+    getRowId: (row) => String((row as { id?: number | string }).id ?? ''),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onRowSelectionChange: (updater) => {
       setRowSelection(updater);
-      // Call onSelectionChange callback with selected rows
       if (onSelectionChange) {
         const newSelection = typeof updater === 'function' ? updater(rowSelection) : updater;
-        const selectedRows = data.filter((_, index) => newSelection[index]);
+        // Con getRowId estable, las keys de newSelection son los row.id originales.
+        const selectedSet = new Set(Object.keys(newSelection).filter((k) => newSelection[k]));
+        const selectedRows = data.filter((d) => selectedSet.has(String((d as { id?: number | string }).id ?? '')));
         onSelectionChange(selectedRows);
       }
     },
@@ -133,7 +136,6 @@ function DataTableComponent<TData, TValue>({
     }
   });
 
-  // Memoize row click handler to prevent recreating on every render
   const handleRowClick = useCallback(
     (rowData: TData) => {
       onRowClick?.(rowData);
@@ -141,34 +143,24 @@ function DataTableComponent<TData, TValue>({
     [onRowClick]
   );
 
-  // Cell editing handlers
   const handleCellDoubleClick = useCallback(
     (rowId: number, columnId: string, currentValue: unknown, columnMeta?: Record<string, unknown>) => {
-      // Only allow editing if onCellEdit callback is provided
       if (!onCellEdit) return;
-
-      // Don't allow editing the select column
       if (columnId === 'select') return;
-
-      // Check if column is editable (if editableColumns is provided)
       if (editableColumns && !editableColumns.includes(columnId)) return;
 
       setEditingCell({ rowId, columnId });
 
-      // Get dataType from column metadata (single source of truth)
       const dataType = (columnMeta?.dataType as 'string' | 'integer' | 'float' | 'date' | undefined) || 'string';
       setEditingDataType(dataType);
 
-      // Convert value to string for input
       if (currentValue === null || currentValue === undefined) {
         setEditValue('');
         setOriginalEditValue('');
         return;
       }
 
-      // Format value based on data type
       if (dataType === 'date') {
-        // Format date as DD/MM/YYYY for editing
         const formattedDate = formatDate(currentValue as Date | string);
         setEditValue(formattedDate);
         setOriginalEditValue(formattedDate);
@@ -186,7 +178,6 @@ function DataTableComponent<TData, TValue>({
 
     setIsSaving(true);
     try {
-      // Handle empty values
       if (editValue.trim() === '') {
         await onCellEdit(editingCell.rowId, editingCell.columnId, null);
         setEditingCell(null);
@@ -197,14 +188,12 @@ function DataTableComponent<TData, TValue>({
         return;
       }
 
-      // Validate based on data type
       let parsedValue: unknown;
       let validationResult;
 
       switch (editingDataType) {
         case 'integer': {
           validationResult = validateInteger(editValue, { allowNull: false });
-
           if (!validationResult.isValid) {
             showError('Número entero inválido', {
               description: validationResult.errorMessage || 'Por favor, ingrese un número entero válido sin decimales.'
@@ -213,14 +202,12 @@ function DataTableComponent<TData, TValue>({
             setIsSaving(false);
             return;
           }
-
           parsedValue = validationResult.sanitizedValue;
           break;
         }
 
         case 'float': {
           validationResult = validateFloat(editValue, { allowNull: false, decimals: 2 });
-
           if (!validationResult.isValid) {
             showError('Número decimal inválido', {
               description: validationResult.errorMessage || 'Por favor, ingrese un número decimal válido.'
@@ -229,14 +216,12 @@ function DataTableComponent<TData, TValue>({
             setIsSaving(false);
             return;
           }
-
           parsedValue = validationResult.sanitizedValue;
           break;
         }
 
         case 'date': {
           validationResult = validateDate(editValue, { allowNull: false });
-
           if (!validationResult.isValid) {
             showError('Fecha inválida', {
               description: validationResult.errorMessage || 'Por favor, use el formato DD/MM/YYYY con valores válidos.'
@@ -245,9 +230,6 @@ function DataTableComponent<TData, TValue>({
             setIsSaving(false);
             return;
           }
-
-          // Convert to YYYY-MM-DD (ISO format) for storage
-          // validateDate returns a Date object, not a string
           const dateObj = validationResult.sanitizedValue as Date;
           const year = dateObj.getFullYear();
           const month = String(dateObj.getMonth() + 1).padStart(2, '0');
@@ -257,11 +239,9 @@ function DataTableComponent<TData, TValue>({
         }
 
         case 'string':
-        default: {
-          // No validation for strings, accept as-is
+        default:
           parsedValue = editValue;
           break;
-        }
       }
 
       await onCellEdit(editingCell.rowId, editingCell.columnId, parsedValue);
@@ -296,40 +276,75 @@ function DataTableComponent<TData, TValue>({
     [handleCellEditSave, handleCellEditCancel]
   );
 
-  // Get rows from table
   const rows = table.getRowModel().rows;
 
-  // Ref for the scrolling container
-  const tableContainerRef = useRef<HTMLDivElement>(null);
-
-  // Enable virtualization for large datasets (>500 rows)
-  const enableVirtualization = rows.length > VIRTUALIZATION_THRESHOLD;
-
-  // Setup virtualizer for large datasets
-  const rowVirtualizer = useVirtualizer({
+  // Virtualización: solo renderizamos las filas visibles + un buffer arriba/abajo.
+  // El cuello medido a 500 filas × 51 cols era ~880ms/sort. La causa raíz: 25k
+  // celdas DOM montadas. Virtualizando bajamos a ~30 filas × 51 cols = 1500
+  // celdas. El padding-row pattern mantiene <table> semantics y sticky header.
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const ROW_HEIGHT_ESTIMATE = 28; // text-xs + py-0.5 + border-b ≈ 28px
+  // Overscan 10: mejor balance medido en ambos engines.
+  //
+  // Sweep empírico (Chromium harness, 500 filas, ms wall clock):
+  //   overscan 1:   sort 59-76,  selectAll 83,  scroll5000 55,  DOM 27 filas
+  //   overscan 10:  sort 80-102, selectAll 122, scroll5000 86,  DOM 36 filas ← elegido
+  //   overscan 30:  sort 108-148, selectAll 317, scroll5000 133, DOM 56 filas
+  //   overscan 100: sort 230-389, selectAll 775, scroll5000 312, DOM 126 filas
+  //
+  // Mismo patrón en WKWebView (Mac): subir overscan empeora linealmente todo.
+  // El costo de DOM extra escala más rápido que el beneficio de buffer.
+  //
+  // 10 es el sweet spot: ~280px de buffer (5 filas arriba + 5 abajo) cubre
+  // scroll suave con rueda (3-4 frames de gracia). Para jump scroll grande
+  // hay ~50-80ms de blanks por 1 frame — aceptable vs el costo de mantener
+  // 2-3× más DOM en todos los demás casos.
+  const OVERSCAN = overscanOverride ?? 10;
+  const virtualizer = useVirtualizer({
     count: rows.length,
-    getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 35, // Estimated row height in pixels
-    overscan: 10, // Number of items to render outside visible area
-    enabled: enableVirtualization
+    getScrollElement: () => scrollContainerRef.current,
+    estimateSize: () => ROW_HEIGHT_ESTIMATE,
+    overscan: OVERSCAN
   });
-
-  // Get virtual items (only when virtualization is enabled)
-  const virtualRows = enableVirtualization ? rowVirtualizer.getVirtualItems() : [];
-  const totalSize = enableVirtualization ? rowVirtualizer.getTotalSize() : 0;
+  const measuredVirtualRows = virtualizer.getVirtualItems();
+  // Fallback: si el virtualizer aún no midió el contenedor (jsdom en tests,
+  // primer render antes del layout en prod), rendereamos todas las filas
+  // sin offsets. En prod-runtime real este array se sobreescribe en el
+  // siguiente render con la ventana virtualizada.
+  const virtualRows =
+    measuredVirtualRows.length > 0 || rows.length === 0
+      ? measuredVirtualRows
+      : rows.map((_, index) => ({ index, start: 0, end: 0, key: index, size: 0, lane: 0 }));
+  const totalHeight = virtualizer.getTotalSize();
+  const useVirtualOffsets = measuredVirtualRows.length > 0;
+  const paddingTop = useVirtualOffsets ? virtualRows[0].start : 0;
+  const paddingBottom = useVirtualOffsets ? totalHeight - virtualRows[virtualRows.length - 1].end : 0;
 
   return (
     <div className="flex h-full flex-col">
-      <DataTableToolbar
-        table={table}
-        globalFilter={globalFilter}
-        setGlobalFilter={setGlobalFilter}
-        selectedRows={Object.keys(rowSelection).length}
-        onDiscardSelected={onDiscardSelected}
-      />
+      <DevProfiler id="DataTableToolbar">
+        <DataTableToolbar
+          table={table}
+          globalFilter={globalFilter}
+          setGlobalFilter={setGlobalFilter}
+          selectedRows={Object.keys(rowSelection).length}
+          onDiscardSelected={onDiscardSelected}
+        />
+      </DevProfiler>
 
-      <div ref={tableContainerRef} className="mt-4 flex-1 overflow-y-auto overflow-x-scroll rounded-md border">
-        <Table>
+      {/* min-h-0 es CRÍTICO: sin esto, flex-1 + overflow-y-auto crece al tamaño
+          del contenido (todas las filas) → virtualizer mide full-height y no
+          virtualiza. Con min-h-0 el contenedor se constrain a la altura
+          disponible del flex parent, scroll se activa, virtualizer trabaja. */}
+      <div
+        ref={scrollContainerRef}
+        className="mt-4 min-h-0 flex-1 overflow-y-auto overflow-x-scroll rounded-md border"
+      >
+        {/* Profiler dev-only del árbol completo de la tabla — actualDuration aquí
+            incluye header + body + footer. Para descomponer, hay un Profiler
+            adicional dentro de DataTableFooter con id="DataTableFooter". */}
+        <DevProfiler id="DataTable">
+          <Table>
           <TableHeader className="sticky top-0 z-10 bg-primary">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="!hover:bg-primary hover:!bg-primary">
@@ -359,209 +374,119 @@ function DataTableComponent<TData, TValue>({
             ))}
           </TableHeader>
           <TableBody>
-            {rows?.length ? (
-              enableVirtualization ? (
-                // VIRTUALIZED RENDERING (>500 rows)
-                <>
-                  {/* Padding top for virtual scrolling */}
-                  {virtualRows.length > 0 && <tr style={{ height: `${virtualRows[0].start}px` }} />}
-
-                  {/* Render only visible rows */}
-                  {virtualRows.map((virtualRow) => {
-                    const row = rows[virtualRow.index];
-                    return (
-                      <TableRow
-                        key={row.id}
-                        data-state={row.getIsSelected() && 'selected'}
-                        onClick={() => handleRowClick(row.original)}
-                        className="cursor-pointer transition-colors hover:bg-muted/50"
-                        style={{
-                          backgroundColor: row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined
-                        }}
-                        onMouseEnter={(e) => {
-                          if (row.getIsSelected()) {
-                            e.currentTarget.style.backgroundColor = 'rgb(125, 211, 252)';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (row.getIsSelected()) {
-                            e.currentTarget.style.backgroundColor = 'rgb(186, 230, 253)';
-                          }
-                        }}
-                      >
-                        {row.getVisibleCells().map((cell) => {
-                          const isSelectionColumn = cell.column.id === 'select';
-                          const rowData = row.original as any;
-                          const rowId = rowData.id || row.id;
-                          const columnId = cell.column.id;
-                          const isEditing = editingCell?.rowId === rowId && editingCell?.columnId === columnId;
-
-                          const cellMeta = cell.column.columnDef.meta as {
-                            cellClassName?: string;
-                            cellStyle?: React.CSSProperties;
-                          };
-                          const cellClassName = cellMeta?.cellClassName || '';
-                          const cellStyle = cellMeta?.cellStyle;
-
-                          return (
-                            <TableCell
-                              key={cell.id}
-                              style={{
-                                width: cell.column.getSize(),
-                                backgroundColor:
-                                  isSelectionColumn && row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined,
-                                position: isEditing ? 'relative' : undefined,
-                                ...cellStyle
-                              }}
-                              className={cn(
-                                'overflow-visible whitespace-nowrap',
-                                isSelectionColumn && 'sticky left-0 z-[5] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
-                                isSelectionColumn && !row.getIsSelected() && 'bg-background',
-                                cellClassName
-                              )}
-                              onDoubleClick={(e) => {
-                                if (!isSelectionColumn) {
-                                  e.stopPropagation();
-                                  const cellValue = cell.getValue();
-                                  handleCellDoubleClick(
-                                    rowId,
-                                    columnId,
-                                    cellValue,
-                                    cell.column.columnDef.meta as Record<string, unknown> | undefined
-                                  );
-                                }
-                              }}
-                            >
-                              {isEditing ? (
-                                <input
-                                  type="text"
-                                  value={editValue}
-                                  onChange={(e) => setEditValue(e.target.value)}
-                                  onKeyDown={handleCellEditKeyDown}
-                                  onBlur={handleCellEditCancel}
-                                  onClick={(e) => e.currentTarget.select()}
-                                  autoFocus
-                                  disabled={isSaving}
-                                  className={
-                                    'absolute inset-0 w-full h-full px-1 py-0.5 text-xs ' +
-                                    'border-2 border-primary focus:outline-none box-border'
-                                  }
-                                  style={{ margin: 0 }}
-                                />
-                              ) : (
-                                flexRender(cell.column.columnDef.cell, cell.getContext())
-                              )}
-                            </TableCell>
-                          );
-                        })}
-                      </TableRow>
-                    );
-                  })}
-
-                  {/* Padding bottom for virtual scrolling */}
-                  {virtualRows.length > 0 && (
-                    <tr
-                      style={{
-                        height: `${totalSize - (virtualRows[virtualRows.length - 1]?.end ?? 0)}px`
-                      }}
-                    />
-                  )}
-                </>
-              ) : (
-                // NORMAL RENDERING (<=500 rows)
-                <>
-                  {rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
-                      onClick={() => handleRowClick(row.original)}
-                      className="cursor-pointer transition-colors hover:bg-muted/50"
-                      style={{
-                        backgroundColor: row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined
-                      }}
-                      onMouseEnter={(e) => {
-                        if (row.getIsSelected()) {
-                          e.currentTarget.style.backgroundColor = 'rgb(125, 211, 252)';
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (row.getIsSelected()) {
-                          e.currentTarget.style.backgroundColor = 'rgb(186, 230, 253)';
-                        }
-                      }}
-                    >
-                      {row.getVisibleCells().map((cell) => {
-                        const isSelectionColumn = cell.column.id === 'select';
-                        const rowData = row.original as any;
-                        const rowId = rowData.id || row.id;
-                        const columnId = cell.column.id;
-                        const isEditing = editingCell?.rowId === rowId && editingCell?.columnId === columnId;
-                        const cellMeta = cell.column.columnDef.meta as {
-                          cellClassName?: string;
-                          cellStyle?: React.CSSProperties;
-                        };
-                        const cellClassName = cellMeta?.cellClassName || '';
-                        const cellStyle = cellMeta?.cellStyle;
-
-                        return (
-                          <TableCell
-                            key={cell.id}
-                            style={{
-                              width: cell.column.getSize(),
-                              backgroundColor:
-                                isSelectionColumn && row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined,
-                              position: isEditing ? 'relative' : undefined,
-                              ...cellStyle
-                            }}
-                            className={cn(
-                              'overflow-visible whitespace-nowrap',
-                              isSelectionColumn && 'sticky left-0 z-[5] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
-                              isSelectionColumn && !row.getIsSelected() && 'bg-background',
-                              cellClassName
-                            )}
-                            onDoubleClick={(e) => {
-                              if (!isSelectionColumn) {
-                                e.stopPropagation();
-                                const cellValue = cell.getValue();
-                                handleCellDoubleClick(
-                                  rowId,
-                                  columnId,
-                                  cellValue,
-                                  cell.column.columnDef.meta as Record<string, unknown> | undefined
-                                );
-                              }
-                            }}
-                          >
-                            {isEditing ? (
-                              <input
-                                type="text"
-                                value={editValue}
-                                onChange={(e) => setEditValue(e.target.value)}
-                                onKeyDown={handleCellEditKeyDown}
-                                onBlur={handleCellEditCancel}
-                                onClick={(e) => e.currentTarget.select()}
-                                autoFocus
-                                disabled={isSaving}
-                                className={
-                                  'absolute inset-0 w-full h-full px-1 py-0.5 text-xs ' +
-                                  'border-2 border-primary focus:outline-none box-border'
-                                }
-                                style={{ margin: 0 }}
-                              />
-                            ) : (
-                              flexRender(cell.column.columnDef.cell, cell.getContext())
-                            )}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  ))}
-                  {/* Spacer row to push footer to bottom */}
-                  <tr style={{ height: '100%' }}>
-                    <td colSpan={tableColumns.length} style={{ padding: 0, border: 'none' }} />
+            {rows.length ? (
+              <>
+                {/* Spacer top: ocupa el espacio de las filas no renderizadas arriba */}
+                {paddingTop > 0 && (
+                  <tr aria-hidden="true">
+                    <td colSpan={tableColumns.length} style={{ height: paddingTop, padding: 0, border: 'none' }} />
                   </tr>
-                </>
-              )
+                )}
+                {virtualRows.map((virtualRow) => {
+                  const row = rows[virtualRow.index];
+                  return (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && 'selected'}
+                    onClick={() => handleRowClick(row.original)}
+                    // content-visibility: auto → el navegador saltea layout/paint de filas
+                    // fuera del viewport. Crítico con 100-500 filas × 80 columnas:
+                    // sin esto, abrir un dialog dispara recalc de layout sobre todas
+                    // las celdas detrás (1.2s observado en Safari Web Inspector).
+                    // contain-intrinsic-size: hint inicial de altura (~28px) para evitar
+                    // flicker antes de que el navegador mida la fila real.
+                    className={cn(
+                      'cursor-pointer transition-colors hover:bg-muted/50',
+                      '[content-visibility:auto] [contain-intrinsic-size:auto_28px]'
+                    )}
+                    style={{
+                      backgroundColor: row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined
+                    }}
+                    onMouseEnter={(e) => {
+                      if (row.getIsSelected()) {
+                        e.currentTarget.style.backgroundColor = 'rgb(125, 211, 252)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (row.getIsSelected()) {
+                        e.currentTarget.style.backgroundColor = 'rgb(186, 230, 253)';
+                      }
+                    }}
+                  >
+                    {row.getVisibleCells().map((cell) => {
+                      const isSelectionColumn = cell.column.id === 'select';
+                      const rowData = row.original as { id?: number };
+                      const rowId = (rowData.id as number) || (row.id as unknown as number);
+                      const columnId = cell.column.id;
+                      const isEditing = editingCell?.rowId === rowId && editingCell?.columnId === columnId;
+                      const cellMeta = cell.column.columnDef.meta as {
+                        cellClassName?: string;
+                        cellStyle?: React.CSSProperties;
+                      };
+                      const cellClassName = cellMeta?.cellClassName || '';
+                      const cellStyle = cellMeta?.cellStyle;
+
+                      return (
+                        <TableCell
+                          key={cell.id}
+                          style={{
+                            width: cell.column.getSize(),
+                            backgroundColor:
+                              isSelectionColumn && row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined,
+                            position: isEditing ? 'relative' : undefined,
+                            ...cellStyle
+                          }}
+                          className={cn(
+                            'overflow-visible whitespace-nowrap',
+                            isSelectionColumn && 'sticky left-0 z-[5] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
+                            isSelectionColumn && !row.getIsSelected() && 'bg-background',
+                            cellClassName
+                          )}
+                          onDoubleClick={(e) => {
+                            if (!isSelectionColumn) {
+                              e.stopPropagation();
+                              const cellValue = cell.getValue();
+                              handleCellDoubleClick(
+                                rowId,
+                                columnId,
+                                cellValue,
+                                cell.column.columnDef.meta as Record<string, unknown> | undefined
+                              );
+                            }
+                          }}
+                        >
+                          {isEditing ? (
+                            <input
+                              type="text"
+                              value={editValue}
+                              onChange={(e) => setEditValue(e.target.value)}
+                              onKeyDown={handleCellEditKeyDown}
+                              onBlur={handleCellEditCancel}
+                              onClick={(e) => e.currentTarget.select()}
+                              autoFocus
+                              disabled={isSaving}
+                              className={
+                                'absolute inset-0 w-full h-full px-1 py-0.5 text-xs ' +
+                                'border-2 border-primary focus:outline-none box-border'
+                              }
+                              style={{ margin: 0 }}
+                            />
+                          ) : (
+                            flexRender(cell.column.columnDef.cell, cell.getContext())
+                          )}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                  );
+                })}
+                {/* Spacer bottom: ocupa el espacio de las filas no renderizadas abajo */}
+                {paddingBottom > 0 && (
+                  <tr aria-hidden="true">
+                    <td colSpan={tableColumns.length} style={{ height: paddingBottom, padding: 0, border: 'none' }} />
+                  </tr>
+                )}
+              </>
             ) : (
               <>
                 <TableRow>
@@ -569,7 +494,6 @@ function DataTableComponent<TData, TValue>({
                     No se encontraron resultados.
                   </TableCell>
                 </TableRow>
-                {/* Spacer row to push footer to bottom when no data */}
                 <tr style={{ height: '100%' }}>
                   <td colSpan={tableColumns.length} style={{ padding: 0, border: 'none' }} />
                 </tr>
@@ -577,11 +501,10 @@ function DataTableComponent<TData, TValue>({
             )}
           </TableBody>
           <DataTableFooter table={table} totalsConfig={totalsConfig} />
-        </Table>
+          </Table>
+        </DevProfiler>
       </div>
     </div>
   );
 }
 
-// Memoize the entire component to prevent re-renders when parent re-renders
-export const DataTable = memo(DataTableComponent) as typeof DataTableComponent;
