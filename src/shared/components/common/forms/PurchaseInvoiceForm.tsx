@@ -65,11 +65,13 @@ export function PurchaseInvoiceForm({ onSubmit, onCancel, defaultValues }: Purch
       plasticBagTax: '0.00',
       currency: 'PEN',
       exchangeRate: '1.000',
+      voucherStatus: '1',
       ...defaultValues
     }
   });
 
   const voucherType = watch('voucherType');
+  const voucherStatus = watch('voucherStatus');
   const supplierDocType = watch('supplierDocType');
   const supplierDocNumber = watch('supplierDocNumber');
   const totalAmount = watch('totalAmount');
@@ -122,7 +124,7 @@ export function PurchaseInvoiceForm({ onSubmit, onCancel, defaultValues }: Purch
 
       if (supplierDocType === '6') {
         if (!ApiPeruService.isValidRuc(supplierDocNumber)) {
-          setLookupError('RUC inválido (debe tener 11 dígitos)');
+          setLookupError('RUC inválido (11 dígitos + dígito verificador)');
           return;
         }
         const data = await ApiPeruService.queryRuc(supplierDocNumber, apiKey);
@@ -220,19 +222,38 @@ export function PurchaseInvoiceForm({ onSubmit, onCancel, defaultValues }: Purch
             />
           </div>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="voucherType">
-            Tipo de Comprobante <span className="text-destructive">*</span>
-          </Label>
-          <Select value={voucherType} onValueChange={(value) => setValue('voucherType', value)}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="01">01 - Factura</SelectItem>
-              <SelectItem value="03">03 - Boleta</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="voucherType">
+              Tipo de Comprobante <span className="text-destructive">*</span>
+            </Label>
+            <Select value={voucherType} onValueChange={(value) => setValue('voucherType', value)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="01">01 - Factura</SelectItem>
+                <SelectItem value="03">03 - Boleta</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="voucherStatus">
+              Estado del Comprobante <span className="text-destructive">*</span>
+            </Label>
+            <Select value={voucherStatus ?? '1'} onValueChange={(value) => setValue('voucherStatus', value)}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">1 - Registrado</SelectItem>
+                <SelectItem value="2">2 - Anulado</SelectItem>
+                <SelectItem value="8">8 - Periodo anterior no anotado</SelectItem>
+                <SelectItem value="9">9 - Periodo anterior anotado incorrectamente</SelectItem>
+                <SelectItem value="0">0 - Cierre o anulación de serie</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="space-y-2">

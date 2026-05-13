@@ -1,4 +1,5 @@
 import { invoke } from '@tauri-apps/api/core';
+import { CompanyValidation } from '@/core/domain/entities/company.entity';
 
 /**
  * RUC data structure from apiperu.dev API
@@ -74,10 +75,11 @@ export class ApiPeruService {
   }
 
   /**
-   * Validates RUC format (11 digits)
+   * Valida RUC: 11 dígitos + dígito verificador (módulo 11). Delegado al canónico
+   * en CompanyValidation para mantener una sola implementación del algoritmo SUNAT.
    */
   static isValidRuc(ruc: string): boolean {
-    return /^\d{11}$/.test(ruc);
+    return CompanyValidation.isValidRuc(ruc);
   }
 
   /**

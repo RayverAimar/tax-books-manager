@@ -5,6 +5,7 @@ import { importSalesCSV, importSalesTXT } from '@/features/sales/lib/sales-impor
 import { importPurchasesCSV, importPurchasesTXT } from '@/features/purchases/lib/purchases-import';
 import type { InvoiceType, InvoiceMap } from '@/shared/types/invoice.types';
 import type { ImportResult } from '@/shared/lib/import/import-types';
+import { decodeFileBytes } from '@/shared/lib/utils/encoding';
 
 export function useImport<T extends InvoiceType>(type: T) {
   const [isImporting, setIsImporting] = useState(false);
@@ -40,8 +41,9 @@ export function useImport<T extends InvoiceType>(type: T) {
       const fileContent = await readFile(filePath as string);
       setProgress(50);
 
-      // Decode content
-      const textContent = new TextDecoder('utf-8').decode(fileContent);
+      // Decode content with auto-detection (UTF-8 strict, fallback to Windows-1252
+      // for files exported by sistemas contables como Concar o Excel ES en Windows)
+      const { text: textContent } = decodeFileBytes(fileContent);
 
       let result: ImportResult<InvoiceMap<T>>;
 

@@ -43,8 +43,12 @@ export class CompanyValidation {
       sum += parseInt(ruc[i]) * factors[i];
     }
 
-    const remainder = sum % 11;
-    const checkDigit = remainder === 0 ? 0 : 11 - remainder;
+    // Algoritmo oficial SUNAT:
+    //   check = 11 - (sum % 11)
+    //   si check == 10 → 0; si check == 11 → 1
+    let checkDigit = 11 - (sum % 11);
+    if (checkDigit === 10) checkDigit = 0;
+    else if (checkDigit === 11) checkDigit = 1;
 
     return checkDigit === parseInt(ruc[10]);
   }

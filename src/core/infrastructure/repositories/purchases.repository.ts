@@ -5,7 +5,11 @@ import type { PeriodRepository } from '@/core/domain/repositories';
 import { PeriodUtils } from '@/core/domain/entities/period.entity';
 import { queryCache } from '@/shared/lib/cache/query-cache';
 import { PURCHASE_RECORD_COLUMNS, PURCHASES_BATCH_SIZE } from '@/shared/constants/database.constants';
-import { PURCHASE_ALLOWED_FIELDS, type CreatablePurchaseInvoice } from '@/shared/constants/field-registry';
+import {
+  PURCHASE_ALLOWED_FIELDS,
+  PURCHASE_SUNAT_COLUMNS_MAPPING,
+  type CreatablePurchaseInvoice
+} from '@/shared/constants/field-registry';
 import { camelToSnake } from '@/shared/lib/utils/case-converter';
 import { RepositoryFactory } from '@/core/infrastructure/repositories/repository.factory';
 
@@ -45,7 +49,26 @@ export class PurchasesRepository implements IPurchasesRepository {
       throw new Error('Código de periodo inválido');
     }
 
-    const result = await this.db.execute(
+    const newId = await this.db.transaction(async () => {
+      const result = await this.insertOne(companyId, periodCode, invoice);
+      await this.refreshPeriodMetadata(companyId, periodCode);
+      return result.lastInsertId as number;
+    });
+
+    this.invalidateCache(companyId, periodCode);
+
+    const created = await this.getById(newId, companyId);
+    if (!created) {
+      throw new Error('Failed to retrieve created record');
+    }
+    return created;
+  }
+
+  /**
+   * Inserts a single purchase record (no transaction, no metadata update)
+   */
+  private async insertOne(companyId: number, periodCode: string, invoice: CreatablePurchaseInvoice) {
+    return this.db.execute(
       `INSERT INTO purchase_records (
         company_id, ruc, business_name, period,
         sunat_correlative,
@@ -164,20 +187,21 @@ export class PurchasesRepository implements IPurchasesRepository {
         this.formatNumeric(invoice.vatPercentage, 2)
       ]
     );
+  }
 
-    // Update period metadata
-    const records = await this.getAll(companyId, periodCode);
-    const totalAmount = records.reduce((sum, r) => sum + (r.totalAmount || 0), 0);
-    await this.periodRepo.update(companyId, periodCode, 'purchases', records.length, totalAmount);
-
-    // Invalidate cache
-    this.invalidateCache(companyId, periodCode);
-
-    const created = await this.getById(result.lastInsertId as number);
-    if (!created) {
-      throw new Error('Failed to retrieve created record');
-    }
-    return created;
+  /**
+   * Refreshes period metadata using a single aggregation query.
+   * Must be called inside a transaction to avoid race conditions.
+   */
+  private async refreshPeriodMetadata(companyId: number, periodCode: string): Promise<void> {
+    const rows = await this.db.select<{ count: number; total: number | null }>(
+      `SELECT COUNT(*) as count, COALESCE(SUM(total_amount), 0) as total
+         FROM purchase_records
+        WHERE company_id = ? AND period = ?`,
+      [companyId, periodCode]
+    );
+    const { count, total } = rows[0] ?? { count: 0, total: 0 };
+    await this.periodRepo.update(companyId, periodCode, 'purchases', count, total ?? 0);
   }
 
   /**
@@ -410,13 +434,17 @@ export class PurchasesRepository implements IPurchasesRepository {
   }
 
   /**
-   * Gets a single purchase record by ID
+   * Gets a single purchase record by ID, scoped to a company (multi-tenant safety).
    *
    * @param id - Record ID
+   * @param companyId - Company ID (requerido — evita leaks cross-empresa)
    * @returns Purchase invoice or null if not found
    */
-  async getById(id: number): Promise<PurchaseInvoice | null> {
-    const records = await this.db.select<Record<string, unknown>>(`SELECT * FROM purchase_records WHERE id = ?`, [id]);
+  async getById(id: number, companyId: number): Promise<PurchaseInvoice | null> {
+    const records = await this.db.select<Record<string, unknown>>(
+      `SELECT * FROM purchase_records WHERE id = ? AND company_id = ?`,
+      [id, companyId]
+    );
 
     if (records.length === 0) {
       return null;
@@ -456,7 +484,7 @@ export class PurchasesRepository implements IPurchasesRepository {
     }
 
     // Format value
-    const formattedValue = this.formatValueByType(value);
+    const formattedValue = this.formatValueByType(value, fieldName);
 
     // Execute UPDATE
     const result = await this.db.execute(
@@ -475,7 +503,7 @@ export class PurchasesRepository implements IPurchasesRepository {
   }
 
   /**
-   * P Updates multiple fields in a purchase record with a SINGLE query
+   * Updates multiple fields in a purchase record with a SINGLE query
    *
    * This is the OPTIMIZED method for updating multiple related fields at once.
    * See SalesRepository.updateFields() for detailed documentation.
@@ -505,7 +533,7 @@ export class PurchasesRepository implements IPurchasesRepository {
     const setClause = setClauses.join(', ');
 
     // Format values
-    const values = fieldNames.map((field) => this.formatValueByType(fields[field]));
+    const values = fieldNames.map((field) => this.formatValueByType(fields[field], field));
 
     // Execute single UPDATE with multiple SET clauses
     const result = await this.db.execute(
@@ -538,66 +566,21 @@ export class PurchasesRepository implements IPurchasesRepository {
     recordId: number,
     invoice: Partial<PurchaseInvoice>
   ): Promise<PurchaseInvoice> {
-    // Build update fields from partial invoice
+    // Build update map by intersecting provided fields with the allowed-fields whitelist.
+    // This filters out system fields (id, createdAt, updatedAt) and any unknown keys,
+    // and covers SUNAT fields, calculated fields, and the 39 freeUseFieldN columns.
     const fields: Record<string, string | number | null> = {};
-
-    // Map all provided fields
-    if (invoice.ruc !== undefined) fields.ruc = invoice.ruc;
-    if (invoice.businessName !== undefined) fields.businessName = invoice.businessName;
-    if (invoice.sunatCorrelative !== undefined) fields.sunatCorrelative = invoice.sunatCorrelative;
-    if (invoice.issueDate !== undefined) fields.issueDate = invoice.issueDate;
-    if (invoice.dueDate !== undefined) fields.dueDate = invoice.dueDate;
-    if (invoice.voucherType !== undefined) fields.voucherType = invoice.voucherType;
-    if (invoice.voucherSeries !== undefined) fields.voucherSeries = invoice.voucherSeries;
-    if (invoice.customsYear !== undefined) fields.customsYear = invoice.customsYear;
-    if (invoice.voucherNumberStart !== undefined) fields.voucherNumberStart = invoice.voucherNumberStart;
-    if (invoice.voucherNumberEnd !== undefined) fields.voucherNumberEnd = invoice.voucherNumberEnd;
-    if (invoice.supplierDocType !== undefined) fields.supplierDocType = invoice.supplierDocType;
-    if (invoice.supplierDocNumber !== undefined) fields.supplierDocNumber = invoice.supplierDocNumber;
-    if (invoice.supplierName !== undefined) fields.supplierName = invoice.supplierName;
-    if (invoice.taxableBaseTaxed !== undefined) fields.taxableBaseTaxed = invoice.taxableBaseTaxed;
-    if (invoice.vatAmountTaxed !== undefined) fields.vatAmountTaxed = invoice.vatAmountTaxed;
-    if (invoice.taxableBaseMixed !== undefined) fields.taxableBaseMixed = invoice.taxableBaseMixed;
-    if (invoice.vatAmountMixed !== undefined) fields.vatAmountMixed = invoice.vatAmountMixed;
-    if (invoice.taxableBaseUntaxed !== undefined) fields.taxableBaseUntaxed = invoice.taxableBaseUntaxed;
-    if (invoice.vatAmountUntaxed !== undefined) fields.vatAmountUntaxed = invoice.vatAmountUntaxed;
-    if (invoice.nonTaxableValue !== undefined) fields.nonTaxableValue = invoice.nonTaxableValue;
-    if (invoice.selectiveConsumptionTax !== undefined) fields.selectiveConsumptionTax = invoice.selectiveConsumptionTax;
-    if (invoice.plasticBagTax !== undefined) fields.plasticBagTax = invoice.plasticBagTax;
-    if (invoice.otherTaxes !== undefined) fields.otherTaxes = invoice.otherTaxes;
-    if (invoice.totalAmount !== undefined) fields.totalAmount = invoice.totalAmount;
-    if (invoice.currency !== undefined) fields.currency = invoice.currency;
-    if (invoice.exchangeRate !== undefined) fields.exchangeRate = invoice.exchangeRate;
-    if (invoice.modifiedVoucherDate !== undefined) fields.modifiedVoucherDate = invoice.modifiedVoucherDate;
-    if (invoice.modifiedVoucherType !== undefined) fields.modifiedVoucherType = invoice.modifiedVoucherType;
-    if (invoice.modifiedVoucherSeries !== undefined) fields.modifiedVoucherSeries = invoice.modifiedVoucherSeries;
-    if (invoice.damCode !== undefined) fields.damCode = invoice.damCode;
-    if (invoice.modifiedVoucherNumber !== undefined) fields.modifiedVoucherNumber = invoice.modifiedVoucherNumber;
-    if (invoice.goodsServicesClass !== undefined) fields.goodsServicesClass = invoice.goodsServicesClass;
-    if (invoice.operatorsProjectId !== undefined) fields.operatorsProjectId = invoice.operatorsProjectId;
-    if (invoice.participationPercentage !== undefined) fields.participationPercentage = invoice.participationPercentage;
-    if (invoice.municipalBingoTax !== undefined) fields.municipalBingoTax = invoice.municipalBingoTax;
-    if (invoice.carExportImportIndicator !== undefined)
-      fields.carExportImportIndicator = invoice.carExportImportIndicator;
-    if (invoice.detraction !== undefined) fields.detraction = invoice.detraction;
-    if (invoice.noteType !== undefined) fields.noteType = invoice.noteType;
-    if (invoice.voucherStatus !== undefined) fields.voucherStatus = invoice.voucherStatus;
-    if (invoice.inconsistencyIndicator !== undefined) fields.inconsistencyIndicator = invoice.inconsistencyIndicator;
-    if (invoice.vatPercentage !== undefined) fields.vatPercentage = invoice.vatPercentage;
-
-    // CLU fields
-    for (let i = 1; i <= 39; i++) {
-      const fieldName = `freeUseField${i}` as keyof PurchaseInvoice;
-      if (invoice[fieldName] !== undefined) {
-        fields[fieldName] = invoice[fieldName] as string | null;
+    for (const fieldName of PURCHASE_ALLOWED_FIELDS) {
+      const value = invoice[fieldName as keyof PurchaseInvoice];
+      if (value !== undefined) {
+        fields[fieldName] = value as string | number | null;
       }
     }
 
-    // Use updateFields for the update
     await this.updateFields(companyId, periodCode, recordId, fields);
 
     // Return updated record
-    const updated = await this.getById(recordId);
+    const updated = await this.getById(recordId, companyId);
     if (!updated) {
       throw new Error('Failed to retrieve updated record');
     }
@@ -617,21 +600,19 @@ export class PurchasesRepository implements IPurchasesRepository {
    * @param recordId - Database ID of the record to delete
    */
   async delete(companyId: number, periodCode: string, recordId: number): Promise<void> {
-    const result = await this.db.execute(
-      `DELETE FROM purchase_records WHERE id = ? AND company_id = ? AND period = ?`,
-      [recordId, companyId, periodCode]
-    );
+    await this.db.transaction(async () => {
+      const result = await this.db.execute(
+        `DELETE FROM purchase_records WHERE id = ? AND company_id = ? AND period = ?`,
+        [recordId, companyId, periodCode]
+      );
 
-    if (result.rowsAffected === 0) {
-      throw new Error('Registro no encontrado o sin permisos para eliminarlo');
-    }
+      if (result.rowsAffected === 0) {
+        throw new Error('Registro no encontrado o sin permisos para eliminarlo');
+      }
 
-    // Update period metadata
-    const records = await this.getAll(companyId, periodCode);
-    const totalAmount = records.reduce((sum, r) => sum + (r.totalAmount || 0), 0);
-    await this.periodRepo.update(companyId, periodCode, 'purchases', records.length, totalAmount);
+      await this.refreshPeriodMetadata(companyId, periodCode);
+    });
 
-    // Invalidate cache
     this.invalidateCache(companyId, periodCode);
   }
 
@@ -642,12 +623,15 @@ export class PurchasesRepository implements IPurchasesRepository {
    * @param periodCode - Period code (YYYYMM)
    */
   async deleteByPeriod(companyId: number, periodCode: string): Promise<void> {
-    await this.db.execute(`DELETE FROM purchase_records WHERE company_id = ? AND period = ?`, [companyId, periodCode]);
+    // DELETE + metadata update deben ser atómicos (ver sales.repository.deleteByPeriod).
+    await this.db.transaction(async () => {
+      await this.db.execute(`DELETE FROM purchase_records WHERE company_id = ? AND period = ?`, [
+        companyId,
+        periodCode
+      ]);
+      await this.periodRepo.update(companyId, periodCode, 'purchases', 0, 0);
+    });
 
-    // Update period metadata (0 records)
-    await this.periodRepo.update(companyId, periodCode, 'purchases', 0, 0);
-
-    // Invalidate cache
     this.invalidateCache(companyId, periodCode);
   }
 
@@ -760,11 +744,19 @@ export class PurchasesRepository implements IPurchasesRepository {
   }
 
   /**
-   * Formats value based on type
+   * Formats value based on type. Para campos numéricos, respeta `exportDecimals`
+   * del field-registry (Tipo de Cambio = 3, importes = 2).
    */
-  private formatValueByType(value: string | number | null | undefined): string | number | null {
+  private formatValueByType(
+    value: string | number | null | undefined,
+    fieldName?: string
+  ): string | number | null {
     if (typeof value === 'number') {
-      return value.toFixed(2);
+      const mapping = fieldName
+        ? PURCHASE_SUNAT_COLUMNS_MAPPING.find((m) => m.tsField === fieldName)
+        : undefined;
+      const decimals = mapping?.exportDecimals ?? 2;
+      return value.toFixed(decimals);
     } else if (value === '' || value === undefined) {
       return null;
     }
