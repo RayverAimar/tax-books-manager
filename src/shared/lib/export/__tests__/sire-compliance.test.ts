@@ -9,12 +9,7 @@
  * primero contra el Excel oficial y, en duda, contra PVSIRE.
  */
 import { describe, it, expect } from 'vitest';
-import {
-  exportSalesTXT,
-  exportSalesCSV,
-  exportPurchasesTXT,
-  exportPurchasesCSV
-} from '../generic-export';
+import { exportSalesTXT, exportSalesCSV, exportPurchasesTXT, exportPurchasesCSV } from '../generic-export';
 import { aSalesInvoice, aPurchaseInvoice } from '@/test/helpers/factories';
 
 // Headers oficiales SIRE (50 cols RVIE, 80 cols RCE)

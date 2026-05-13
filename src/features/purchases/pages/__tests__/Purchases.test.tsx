@@ -2,7 +2,9 @@ import { describe, it, expect, vi } from 'vitest';
 
 vi.mock('@/shared/components/common/templates/InvoiceListPage', () => ({
   InvoiceListPage: (props: { title: string; type: string }) => (
-    <div data-testid="ilp" data-type={props.type}>{props.title}</div>
+    <div data-testid="ilp" data-type={props.type}>
+      {props.title}
+    </div>
   )
 }));
 

@@ -87,11 +87,7 @@ export async function encryptSecret(plaintext: string): Promise<string> {
   const key = await getOrCreateKey();
   const iv = crypto.getRandomValues(new Uint8Array(12));
   const ptBytes = new TextEncoder().encode(plaintext);
-  const ct = await crypto.subtle.encrypt(
-    { name: 'AES-GCM', iv: iv as BufferSource },
-    key,
-    ptBytes as BufferSource
-  );
+  const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv as BufferSource }, key, ptBytes as BufferSource);
   return `${ENC_PREFIX}${bytesToB64(iv)}:${bytesToB64(new Uint8Array(ct))}`;
 }
 

@@ -5,13 +5,7 @@ import { InvoiceCard } from '../InvoiceCard';
 describe('InvoiceCard', () => {
   it('renderiza badge VENTAS para sales', () => {
     render(
-      <InvoiceCard
-        type="sales"
-        title="Libro de Ventas"
-        description="x"
-        recordCount={42}
-        onClick={() => undefined}
-      />
+      <InvoiceCard type="sales" title="Libro de Ventas" description="x" recordCount={42} onClick={() => undefined} />
     );
     expect(screen.getByText('VENTAS')).toBeInTheDocument();
     expect(screen.getByText('42')).toBeInTheDocument();
@@ -23,9 +17,7 @@ describe('InvoiceCard', () => {
   });
 
   it('muestra badge Declarado cuando declared=true', () => {
-    render(
-      <InvoiceCard type="sales" title="x" description="x" recordCount={1} declared onClick={() => undefined} />
-    );
+    render(<InvoiceCard type="sales" title="x" description="x" recordCount={1} declared onClick={() => undefined} />);
     expect(screen.getByText('Declarado')).toBeInTheDocument();
   });
 

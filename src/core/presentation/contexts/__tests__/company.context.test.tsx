@@ -25,9 +25,7 @@ describe('CompanyProvider', () => {
     let ctx: ReturnType<typeof useCompany> | undefined;
     mockHandler((sql) => {
       if (/SELECT[\s\S]*FROM companies/i.test(sql))
-        return [
-          { id: 1, ruc: '12345678903', business_name: 'A', created_at: '2024-01-01', updated_at: '2024-01-01' }
-        ];
+        return [{ id: 1, ruc: '12345678903', business_name: 'A', created_at: '2024-01-01', updated_at: '2024-01-01' }];
       return [];
     });
     render(

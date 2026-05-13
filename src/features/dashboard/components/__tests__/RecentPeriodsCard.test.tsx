@@ -9,8 +9,6 @@ describe('RecentPeriodsCard', () => {
     mockHandler(() => []);
     render(<RecentPeriodsCard companyId={1} onPeriodClick={vi.fn()} />);
     expect(screen.getByText('Cargando...')).toBeInTheDocument();
-    await waitFor(() =>
-      expect(screen.getByText(/No hay periodos con datos/)).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByText(/No hay periodos con datos/)).toBeInTheDocument());
   });
 });

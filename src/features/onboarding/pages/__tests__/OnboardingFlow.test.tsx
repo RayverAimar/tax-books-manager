@@ -4,9 +4,7 @@ vi.mock('@/core/presentation/contexts/company.context', () => ({
   useCompany: () => ({ createCompany: vi.fn().mockResolvedValue({ id: 1 }) })
 }));
 vi.mock('@/features/onboarding/components/WelcomeStep', () => ({
-  WelcomeStep: ({ onNext }: { onNext: () => void }) => (
-    <button onClick={onNext}>welcome-next</button>
-  )
+  WelcomeStep: ({ onNext }: { onNext: () => void }) => <button onClick={onNext}>welcome-next</button>
 }));
 vi.mock('@/features/onboarding/components/CompanyRegistrationStep', () => ({
   CompanyRegistrationStep: () => <div data-testid="registration" />

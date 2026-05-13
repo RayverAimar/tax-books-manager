@@ -1,21 +1,8 @@
 import { useEffect, useState } from 'react';
 import { History, Copy, FolderOpen } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle
-} from '@/shared/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/shared/components/ui/dialog';
 import { Button } from '@/shared/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow
-} from '@/shared/components/ui/table';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/shared/components/ui/table';
 import { useCompany } from '@/core/presentation/contexts/company.context';
 import { RepositoryFactory } from '@/core/infrastructure/repositories/repository.factory';
 import { showSuccess, showError } from '@/shared/lib/utils/toast';
@@ -70,8 +57,8 @@ export function ExportHistoryDialog({ open, onOpenChange }: ExportHistoryDialogP
             <DialogTitle>Historial de exports</DialogTitle>
           </div>
           <DialogDescription>
-            Últimos archivos generados para SUNAT. El hash SHA-256 te permite probar qué archivo se subió en caso
-            de impugnación.
+            Últimos archivos generados para SUNAT. El hash SHA-256 te permite probar qué archivo se subió en caso de
+            impugnación.
           </DialogDescription>
         </DialogHeader>
 

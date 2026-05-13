@@ -747,14 +747,9 @@ export class PurchasesRepository implements IPurchasesRepository {
    * Formats value based on type. Para campos numéricos, respeta `exportDecimals`
    * del field-registry (Tipo de Cambio = 3, importes = 2).
    */
-  private formatValueByType(
-    value: string | number | null | undefined,
-    fieldName?: string
-  ): string | number | null {
+  private formatValueByType(value: string | number | null | undefined, fieldName?: string): string | number | null {
     if (typeof value === 'number') {
-      const mapping = fieldName
-        ? PURCHASE_SUNAT_COLUMNS_MAPPING.find((m) => m.tsField === fieldName)
-        : undefined;
+      const mapping = fieldName ? PURCHASE_SUNAT_COLUMNS_MAPPING.find((m) => m.tsField === fieldName) : undefined;
       const decimals = mapping?.exportDecimals ?? 2;
       return value.toFixed(decimals);
     } else if (value === '' || value === undefined) {

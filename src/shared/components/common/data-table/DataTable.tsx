@@ -336,175 +336,172 @@ export function DataTable<TData, TValue>({
           del contenido (todas las filas) → virtualizer mide full-height y no
           virtualiza. Con min-h-0 el contenedor se constrain a la altura
           disponible del flex parent, scroll se activa, virtualizer trabaja. */}
-      <div
-        ref={scrollContainerRef}
-        className="mt-4 min-h-0 flex-1 overflow-y-auto overflow-x-scroll rounded-md border"
-      >
+      <div ref={scrollContainerRef} className="mt-4 min-h-0 flex-1 overflow-y-auto overflow-x-scroll rounded-md border">
         {/* Profiler dev-only del árbol completo de la tabla — actualDuration aquí
             incluye header + body + footer. Para descomponer, hay un Profiler
             adicional dentro de DataTableFooter con id="DataTableFooter". */}
         <DevProfiler id="DataTable">
           <Table>
-          <TableHeader className="sticky top-0 z-10 bg-primary">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="!hover:bg-primary hover:!bg-primary">
-                {headerGroup.headers.map((header) => {
-                  const isSelectionColumn = header.column.id === 'select';
-                  const meta = header.column.columnDef.meta as {
-                    headerClassName?: string;
-                    headerStyle?: React.CSSProperties;
-                  };
-                  const headerClassName = meta?.headerClassName || '';
-                  const headerStyle = meta?.headerStyle;
-                  return (
-                    <TableHead
-                      key={header.id}
-                      style={{ width: header.getSize(), ...headerStyle }}
-                      className={cn(
-                        'whitespace-nowrap p-0',
-                        isSelectionColumn && 'sticky left-0 z-[15] bg-primary shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
-                        headerClassName
-                      )}
-                    >
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {rows.length ? (
-              <>
-                {/* Spacer top: ocupa el espacio de las filas no renderizadas arriba */}
-                {paddingTop > 0 && (
-                  <tr aria-hidden="true">
-                    <td colSpan={tableColumns.length} style={{ height: paddingTop, padding: 0, border: 'none' }} />
-                  </tr>
-                )}
-                {virtualRows.map((virtualRow) => {
-                  const row = rows[virtualRow.index];
-                  return (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && 'selected'}
-                    onClick={() => handleRowClick(row.original)}
-                    // content-visibility: auto → el navegador saltea layout/paint de filas
-                    // fuera del viewport. Crítico con 100-500 filas × 80 columnas:
-                    // sin esto, abrir un dialog dispara recalc de layout sobre todas
-                    // las celdas detrás (1.2s observado en Safari Web Inspector).
-                    // contain-intrinsic-size: hint inicial de altura (~28px) para evitar
-                    // flicker antes de que el navegador mida la fila real.
-                    className={cn(
-                      'cursor-pointer transition-colors hover:bg-muted/50',
-                      '[content-visibility:auto] [contain-intrinsic-size:auto_28px]'
-                    )}
-                    style={{
-                      backgroundColor: row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined
-                    }}
-                    onMouseEnter={(e) => {
-                      if (row.getIsSelected()) {
-                        e.currentTarget.style.backgroundColor = 'rgb(125, 211, 252)';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (row.getIsSelected()) {
-                        e.currentTarget.style.backgroundColor = 'rgb(186, 230, 253)';
-                      }
-                    }}
-                  >
-                    {row.getVisibleCells().map((cell) => {
-                      const isSelectionColumn = cell.column.id === 'select';
-                      const rowData = row.original as { id?: number };
-                      const rowId = (rowData.id as number) || (row.id as unknown as number);
-                      const columnId = cell.column.id;
-                      const isEditing = editingCell?.rowId === rowId && editingCell?.columnId === columnId;
-                      const cellMeta = cell.column.columnDef.meta as {
-                        cellClassName?: string;
-                        cellStyle?: React.CSSProperties;
-                      };
-                      const cellClassName = cellMeta?.cellClassName || '';
-                      const cellStyle = cellMeta?.cellStyle;
-
-                      return (
-                        <TableCell
-                          key={cell.id}
-                          style={{
-                            width: cell.column.getSize(),
-                            backgroundColor:
-                              isSelectionColumn && row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined,
-                            position: isEditing ? 'relative' : undefined,
-                            ...cellStyle
-                          }}
-                          className={cn(
-                            'overflow-visible whitespace-nowrap',
-                            isSelectionColumn && 'sticky left-0 z-[5] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
-                            isSelectionColumn && !row.getIsSelected() && 'bg-background',
-                            cellClassName
-                          )}
-                          onDoubleClick={(e) => {
-                            if (!isSelectionColumn) {
-                              e.stopPropagation();
-                              const cellValue = cell.getValue();
-                              handleCellDoubleClick(
-                                rowId,
-                                columnId,
-                                cellValue,
-                                cell.column.columnDef.meta as Record<string, unknown> | undefined
-                              );
-                            }
-                          }}
-                        >
-                          {isEditing ? (
-                            <input
-                              type="text"
-                              value={editValue}
-                              onChange={(e) => setEditValue(e.target.value)}
-                              onKeyDown={handleCellEditKeyDown}
-                              onBlur={handleCellEditCancel}
-                              onClick={(e) => e.currentTarget.select()}
-                              autoFocus
-                              disabled={isSaving}
-                              className={
-                                'absolute inset-0 w-full h-full px-1 py-0.5 text-xs ' +
-                                'border-2 border-primary focus:outline-none box-border'
-                              }
-                              style={{ margin: 0 }}
-                            />
-                          ) : (
-                            flexRender(cell.column.columnDef.cell, cell.getContext())
-                          )}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                  );
-                })}
-                {/* Spacer bottom: ocupa el espacio de las filas no renderizadas abajo */}
-                {paddingBottom > 0 && (
-                  <tr aria-hidden="true">
-                    <td colSpan={tableColumns.length} style={{ height: paddingBottom, padding: 0, border: 'none' }} />
-                  </tr>
-                )}
-              </>
-            ) : (
-              <>
-                <TableRow>
-                  <TableCell colSpan={columns.length} className="h-24 text-center">
-                    No se encontraron resultados.
-                  </TableCell>
+            <TableHeader className="sticky top-0 z-10 bg-primary">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <TableRow key={headerGroup.id} className="!hover:bg-primary hover:!bg-primary">
+                  {headerGroup.headers.map((header) => {
+                    const isSelectionColumn = header.column.id === 'select';
+                    const meta = header.column.columnDef.meta as {
+                      headerClassName?: string;
+                      headerStyle?: React.CSSProperties;
+                    };
+                    const headerClassName = meta?.headerClassName || '';
+                    const headerStyle = meta?.headerStyle;
+                    return (
+                      <TableHead
+                        key={header.id}
+                        style={{ width: header.getSize(), ...headerStyle }}
+                        className={cn(
+                          'whitespace-nowrap p-0',
+                          isSelectionColumn &&
+                            'sticky left-0 z-[15] bg-primary shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
+                          headerClassName
+                        )}
+                      >
+                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-                <tr style={{ height: '100%' }}>
-                  <td colSpan={tableColumns.length} style={{ padding: 0, border: 'none' }} />
-                </tr>
-              </>
-            )}
-          </TableBody>
-          <DataTableFooter table={table} totalsConfig={totalsConfig} />
+              ))}
+            </TableHeader>
+            <TableBody>
+              {rows.length ? (
+                <>
+                  {/* Spacer top: ocupa el espacio de las filas no renderizadas arriba */}
+                  {paddingTop > 0 && (
+                    <tr aria-hidden="true">
+                      <td colSpan={tableColumns.length} style={{ height: paddingTop, padding: 0, border: 'none' }} />
+                    </tr>
+                  )}
+                  {virtualRows.map((virtualRow) => {
+                    const row = rows[virtualRow.index];
+                    return (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && 'selected'}
+                        onClick={() => handleRowClick(row.original)}
+                        // content-visibility: auto → el navegador saltea layout/paint de filas
+                        // fuera del viewport. Crítico con 100-500 filas × 80 columnas:
+                        // sin esto, abrir un dialog dispara recalc de layout sobre todas
+                        // las celdas detrás (1.2s observado en Safari Web Inspector).
+                        // contain-intrinsic-size: hint inicial de altura (~28px) para evitar
+                        // flicker antes de que el navegador mida la fila real.
+                        className={cn(
+                          'cursor-pointer transition-colors hover:bg-muted/50',
+                          '[content-visibility:auto] [contain-intrinsic-size:auto_28px]'
+                        )}
+                        style={{
+                          backgroundColor: row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined
+                        }}
+                        onMouseEnter={(e) => {
+                          if (row.getIsSelected()) {
+                            e.currentTarget.style.backgroundColor = 'rgb(125, 211, 252)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (row.getIsSelected()) {
+                            e.currentTarget.style.backgroundColor = 'rgb(186, 230, 253)';
+                          }
+                        }}
+                      >
+                        {row.getVisibleCells().map((cell) => {
+                          const isSelectionColumn = cell.column.id === 'select';
+                          const rowData = row.original as { id?: number };
+                          const rowId = (rowData.id as number) || (row.id as unknown as number);
+                          const columnId = cell.column.id;
+                          const isEditing = editingCell?.rowId === rowId && editingCell?.columnId === columnId;
+                          const cellMeta = cell.column.columnDef.meta as {
+                            cellClassName?: string;
+                            cellStyle?: React.CSSProperties;
+                          };
+                          const cellClassName = cellMeta?.cellClassName || '';
+                          const cellStyle = cellMeta?.cellStyle;
+
+                          return (
+                            <TableCell
+                              key={cell.id}
+                              style={{
+                                width: cell.column.getSize(),
+                                backgroundColor:
+                                  isSelectionColumn && row.getIsSelected() ? 'rgb(186, 230, 253)' : undefined,
+                                position: isEditing ? 'relative' : undefined,
+                                ...cellStyle
+                              }}
+                              className={cn(
+                                'overflow-visible whitespace-nowrap',
+                                isSelectionColumn && 'sticky left-0 z-[5] shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]',
+                                isSelectionColumn && !row.getIsSelected() && 'bg-background',
+                                cellClassName
+                              )}
+                              onDoubleClick={(e) => {
+                                if (!isSelectionColumn) {
+                                  e.stopPropagation();
+                                  const cellValue = cell.getValue();
+                                  handleCellDoubleClick(
+                                    rowId,
+                                    columnId,
+                                    cellValue,
+                                    cell.column.columnDef.meta as Record<string, unknown> | undefined
+                                  );
+                                }
+                              }}
+                            >
+                              {isEditing ? (
+                                <input
+                                  type="text"
+                                  value={editValue}
+                                  onChange={(e) => setEditValue(e.target.value)}
+                                  onKeyDown={handleCellEditKeyDown}
+                                  onBlur={handleCellEditCancel}
+                                  onClick={(e) => e.currentTarget.select()}
+                                  autoFocus
+                                  disabled={isSaving}
+                                  className={
+                                    'absolute inset-0 w-full h-full px-1 py-0.5 text-xs ' +
+                                    'border-2 border-primary focus:outline-none box-border'
+                                  }
+                                  style={{ margin: 0 }}
+                                />
+                              ) : (
+                                flexRender(cell.column.columnDef.cell, cell.getContext())
+                              )}
+                            </TableCell>
+                          );
+                        })}
+                      </TableRow>
+                    );
+                  })}
+                  {/* Spacer bottom: ocupa el espacio de las filas no renderizadas abajo */}
+                  {paddingBottom > 0 && (
+                    <tr aria-hidden="true">
+                      <td colSpan={tableColumns.length} style={{ height: paddingBottom, padding: 0, border: 'none' }} />
+                    </tr>
+                  )}
+                </>
+              ) : (
+                <>
+                  <TableRow>
+                    <TableCell colSpan={columns.length} className="h-24 text-center">
+                      No se encontraron resultados.
+                    </TableCell>
+                  </TableRow>
+                  <tr style={{ height: '100%' }}>
+                    <td colSpan={tableColumns.length} style={{ padding: 0, border: 'none' }} />
+                  </tr>
+                </>
+              )}
+            </TableBody>
+            <DataTableFooter table={table} totalsConfig={totalsConfig} />
           </Table>
         </DevProfiler>
       </div>
     </div>
   );
 }
-

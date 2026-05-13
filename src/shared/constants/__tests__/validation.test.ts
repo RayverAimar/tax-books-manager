@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  isValidRUC,
-  isValidDNI,
-  truncateToLength,
-  sanitizeString
-} from '../validation.constants';
+import { isValidRUC, isValidDNI, truncateToLength, sanitizeString } from '../validation.constants';
 
 describe('isValidRUC', () => {
   it('accepts 11-digit RUC', () => {

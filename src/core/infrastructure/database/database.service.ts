@@ -297,7 +297,7 @@ export class DatabaseService {
       if (!msg.includes('cannot rollback') && !msg.includes('no transaction is active')) {
         // Log unexpected rollback failures but do not throw — the original
         // error is more useful to surface.
-         
+
         console.warn('[DB] Rollback failed:', msg);
       }
       this.transactionDepth = 0;

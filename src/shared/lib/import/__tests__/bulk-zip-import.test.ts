@@ -71,12 +71,8 @@ describe('checkPeriodCollisions', () => {
 
   it('retorna colisiones cuando el periodo tiene datos', async () => {
     const validPeriod = PeriodUtils.getLastValidPeriod();
-    mockHandler(() => [
-      { code: validPeriod, record_count: 10, last_modified: '2024-08-15', declared: 0 }
-    ]);
-    const files: ZipFileInfo[] = [
-      { path: 'ventas/p.csv', period: validPeriod, type: 'sales', content: '' }
-    ];
+    mockHandler(() => [{ code: validPeriod, record_count: 10, last_modified: '2024-08-15', declared: 0 }]);
+    const files: ZipFileInfo[] = [{ path: 'ventas/p.csv', period: validPeriod, type: 'sales', content: '' }];
     const collisions = await checkPeriodCollisions(files, 1);
     expect(collisions).toHaveLength(1);
     expect(collisions[0].existingRecordCount).toBe(10);

@@ -18,14 +18,7 @@ describe('DataTableToolbar', () => {
 
   it('actualiza globalFilter tras debounce de 300ms', () => {
     const setFilter = vi.fn();
-    render(
-      <DataTableToolbar
-        table={makeTable()}
-        globalFilter=""
-        setGlobalFilter={setFilter}
-        selectedRows={0}
-      />
-    );
+    render(<DataTableToolbar table={makeTable()} globalFilter="" setGlobalFilter={setFilter} selectedRows={0} />);
     fireEvent.change(screen.getByPlaceholderText(/Buscar/), { target: { value: 'abc' } });
     // No llamó todavía
     expect(setFilter).not.toHaveBeenCalledWith('abc');
@@ -37,14 +30,7 @@ describe('DataTableToolbar', () => {
 
   it('botón limpiar aparece y resetea de inmediato', () => {
     const setFilter = vi.fn();
-    render(
-      <DataTableToolbar
-        table={makeTable(2)}
-        globalFilter="x"
-        setGlobalFilter={setFilter}
-        selectedRows={0}
-      />
-    );
+    render(<DataTableToolbar table={makeTable(2)} globalFilter="x" setGlobalFilter={setFilter} selectedRows={0} />);
     expect(screen.getByText(/2 resultados/)).toBeInTheDocument();
     fireEvent.click(screen.getByText('Limpiar filtro'));
     expect(setFilter).toHaveBeenCalledWith('');

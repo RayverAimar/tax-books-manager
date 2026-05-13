@@ -507,10 +507,11 @@ export class SalesRepository implements ISalesRepository {
    */
   async delete(companyId: number, periodCode: string, recordId: number): Promise<void> {
     await this.db.transaction(async () => {
-      const result = await this.db.execute(
-        `DELETE FROM sales_records WHERE id = ? AND company_id = ? AND period = ?`,
-        [recordId, companyId, periodCode]
-      );
+      const result = await this.db.execute(`DELETE FROM sales_records WHERE id = ? AND company_id = ? AND period = ?`, [
+        recordId,
+        companyId,
+        periodCode
+      ]);
 
       if (result.rowsAffected === 0) {
         throw new Error('Registro no encontrado o sin permisos para eliminarlo');
@@ -532,10 +533,7 @@ export class SalesRepository implements ISalesRepository {
     // DELETE + metadata update deben ser atómicos: si falla el segundo, los registros
     // ya borrados dejarían a Period con record_count > 0 sin filas detrás.
     await this.db.transaction(async () => {
-      await this.db.execute(`DELETE FROM sales_records WHERE company_id = ? AND period = ?`, [
-        companyId,
-        periodCode
-      ]);
+      await this.db.execute(`DELETE FROM sales_records WHERE company_id = ? AND period = ?`, [companyId, periodCode]);
       await this.periodRepo.update(companyId, periodCode, 'sales', 0, 0);
     });
 
@@ -612,14 +610,9 @@ export class SalesRepository implements ISalesRepository {
    * Formats value based on type. Para campos numéricos, respeta `exportDecimals`
    * del field-registry (Tipo de Cambio = 3, importes = 2).
    */
-  private formatValueByType(
-    value: string | number | null | undefined,
-    fieldName?: string
-  ): string | number | null {
+  private formatValueByType(value: string | number | null | undefined, fieldName?: string): string | number | null {
     if (typeof value === 'number') {
-      const mapping = fieldName
-        ? SALES_SUNAT_COLUMNS_MAPPING.find((m) => m.tsField === fieldName)
-        : undefined;
+      const mapping = fieldName ? SALES_SUNAT_COLUMNS_MAPPING.find((m) => m.tsField === fieldName) : undefined;
       const decimals = mapping?.exportDecimals ?? 2;
       return value.toFixed(decimals);
     } else if (value === '' || value === undefined) {

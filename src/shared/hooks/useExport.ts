@@ -8,10 +8,7 @@ import {
   exportPurchasesTXT
 } from '@/shared/lib/export/generic-export';
 import { buildSireFileName, type SireOpportunity } from '@/shared/lib/export/sire-filename';
-import {
-  validateForPvsire,
-  type PvsireBatchResult
-} from '@/shared/lib/export/pvsire-row-validator';
+import { validateForPvsire, type PvsireBatchResult } from '@/shared/lib/export/pvsire-row-validator';
 import { useCompany } from '@/core/presentation/contexts/company.context';
 import { usePeriod } from '@/core/presentation/contexts/period.context';
 import { RepositoryFactory } from '@/core/infrastructure/repositories/repository.factory';

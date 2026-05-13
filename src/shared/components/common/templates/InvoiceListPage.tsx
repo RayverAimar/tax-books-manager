@@ -4,10 +4,7 @@ import { DataTable } from '@/shared/components/common/data-table/DataTable';
 import { ImportConfirmationDialog } from './ImportConfirmationDialog';
 import { ConfirmDiscardDialog } from '../dialogs/ConfirmDiscardDialog';
 import { DeclaredPeriodWarningDialog } from '../dialogs/DeclaredPeriodWarningDialog';
-import {
-  SireExportOptionsDialog,
-  type SireExportOptionsResult
-} from '../dialogs/SireExportOptionsDialog';
+import { SireExportOptionsDialog, type SireExportOptionsResult } from '../dialogs/SireExportOptionsDialog';
 import type { FooterTotalConfig } from '@/shared/components/common/data-table/DataTableFooter';
 
 // ✅ NUEVO: Componentes con composición

@@ -61,10 +61,7 @@ describe('DataTableFooter', () => {
         }
       }
     ];
-    const stableTable = makeStableTable(
-      [{ amount: 100 }, { amount: 50 }],
-      ['select', 'col1', 'recordCount', 'amount']
-    );
+    const stableTable = makeStableTable([{ amount: 100 }, { amount: 50 }], ['select', 'col1', 'recordCount', 'amount']);
 
     function Wrapper() {
       const [, setN] = useState(0);

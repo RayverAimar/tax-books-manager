@@ -236,11 +236,7 @@ export function validateRvieRow(inv: SalesInvoice, period: string): PvsireRowVal
   const rMon = V.validaMoneda(inv.currency);
   if (rMon !== 0) errors.push(err('currency', rMon, 27));
 
-  const rTC = V.validaTipoCambio(
-    inv.exchangeRate != null ? String(inv.exchangeRate) : '',
-    inv.currency ?? '',
-    'PEN'
-  );
+  const rTC = V.validaTipoCambio(inv.exchangeRate != null ? String(inv.exchangeRate) : '', inv.currency ?? '', 'PEN');
   if (rTC !== 0) errors.push(err('exchangeRate', rTC, 28));
 
   // ---------------------------------------------------------------------------
@@ -386,25 +382,13 @@ export function validateRceRow(inv: PurchaseInvoice, period: string): PvsireRowV
   const rBI_DG = V.validaValorBIGravadaRCE(amt(inv.taxableBaseTaxed), tipoCP, idProy, nroFin);
   if (rBI_DG !== 0) errors.push(err('taxableBaseTaxed', rBI_DG, 15));
 
-  const rIGV_DG = V.validaValorIGVIPMDG(
-    amt(inv.vatAmountTaxed),
-    tipoCP,
-    idProy,
-    nroFin,
-    amt(inv.taxableBaseTaxed)
-  );
+  const rIGV_DG = V.validaValorIGVIPMDG(amt(inv.vatAmountTaxed), tipoCP, idProy, nroFin, amt(inv.taxableBaseTaxed));
   if (rIGV_DG !== 0) errors.push(err('vatAmountTaxed', rIGV_DG, 16));
 
   const rBI_DGNG = V.validaValorBIGravadaDGNG(amt(inv.taxableBaseMixed), tipoCP, idProy, nroFin);
   if (rBI_DGNG !== 0) errors.push(err('taxableBaseMixed', rBI_DGNG, 17));
 
-  const rIGV_DGNG = V.validaValorIGVIPMDGNG(
-    amt(inv.vatAmountMixed),
-    tipoCP,
-    idProy,
-    nroFin,
-    amt(inv.taxableBaseMixed)
-  );
+  const rIGV_DGNG = V.validaValorIGVIPMDGNG(amt(inv.vatAmountMixed), tipoCP, idProy, nroFin, amt(inv.taxableBaseMixed));
   if (rIGV_DGNG !== 0) errors.push(err('vatAmountMixed', rIGV_DGNG, 18));
 
   const rBI_DNG = V.validaValorBIGravadaDNG(amt(inv.taxableBaseUntaxed), tipoCP, idProy, nroFin);
@@ -438,11 +422,7 @@ export function validateRceRow(inv: PurchaseInvoice, period: string): PvsireRowV
   const rMon = V.validaMonedaRCE(inv.currency);
   if (rMon !== 0) errors.push(err('currency', rMon, 26));
 
-  const rTC = V.validaTipoCambioRCE(
-    inv.exchangeRate ? String(inv.exchangeRate) : '',
-    inv.currency ?? '',
-    'PEN'
-  );
+  const rTC = V.validaTipoCambioRCE(inv.exchangeRate ? String(inv.exchangeRate) : '', inv.currency ?? '', 'PEN');
   if (rTC !== 0) errors.push(err('exchangeRate', rTC, 27));
 
   // Doc modificado (NC/ND)
@@ -531,9 +511,7 @@ export function validateForPvsire(
 
   invoices.forEach((inv, idx) => {
     const result =
-      type === 'sales'
-        ? validateRvieRow(inv as SalesInvoice, period)
-        : validateRceRow(inv as PurchaseInvoice, period);
+      type === 'sales' ? validateRvieRow(inv as SalesInvoice, period) : validateRceRow(inv as PurchaseInvoice, period);
     if (!result.ok) {
       totalErrors += result.errors.length;
       totalWarnings += result.warnings.length;

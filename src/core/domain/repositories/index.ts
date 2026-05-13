@@ -31,8 +31,4 @@ export type { PeriodRepository } from './period.repository';
 export type { SettingsRepository } from './settings.repository';
 
 // Export history
-export type {
-  ExportHistoryRepository,
-  ExportHistoryEntry,
-  CreateExportHistoryDto
-} from './export-history.repository';
+export type { ExportHistoryRepository, ExportHistoryEntry, CreateExportHistoryDto } from './export-history.repository';

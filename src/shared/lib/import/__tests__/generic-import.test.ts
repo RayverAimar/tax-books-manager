@@ -110,9 +110,7 @@ describe('createImporter', () => {
   });
 
   it('integer dataType: convierte válido y reporta no parseable como null + warning', async () => {
-    const mapInt: ImportFieldMapping[] = [
-      { sunatHeader: 'N', tsField: 'n', dataType: 'integer' }
-    ];
+    const mapInt: ImportFieldMapping[] = [{ sunatHeader: 'N', tsField: 'n', dataType: 'integer' }];
     const importer = createImporter<{ n: number | null }>(mapInt);
     const r1 = await importer.fromCSV('N\n42');
     expect(r1.data[0].n).toBe(42);

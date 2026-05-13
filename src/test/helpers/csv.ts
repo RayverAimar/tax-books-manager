@@ -4,10 +4,7 @@
  * Build deterministic CSV text suitable for `importSalesCSV` / `importPurchasesCSV`.
  */
 
-import {
-  SALES_SUNAT_COLUMNS_MAPPING,
-  PURCHASE_SUNAT_COLUMNS_MAPPING
-} from '@/shared/constants/field-registry';
+import { SALES_SUNAT_COLUMNS_MAPPING, PURCHASE_SUNAT_COLUMNS_MAPPING } from '@/shared/constants/field-registry';
 import type { SupportedDataType } from '@/shared/types/common.types';
 
 interface FieldMapping {
@@ -59,10 +56,9 @@ export function buildSalesCsv(rows: Array<Record<string, string | number>>): str
  * Build a SUNAT-shaped purchases CSV with the given rows.
  */
 export function buildPurchasesCsv(rows: Array<Record<string, string | number>>): string {
-  return [
-    header(PURCHASE_SUNAT_COLUMNS_MAPPING),
-    ...rows.map((r) => buildRow(PURCHASE_SUNAT_COLUMNS_MAPPING, r))
-  ].join('\n');
+  return [header(PURCHASE_SUNAT_COLUMNS_MAPPING), ...rows.map((r) => buildRow(PURCHASE_SUNAT_COLUMNS_MAPPING, r))].join(
+    '\n'
+  );
 }
 
 /**

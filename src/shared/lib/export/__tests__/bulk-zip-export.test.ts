@@ -31,10 +31,7 @@ describe('createBulkExportZip', () => {
   });
 
   it('omite periodos sin registros', async () => {
-    const out = await createBulkExportZip(
-      [{ period: '202408', salesRecords: [], purchaseRecords: [] }],
-      'csv'
-    );
+    const out = await createBulkExportZip([{ period: '202408', salesRecords: [], purchaseRecords: [] }], 'csv');
     expect(out.salesFilesCreated).toBe(0);
     expect(out.purchasesFilesCreated).toBe(0);
   });

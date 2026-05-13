@@ -122,8 +122,17 @@ export function validarFormatoTipoCambio(tipoCambio: string): number {
 /** Replica getCodigoTipoDoc — mapea código alfanumérico a índice numérico */
 export function getCodigoTipoDoc(cod: string): number {
   const map: Record<string, number> = {
-    '0': 0, '1': 1, '4': 4, '6': 6, '7': 7,
-    A: 10, B: 11, C: 12, D: 13, E: 14, F: 15
+    '0': 0,
+    '1': 1,
+    '4': 4,
+    '6': 6,
+    '7': 7,
+    A: 10,
+    B: 11,
+    C: 12,
+    D: 13,
+    E: 14,
+    F: 15
   };
   return map[cod] ?? -1;
 }
@@ -193,11 +202,7 @@ export function validaFechaEmision(
     if (!isValidDate(fechaVencimiento!)) return E.OK;
     const partsV = fechaVencimiento!.split('/');
     const fechaVen = parseInt(`${partsV[2]}${partsV[1]}`, 10);
-    if (
-      fechaEmi !== periodo &&
-      fechaVen !== periodo &&
-      codTipoCDP === PVSIRE_VOUCHER_CODES.RECIBO_SERVICIO_PUBLICO
-    ) {
+    if (fechaEmi !== periodo && fechaVen !== periodo && codTipoCDP === PVSIRE_VOUCHER_CODES.RECIBO_SERVICIO_PUBLICO) {
       if (fechaEmi < periodo) return E.FECHA_MENOR_PERIODO;
       if (fechaEmi > periodo) return E.FECHA_MAYOR_PERIODO;
     }
@@ -222,9 +227,7 @@ export function validaTipoComprobante(tipoCP: string | null, isIncluido: boolean
 // ============================================================================
 export function validaNumSerie(numSerie: string | null, tipoCP: string, isIncluido: boolean): number {
   const tipo = tipoCP === '' ? '-' : tipoCP;
-  const esCompro = isIncluido
-    ? PVSIRE_VOUCHER_TYPES_INCLUIDOS.has(tipo)
-    : PVSIRE_VOUCHER_TYPES_RVIE.has(tipo);
+  const esCompro = isIncluido ? PVSIRE_VOUCHER_TYPES_INCLUIDOS.has(tipo) : PVSIRE_VOUCHER_TYPES_RVIE.has(tipo);
 
   if (!esCompro || !tipo.trim()) return E.OK;
 
@@ -244,16 +247,9 @@ export function validaNumSerie(numSerie: string | null, tipoCP: string, isInclui
 // ============================================================================
 // validaNumCP (línea 574 RVIE)
 // ============================================================================
-export function validaNumCP(
-  numCP: string | null,
-  numSerie: string,
-  tipoCP: string,
-  isIncluido: boolean
-): number {
+export function validaNumCP(numCP: string | null, numSerie: string, tipoCP: string, isIncluido: boolean): number {
   const tipo = tipoCP === '' ? '-' : tipoCP;
-  const esCompro = isIncluido
-    ? PVSIRE_VOUCHER_TYPES_INCLUIDOS.has(tipo)
-    : PVSIRE_VOUCHER_TYPES_RVIE.has(tipo);
+  const esCompro = isIncluido ? PVSIRE_VOUCHER_TYPES_INCLUIDOS.has(tipo) : PVSIRE_VOUCHER_TYPES_RVIE.has(tipo);
   if (!esCompro) return E.OK;
 
   const rules = PVSIRE_VOUCHER_RULES[tipo];
@@ -291,15 +287,34 @@ export function validaTipoDocIdentidad(
   isIncluido: boolean
 ): number {
   const tipo = tipoCP === '' ? '-' : tipoCP;
-  const esCompro = isIncluido
-    ? PVSIRE_VOUCHER_TYPES_INCLUIDOS.has(tipo)
-    : PVSIRE_VOUCHER_TYPES_RVIE.has(tipo);
+  const esCompro = isIncluido ? PVSIRE_VOUCHER_TYPES_INCLUIDOS.has(tipo) : PVSIRE_VOUCHER_TYPES_RVIE.has(tipo);
   if (!esCompro) return E.OK;
 
   // Lista de tipos donde el doc identidad es opcional (RVIE línea 651-655)
   const tipoCP_1 = [
-    '00', '05', '06', '07', '08', '11', '12', '13', '14', '15', '16', '18',
-    '28', '30', '34', '35', '36', '37', '55', '56', '64', '87', '88'
+    '00',
+    '05',
+    '06',
+    '07',
+    '08',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '18',
+    '28',
+    '30',
+    '34',
+    '35',
+    '36',
+    '37',
+    '55',
+    '56',
+    '64',
+    '87',
+    '88'
   ];
   const tipoCP_2 = ['07', '08', '87', '88'];
   const tipoCPMod_1 = ['03', '12', '13', '14', '36'];
@@ -340,9 +355,7 @@ export function validaNumDocIdentidad(
   isIncluido: boolean
 ): number {
   const tipo = tipoCP === '' ? '-' : tipoCP;
-  const esCompro = isIncluido
-    ? PVSIRE_VOUCHER_TYPES_INCLUIDOS.has(tipo)
-    : PVSIRE_VOUCHER_TYPES_RVIE.has(tipo);
+  const esCompro = isIncluido ? PVSIRE_VOUCHER_TYPES_INCLUIDOS.has(tipo) : PVSIRE_VOUCHER_TYPES_RVIE.has(tipo);
   if (!esCompro) return E.OK;
 
   if (isNullOrEmpty(tipoDocIdentidad)) {
@@ -384,11 +397,7 @@ export function validaMoneda(moneda: string | null): number {
 // ============================================================================
 // validaTipoCambio (línea 1543 RVIE)
 // ============================================================================
-export function validaTipoCambio(
-  tipoCambio: string | null,
-  moneda: string,
-  monedaContabilidad: string
-): number {
+export function validaTipoCambio(tipoCambio: string | null, moneda: string, monedaContabilidad: string): number {
   const monedaVacia = isNullOrEmpty(moneda);
   if (monedaVacia) {
     if (isNullOrEmpty(tipoCambio)) return E.VACIO;
@@ -760,11 +769,7 @@ export function validaValorDsctoIGVIPM(
  * Helper: valida que las fechas de emisión del doc modificado estén dentro del período.
  * Retorna 0 (OK) si todas las fechas son válidas y caen en el período, sino errorCode.
  */
-function validarFechasEmisionMod(
-  fechas: string[],
-  PER_PERI_TRIBUTA: string,
-  errorCode: number
-): number {
+function validarFechasEmisionMod(fechas: string[], PER_PERI_TRIBUTA: string, errorCode: number): number {
   const periodo = parseInt(PER_PERI_TRIBUTA, 10);
   for (const fecha of fechas) {
     if (isNullOrEmpty(fecha)) return errorCode;
@@ -1016,12 +1021,7 @@ export function validaNumSerieModUni(numSerie: string, tipoCPMod: string, isIncl
 // validaNumSerieMod (línea 1712 RVIE)
 // Valida lista de series modificadas, sincronizado con tipoCPMod.
 // ============================================================================
-export function validaNumSerieMod(
-  numSerie: string,
-  tipoCP: string,
-  tipoCPMod: string,
-  isIncluido: boolean
-): number {
+export function validaNumSerieMod(numSerie: string, tipoCP: string, tipoCPMod: string, isIncluido: boolean): number {
   const tipo = tipoCP === '' ? '-' : tipoCP;
   if (numSerie.length > 1500) return E.LONGITUD_INCORRECTA;
   if (!PVSIRE_VOUCHER_TYPES_RVIE.has(tipo)) return E.OK;
@@ -1072,12 +1072,7 @@ export function validaNumCPModUni(numCP: string, tipoCPMod: string, numSerieMod:
 // validaNumCPMod (línea 1778 RVIE)
 // Valida lista de números CP modificados.
 // ============================================================================
-export function validaNumCPMod(
-  numCP: string,
-  tipoCP: string,
-  tipoCPMod: string,
-  numSerieMod: string
-): number {
+export function validaNumCPMod(numCP: string, tipoCP: string, tipoCPMod: string, numSerieMod: string): number {
   const tipo = tipoCP === '' ? '-' : tipoCP;
   if (numCP.length > 1500) return E.LONGITUD_INCORRECTA;
   if (!PVSIRE_VOUCHER_TYPES_RVIE.has(tipo)) return E.OK;
@@ -1634,22 +1629,14 @@ export function validaValorIGVIPMDNG(
 /**
  * Valor Adq. NG (No Gravado) — RCE pos 21. Patrón estándar.
  */
-export function validaValorAdqNG(
-  valor: string | null,
-  tipoCP: string,
-  idProyecto: string
-): number {
+export function validaValorAdqNG(valor: string | null, tipoCP: string, idProyecto: string): number {
   return validarMontoRCE(valor, tipoCP, idProyecto, '');
 }
 
 /**
  * ISC — RCE pos 22. Patrón estándar.
  */
-export function validaValorISCRCE(
-  valor: string | null,
-  tipoCP: string,
-  idProyecto: string
-): number {
+export function validaValorISCRCE(valor: string | null, tipoCP: string, idProyecto: string): number {
   return validarMontoRCE(valor, tipoCP, idProyecto, '');
 }
 
@@ -1663,22 +1650,14 @@ export function validaValorICBPERRCE(valor: string | null, tipoCP: string): numb
 /**
  * Otros Trib/Cargos — RCE pos 24. Patrón estándar.
  */
-export function validaValorOtrosTribRCE(
-  valor: string | null,
-  tipoCP: string,
-  idProyecto: string
-): number {
+export function validaValorOtrosTribRCE(valor: string | null, tipoCP: string, idProyecto: string): number {
   return validarMontoRCE(valor, tipoCP, idProyecto, '');
 }
 
 /**
  * Total CP — RCE pos 25. Patrón estándar.
  */
-export function validaValorTotalCPRCE(
-  valor: string | null,
-  tipoCP: string,
-  idProyecto: string
-): number {
+export function validaValorTotalCPRCE(valor: string | null, tipoCP: string, idProyecto: string): number {
   return validarMontoRCE(valor, tipoCP, idProyecto, '');
 }
 
@@ -1890,11 +1869,7 @@ export function validaMonedaRCE(moneda: string | null): number {
  *   validaTipoCambioRCE('', 'USD', 'PEN')      // 401 (TC obligatorio)
  *   validaTipoCambioRCE('0.000', 'USD', 'PEN') // 427 (no puede ser cero)
  */
-export function validaTipoCambioRCE(
-  tipoCambio: string | null,
-  moneda: string,
-  CONTABILIDAD: string
-): number {
+export function validaTipoCambioRCE(tipoCambio: string | null, moneda: string, CONTABILIDAD: string): number {
   const monedaVacia = isNullOrEmpty(moneda);
   const tcVacio = isNullOrEmpty(tipoCambio);
 
@@ -1995,9 +1970,12 @@ export function validaFechaVencimientoRCE(
 
   // Si suma importes == 0 (sin operación gravada): reglas extra
   const sum =
-    toNum(mtoBIGravadoDG) + toNum(igvDG) +
-    toNum(mtoBIGravadoDGNG) + toNum(igvDGNG) +
-    toNum(mtoBIGravadoDNG) + toNum(igvDNG);
+    toNum(mtoBIGravadoDG) +
+    toNum(igvDG) +
+    toNum(mtoBIGravadoDGNG) +
+    toNum(igvDGNG) +
+    toNum(mtoBIGravadoDNG) +
+    toNum(igvDNG);
   if (sum === 0) {
     if (tipoCP === '14') {
       if (fechaYM > next) return 417;
@@ -2047,20 +2025,84 @@ export function validaNroFinalRCE(
   if (isNullOrEmpty(nroFinal) || nroFinal === '0') return E.OK;
 
   const tipoCP_1 = new Set([
-    '00', '03', '05', '06', '07', '08', '11', '12', '13', '14', '15', '16',
-    '18', '19', '23', '28', '30', '34', '35', '36', '37', '55', '56', '87', '88'
+    '00',
+    '03',
+    '05',
+    '06',
+    '07',
+    '08',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '18',
+    '19',
+    '23',
+    '28',
+    '30',
+    '34',
+    '35',
+    '36',
+    '37',
+    '55',
+    '56',
+    '87',
+    '88'
   ]);
   const tipoCP_Admitidos = new Set([
-    '01', '02', '03', '05', '06', '07', '08', '10', '12', '16', '17', '18', '19',
-    '22', '23', '25', '27', '28', '29', '30', '32', '34', '35', '36', '37',
-    '42', '43', '44', '45', '46', '48', '50', '51', '52', '53', '54',
-    '55', '56', '64', '87', '88', '89'
+    '01',
+    '02',
+    '03',
+    '05',
+    '06',
+    '07',
+    '08',
+    '10',
+    '12',
+    '16',
+    '17',
+    '18',
+    '19',
+    '22',
+    '23',
+    '25',
+    '27',
+    '28',
+    '29',
+    '30',
+    '32',
+    '34',
+    '35',
+    '36',
+    '37',
+    '42',
+    '43',
+    '44',
+    '45',
+    '46',
+    '48',
+    '50',
+    '51',
+    '52',
+    '53',
+    '54',
+    '55',
+    '56',
+    '64',
+    '87',
+    '88',
+    '89'
   ]);
 
   const sum =
-    toNum(BIGravadoDG) + toNum(IGVIPMDG) +
-    toNum(BIGravadoDGNG) + toNum(IGVIPMDGNG) +
-    toNum(BIGravadoDNG) + toNum(IGVIPMDNG);
+    toNum(BIGravadoDG) +
+    toNum(IGVIPMDG) +
+    toNum(BIGravadoDGNG) +
+    toNum(IGVIPMDGNG) +
+    toNum(BIGravadoDNG) +
+    toNum(IGVIPMDNG);
 
   const permitido = tipoCP_1.has(tipoCP) && !isNullOrEmpty(numCP) && sum === 0;
   if (!permitido) return 421;
@@ -2090,16 +2132,34 @@ export function validaNroFinalRCE(
  *   validaTipoDocIdentidadRCE('', '00', '')   // 0 (opcional para "Otros")
  *   validaTipoDocIdentidadRCE('Z', '01', '')  // 423 (no en lista)
  */
-export function validaTipoDocIdentidadRCE(
-  tipoDocIdentidad: string | null,
-  tipoCP: string,
-  nroFinal: string
-): number {
+export function validaTipoDocIdentidadRCE(tipoDocIdentidad: string | null, tipoCP: string, nroFinal: string): number {
   const cp = PVSIRE_RCE_COMPROBANTES.get(tipoCP);
   if (!cp) return E.OK;
   const tipoCP_1 = new Set([
-    '03', '05', '06', '07', '08', '11', '12', '13', '14', '15', '16',
-    '18', '19', '23', '28', '30', '34', '35', '36', '37', '55', '56', '87', '88'
+    '03',
+    '05',
+    '06',
+    '07',
+    '08',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '18',
+    '19',
+    '23',
+    '28',
+    '30',
+    '34',
+    '35',
+    '36',
+    '37',
+    '55',
+    '56',
+    '87',
+    '88'
   ]);
   const condA = tipoCP === '00';
   const condB = tipoCP_1.has(tipoCP) && !!nroFinal && nroFinal.length > 0;
@@ -2139,8 +2199,30 @@ export function validaNumDocIdentidadRCE(
   const cp = PVSIRE_RCE_COMPROBANTES.get(tipoCP);
   if (cp) {
     const tipoCP_1 = new Set([
-      '03', '05', '06', '07', '08', '11', '12', '13', '14', '15', '16',
-      '18', '19', '23', '28', '30', '34', '35', '36', '37', '55', '56', '87', '88'
+      '03',
+      '05',
+      '06',
+      '07',
+      '08',
+      '11',
+      '12',
+      '13',
+      '14',
+      '15',
+      '16',
+      '18',
+      '19',
+      '23',
+      '28',
+      '30',
+      '34',
+      '35',
+      '36',
+      '37',
+      '55',
+      '56',
+      '87',
+      '88'
     ]);
     const condA = tipoCP === '00';
     const condB = tipoCP_1.has(tipoCP) && !!nroFinal && nroFinal.length > 0;
@@ -2152,9 +2234,7 @@ export function validaNumDocIdentidadRCE(
     if (!doc) return 423;
     const lenOk = doc.exactitud ? numDocIdentidad!.length === doc.longitud : numDocIdentidad!.length <= doc.longitud;
     if (!lenOk) return ERCE.LONGITUD_RCE;
-    const regexOk = doc.numerico
-      ? /^[0-9]*$/.test(numDocIdentidad!)
-      : /^[a-zA-Z0-9]*$/.test(numDocIdentidad!);
+    const regexOk = doc.numerico ? /^[0-9]*$/.test(numDocIdentidad!) : /^[a-zA-Z0-9]*$/.test(numDocIdentidad!);
     if (!regexOk) return ERCE.REGEX_RCE;
     // RUC con módulo 11
     if ((tipoDocIdentidad === '6' || tipoDocIdentidad === '06') && !isValidRucMod11(numDocIdentidad!)) {
@@ -2167,9 +2247,7 @@ export function validaNumDocIdentidadRCE(
   if (!doc) return E.OK;
   const lenOk = doc.exactitud ? numDocIdentidad!.length === doc.longitud : numDocIdentidad!.length <= doc.longitud;
   if (!lenOk) return ERCE.LONGITUD_RCE;
-  const regexOk = doc.numerico
-    ? /^[0-9]*$/.test(numDocIdentidad!)
-    : /^[a-zA-Z0-9]*$/.test(numDocIdentidad!);
+  const regexOk = doc.numerico ? /^[0-9]*$/.test(numDocIdentidad!) : /^[a-zA-Z0-9]*$/.test(numDocIdentidad!);
   if (!regexOk) return ERCE.REGEX_RCE;
   return E.OK;
 }
@@ -2232,11 +2310,7 @@ const EMOD = PVSIRE_RCE_MOD_ERROR_CODES;
  *   validaFechaEmisionModRCE('15/12/2024', '01', '202501')   // 429 (factura no debe tener)
  *   validaFechaEmisionModRCE('', '01', '202501')             // 0 (factura sin fechaEmisionMod OK)
  */
-export function validaFechaEmisionModRCE(
-  fechaEmision: string | null,
-  codTipoCDP: string,
-  PERIODO: string
-): number {
+export function validaFechaEmisionModRCE(fechaEmision: string | null, codTipoCDP: string, PERIODO: string): number {
   const esNotaCD = PVSIRE_RCE_TIPO_CP_NOTAS.has(codTipoCDP);
   if (esNotaCD) {
     if (isNullOrEmpty(fechaEmision)) return EMOD.MOD_VACIO_OBLIGATORIO;
