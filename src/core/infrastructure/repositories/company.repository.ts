@@ -44,8 +44,8 @@ export class CompanyRepository implements CompanyRepositoryContract {
       setActiveCompanyId(newCompanyId);
 
       return await this.getById(newCompanyId);
-    } catch (error: any) {
-      if (error.message?.includes('UNIQUE')) {
+    } catch (error) {
+      if (error instanceof Error && error.message.includes('UNIQUE')) {
         throw new Error('Ya existe una empresa con este RUC');
       }
       throw error;
@@ -117,13 +117,13 @@ export class CompanyRepository implements CompanyRepositoryContract {
   /**
    * Maps database row to entity
    */
-  private mapToEntity(row: any): Company {
+  private mapToEntity(row: Company): Company {
     return {
       id: row.id,
       ruc: row.ruc,
-      businessName: row.businessName || row.business_name,
-      createdAt: new Date(row.createdAt || row.created_at),
-      updatedAt: new Date(row.updatedAt || row.updated_at)
+      businessName: row.businessName,
+      createdAt: row.createdAt ? new Date(row.createdAt) : undefined,
+      updatedAt: row.updatedAt ? new Date(row.updatedAt) : undefined
     };
   }
 }

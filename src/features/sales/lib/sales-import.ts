@@ -26,22 +26,22 @@ function postProcessSalesInvoice(record: Partial<SalesInvoice>): void {
 /**
  * Validate and sanitize sales invoice data
  */
-function validateSalesInvoice(record: Partial<SalesInvoice>): void {
+function validateSalesInvoice(record: Partial<SalesInvoice>, rowNumber: number): string[] {
   const recordMap = record as Record<string, string | number | null>;
+  const warnings: string[] = [];
 
-  // SECURITY: Validate and sanitize input data
   // RUC validation (11 digits)
   if (recordMap.ruc && typeof recordMap.ruc === 'string' && !isValidRUC(recordMap.ruc)) {
-    // Invalid RUC - warning only
+    warnings.push(`Fila ${rowNumber}: RUC inválido "${recordMap.ruc}" (deben ser 11 dígitos)`);
   }
 
   // Customer document validation (RUC or DNI)
   if (recordMap.customerDocNumber && typeof recordMap.customerDocNumber === 'string') {
     const docNumber = recordMap.customerDocNumber;
     if (docNumber.length === 11 && !isValidRUC(docNumber)) {
-      // Invalid RUC - warning only
+      warnings.push(`Fila ${rowNumber}: RUC de cliente inválido "${docNumber}"`);
     } else if (docNumber.length === 8 && !isValidDNI(docNumber)) {
-      // Invalid DNI - warning only
+      warnings.push(`Fila ${rowNumber}: DNI de cliente inválido "${docNumber}"`);
     }
   }
 
@@ -58,6 +58,8 @@ function validateSalesInvoice(record: Partial<SalesInvoice>): void {
   if (typeof recordMap.voucherNumber === 'string') {
     recordMap.voucherNumber = truncateToLength(recordMap.voucherNumber, FIELD_LENGTH_LIMITS.NUMBER);
   }
+
+  return warnings;
 }
 
 /**

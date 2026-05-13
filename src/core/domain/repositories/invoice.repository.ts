@@ -89,12 +89,13 @@ export interface InvoiceRepository<T extends InvoiceType> {
   getAll(companyId: number, periodCode: string): Promise<InvoiceMap<T>[]>;
 
   /**
-   * Gets a single invoice by ID
+   * Gets a single invoice by ID, scoped to a company (multi-tenant safety).
    *
    * @param id - Record ID
+   * @param companyId - Company ID
    * @returns Invoice or null if not found
    */
-  getById(id: number): Promise<InvoiceMap<T> | null>;
+  getById(id: number, companyId: number): Promise<InvoiceMap<T> | null>;
 
   /**
    * ===== UPDATE OPERATIONS =====

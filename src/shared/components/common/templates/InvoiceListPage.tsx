@@ -4,6 +4,10 @@ import { DataTable } from '@/shared/components/common/data-table/DataTable';
 import { ImportConfirmationDialog } from './ImportConfirmationDialog';
 import { ConfirmDiscardDialog } from '../dialogs/ConfirmDiscardDialog';
 import { DeclaredPeriodWarningDialog } from '../dialogs/DeclaredPeriodWarningDialog';
+import {
+  SireExportOptionsDialog,
+  type SireExportOptionsResult
+} from '../dialogs/SireExportOptionsDialog';
 import type { FooterTotalConfig } from '@/shared/components/common/data-table/DataTableFooter';
 
 // ✅ NUEVO: Componentes con composición
@@ -34,6 +38,7 @@ import {
 import { useSalesColumns } from '@/features/sales/components/SalesColumns';
 import { usePurchasesColumns } from '@/features/purchases/components/PurchasesColumns';
 import { calculateSalesRelatedFields, calculatePurchaseRelatedFields } from '@/shared/lib/utils/invoice-calculations';
+import { validateRvieRow, validateRceRow } from '@/shared/lib/export/pvsire-row-validator';
 import { RepositoryFactory } from '@/core/infrastructure/repositories/repository.factory';
 import { emitDataImported } from '@/shared/lib/events/data-events';
 import type { ColumnDef } from '@tanstack/react-table';
@@ -218,6 +223,7 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
     operationType: null,
     onConfirm: null
   });
+  const [sireOptionsOpen, setSireOptionsOpen] = useState(false);
   const [importConfirmation, setImportConfirmation] = useState<{
     isOpen: boolean;
     existingCount: number;
@@ -235,7 +241,7 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
   const purchasesRepo = useMemo(() => RepositoryFactory.getPurchasesRepository(), []);
 
   // Custom hooks
-  const { invoices, initializeData, addInvoice, deleteMultipleInvoices } = useInvoiceData(type);
+  const { invoices, initializeData, deleteMultipleInvoices, updateInvoice, setInvoices } = useInvoiceData(type);
   const { handleImport, isImporting } = useImport(type);
   const { handleExport, isExporting } = useExport(type, selectedPeriod || undefined);
 
@@ -270,13 +276,6 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
   // Stores the resolve function of the active declared-warning Promise so the cancel path can resolve it
   const declaredWarningResolveRef = useRef<((value: boolean) => void) | null>(null);
 
-  // Performance logging - detailed profiling
-  const renderStart = useRef(0);
-
-  useEffect(() => {
-    renderStart.current = performance.now();
-  });
-
   // Generate columns (both hooks are called to comply with React Hooks rules)
   // Each hook uses useMemo internally, so columns are only generated once
   const salesColumns = useSalesColumns();
@@ -288,160 +287,47 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
     return (type === 'sales' ? salesColumns : purchasesColumns) as ColumnDef<InvoiceMap<T>>[];
   }, [providedColumns, type, salesColumns, purchasesColumns]);
 
-  // Footer totals configuration
+  // Footer totals configuration — declarative sum-per-column.
   const footerTotalsConfig = useMemo<FooterTotalConfig[]>(() => {
-    if (type === 'sales') {
-      return [
-        {
-          columnId: 'exportValue',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.exportValue || 0), 0);
-          }
-        },
-        {
-          columnId: 'taxableBase',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.taxableBase || 0), 0);
-          }
-        },
-        {
-          columnId: 'taxableBaseDiscount',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.taxableBaseDiscount || 0), 0);
-          }
-        },
-        {
-          columnId: 'vatAmount',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.vatAmount || 0), 0);
-          }
-        },
-        {
-          columnId: 'vatDiscount',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.vatDiscount || 0), 0);
-          }
-        },
-        {
-          columnId: 'exemptAmount',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.exemptAmount || 0), 0);
-          }
-        },
-        {
-          columnId: 'unaffectedAmount',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.unaffectedAmount || 0), 0);
-          }
-        },
-        {
-          columnId: 'selectiveConsumptionTax',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.selectiveConsumptionTax || 0), 0);
-          }
-        },
-        {
-          columnId: 'riceVatBase',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.riceVatBase || 0), 0);
-          }
-        },
-        {
-          columnId: 'riceVat',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.riceVat || 0), 0);
-          }
-        },
-        {
-          columnId: 'plasticBagTax',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.plasticBagTax || 0), 0);
-          }
-        },
-        {
-          columnId: 'otherTaxes',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.otherTaxes || 0), 0);
-          }
-        },
-        {
-          columnId: 'totalAmount',
-          calculate: (data: unknown[]) => {
-            return (data as SalesInvoice[]).reduce((sum, inv) => sum + (inv.totalAmount || 0), 0);
-          }
-        }
-      ];
-    } else {
-      // Purchases
-      return [
-        {
-          columnId: 'taxableBaseTaxed',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.taxableBaseTaxed || 0), 0);
-          }
-        },
-        {
-          columnId: 'vatAmountTaxed',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.vatAmountTaxed || 0), 0);
-          }
-        },
-        {
-          columnId: 'taxableBaseMixed',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.taxableBaseMixed || 0), 0);
-          }
-        },
-        {
-          columnId: 'vatAmountMixed',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.vatAmountMixed || 0), 0);
-          }
-        },
-        {
-          columnId: 'taxableBaseUntaxed',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.taxableBaseUntaxed || 0), 0);
-          }
-        },
-        {
-          columnId: 'vatAmountUntaxed',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.vatAmountUntaxed || 0), 0);
-          }
-        },
-        {
-          columnId: 'nonTaxableValue',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.nonTaxableValue || 0), 0);
-          }
-        },
-        {
-          columnId: 'selectiveConsumptionTax',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.selectiveConsumptionTax || 0), 0);
-          }
-        },
-        {
-          columnId: 'plasticBagTax',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.plasticBagTax || 0), 0);
-          }
-        },
-        {
-          columnId: 'otherTaxes',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.otherTaxes || 0), 0);
-          }
-        },
-        {
-          columnId: 'totalAmount',
-          calculate: (data: unknown[]) => {
-            return (data as PurchaseInvoice[]).reduce((sum, inv) => sum + (inv.totalAmount || 0), 0);
-          }
-        }
-      ];
-    }
+    const SALES_TOTAL_COLUMNS: (keyof SalesInvoice)[] = [
+      'exportValue',
+      'taxableBase',
+      'taxableBaseDiscount',
+      'vatAmount',
+      'vatDiscount',
+      'exemptAmount',
+      'unaffectedAmount',
+      'selectiveConsumptionTax',
+      'riceVatBase',
+      'riceVat',
+      'plasticBagTax',
+      'otherTaxes',
+      'totalAmount'
+    ];
+
+    const PURCHASES_TOTAL_COLUMNS: (keyof PurchaseInvoice)[] = [
+      'taxableBaseTaxed',
+      'vatAmountTaxed',
+      'taxableBaseMixed',
+      'vatAmountMixed',
+      'taxableBaseUntaxed',
+      'vatAmountUntaxed',
+      'nonTaxableValue',
+      'selectiveConsumptionTax',
+      'plasticBagTax',
+      'otherTaxes',
+      'totalAmount'
+    ];
+
+    const columns = type === 'sales' ? SALES_TOTAL_COLUMNS : PURCHASES_TOTAL_COLUMNS;
+    return columns.map((columnId) => ({
+      columnId: columnId as string,
+      calculate: (data: unknown[]) =>
+        (data as Record<string, unknown>[]).reduce((sum, inv) => {
+          const value = inv[columnId as string];
+          return sum + (typeof value === 'number' ? value : 0);
+        }, 0)
+    }));
   }, [type]);
 
   // Auto-save helper function (used by import operations)
@@ -718,19 +604,20 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
     [importConfirmation.newData, type, salesRepo, purchasesRepo] // ✅ Reduced from 8 to 4 dependencies
   );
 
-  const handleExportClick = useCallback(
-    async (format: 'csv' | 'txt' | 'excel') => {
+  const runExport = useCallback(
+    async (format: 'csv' | 'txt', sireOptions?: SireExportOptionsResult) => {
       try {
-        const filePath = await handleExport(invoicesRef.current as SalesInvoice[] | PurchaseInvoice[], format);
+        const filePath = await handleExport(
+          invoicesRef.current as SalesInvoice[] | PurchaseInvoice[],
+          format,
+          sireOptions
+        );
 
         if (filePath) {
-          // Extract filename from path
           const fileName = filePath.split('/').pop() || filePath.split('\\').pop() || 'archivo';
           const bookType = type === 'sales' ? 'ventas' : 'compras';
-
           showExportSuccess(fileName, filePath, `Se exportaron ${invoicesRef.current.length} registros de ${bookType}`);
         } else {
-          // User cancelled the dialog
           showExportCancelled();
         }
       } catch (error) {
@@ -738,6 +625,26 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
       }
     },
     [handleExport, type]
+  );
+
+  const handleExportClick = useCallback(
+    async (format: 'csv' | 'txt') => {
+      // TXT es el archivo oficial SIRE — preguntamos oportunidad/correlativo antes
+      // de generar. CSV se exporta directo (uso interno).
+      if (format === 'txt') {
+        setSireOptionsOpen(true);
+        return;
+      }
+      await runExport(format);
+    },
+    [runExport]
+  );
+
+  const handleSireOptionsConfirm = useCallback(
+    (result: SireExportOptionsResult) => {
+      void runExport('txt', result);
+    },
+    [runExport]
   );
 
   const handleFormSubmit = useCallback(
@@ -757,32 +664,28 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
           ? transformFormData(data)
           : (data as CreateInvoiceData<T>);
 
-        const newInvoice = addInvoice(invoiceData);
-
-        // Save to database
+        // Insert one row directly. The repository returns the persisted record with
+        // its real SQLite id, so we just append it locally — no nuke-and-pave, no
+        // refetching every other row.
         try {
-          // Get all current invoices including the new one
-          const allInvoices = [...invoicesRef.current, newInvoice];
+          const created =
+            type === 'sales'
+              ? await salesRepo.create(
+                  currentCompany.id,
+                  currentPeriod,
+                  invoiceData as unknown as Parameters<typeof salesRepo.create>[2]
+                )
+              : await purchasesRepo.create(
+                  currentCompany.id,
+                  currentPeriod,
+                  invoiceData as unknown as Parameters<typeof purchasesRepo.create>[2]
+                );
 
-          const saveSuccess = await autoSaveRecordsRef.current(allInvoices);
-
-          if (saveSuccess) {
-            // Reload from database to ensure consistency
-            const savedData =
-              type === 'sales'
-                ? await salesRepo.getAll(currentCompany.id, currentPeriod)
-                : await purchasesRepo.getAll(currentCompany.id, currentPeriod);
-
-            initializeDataRef.current(savedData as InvoiceMap<T>[]);
-          } else {
-            showError('Error al guardar', {
-              description: 'El registro se agregó pero no se pudo guardar en la base de datos'
-            });
-            return;
-          }
-        } catch {
+          setInvoices((prev) => [...prev, created as InvoiceMap<T>]);
+        } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : String(error);
           showError('Error al guardar', {
-            description: 'Ocurrió un error al guardar el registro en la base de datos'
+            description: `Ocurrió un error al guardar el registro en la base de datos. ${errorMsg}`
           });
           return;
         }
@@ -792,8 +695,7 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
         });
       });
     },
-    // ✅ Reduced from 12 to 7 dependencies
-    [addInvoice, transformFormData, successMessage, checkDeclaredAndExecute, type, salesRepo, purchasesRepo]
+    [transformFormData, successMessage, checkDeclaredAndExecute, type, salesRepo, purchasesRepo, setInvoices]
   );
 
   const handleSelectionChange = useCallback((rows: InvoiceMap<T>[]) => {
@@ -870,6 +772,28 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
             >;
           }
 
+          // Validación PVSIRE-parity cell-by-cell: aplicar los cambios sobre una copia
+          // del invoice y correr el validator de la fila. Si los errores tocan algún
+          // campo que estamos editando, abortar el guardado — nunca persistir datos
+          // que SUNAT rechazaría al exportar.
+          const proposed = { ...invoice, ...fieldsToUpdate } as InvoiceMap<T>;
+          const validation =
+            type === 'sales'
+              ? validateRvieRow(proposed as SalesInvoice, currentPeriod)
+              : validateRceRow(proposed as PurchaseInvoice, currentPeriod);
+
+          if (!validation.ok) {
+            const editedFields = new Set(Object.keys(fieldsToUpdate));
+            const blocking = validation.errors.filter((e) => editedFields.has(e.field));
+            if (blocking.length > 0) {
+              const first = blocking[0];
+              showError('Valor inválido para SIRE', {
+                description: `${first.field} (PVSIRE ${first.code}): ${first.message}`
+              });
+              return;
+            }
+          }
+
           // ⭐ OPTIMIZED: Save all updated fields with a SINGLE database query
           // Instead of N separate UPDATEs, this executes ONE UPDATE with multiple SET clauses
           // Example: UPDATE table SET field1 = ?, field2 = ?, field3 = ? WHERE id = ?
@@ -884,13 +808,9 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
             await purchasesRepo.updateFields(currentCompany.id, currentPeriod, rowId, fieldsMap);
           }
 
-          // Reload fresh data from database
-          const freshData =
-            type === 'sales'
-              ? await salesRepo.getAll(currentCompany.id, currentPeriod)
-              : await purchasesRepo.getAll(currentCompany.id, currentPeriod);
-
-          initializeDataRef.current(freshData as InvoiceMap<T>[]);
+          // Merge the just-saved fields into local state. The DB row matches now —
+          // no need to re-fetch hundreds/thousands of rows after a single cell edit.
+          updateInvoice(rowId, fieldsToUpdate);
 
           showSuccess(Object.keys(fieldsToUpdate).length > 1 ? 'Campos actualizados' : 'Celda actualizada', {
             description:
@@ -907,7 +827,7 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
         }
       });
     },
-    [type, salesRepo, purchasesRepo, checkDeclaredAndExecute] // ✅ Reduced from 8 to 4 dependencies
+    [type, salesRepo, purchasesRepo, checkDeclaredAndExecute, updateInvoice]
   );
 
   // ✅ OPTIMIZED: Lazy calculation de PDF data usando refs (no dependencies!)
@@ -1119,6 +1039,13 @@ export function InvoiceListPage<T extends InvoiceType, FormData = InvoiceMap<T>>
         }}
         periodCode={selectedPeriod || ''}
         operationType={declaredWarning.operationType || 'import'}
+      />
+
+      {/* Selector de oportunidad SIRE al exportar TXT */}
+      <SireExportOptionsDialog
+        open={sireOptionsOpen}
+        onOpenChange={setSireOptionsOpen}
+        onConfirm={handleSireOptionsConfirm}
       />
     </div>
   );

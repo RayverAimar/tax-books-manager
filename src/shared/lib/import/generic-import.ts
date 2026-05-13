@@ -25,8 +25,11 @@ export interface ExtendedImportOptions extends ImportOptions {
   generateId?: () => number;
   /** Post-process each record after mapping (e.g., calculate vatPercentage) */
   postProcess?: <T>(record: Partial<T>) => void;
-  /** Validate and sanitize record (e.g., RUC validation, field truncation) */
-  validateRecord?: <T>(record: Partial<T>) => void;
+  /**
+   * Validate and sanitize record (e.g., RUC validation, field truncation).
+   * May return an array of warning messages to surface to the user.
+   */
+  validateRecord?: <T>(record: Partial<T>, rowNumber: number) => string[] | void;
   /** Check for extra columns not in mapping */
   strictColumnCheck?: boolean;
 }
@@ -76,45 +79,22 @@ export function createImporter<T>(mappings: readonly ImportFieldMapping[], optio
     validateRecord
   } = options;
 
+  const sharedOptions = {
+    requiredColumns,
+    dateColumns,
+    numberColumns,
+    skipEmptyRows,
+    strictColumnCheck,
+    generateId,
+    postProcess,
+    validateRecord
+  };
+
   return {
-    fromCSV: async (content: string): Promise<ImportResult<T>> => {
-      return importFromDelimited<T>(content, ',', mappings, {
-        requiredColumns,
-        dateColumns,
-        numberColumns,
-        skipEmptyRows,
-        strictColumnCheck,
-        generateId,
-        postProcess,
-        validateRecord
-      });
-    },
-
-    fromTXT: async (content: string): Promise<ImportResult<T>> => {
-      return importFromDelimited<T>(content, '|', mappings, {
-        requiredColumns,
-        dateColumns,
-        numberColumns,
-        skipEmptyRows,
-        strictColumnCheck,
-        generateId,
-        postProcess,
-        validateRecord
-      });
-    },
-
-    fromDelimited: async (content: string, delimiter: string): Promise<ImportResult<T>> => {
-      return importFromDelimited<T>(content, delimiter, mappings, {
-        requiredColumns,
-        dateColumns,
-        numberColumns,
-        skipEmptyRows,
-        strictColumnCheck,
-        generateId,
-        postProcess,
-        validateRecord
-      });
-    }
+    fromCSV: async (content: string): Promise<ImportResult<T>> =>
+      importFromDelimited<T>(content, ',', mappings, sharedOptions),
+    fromTXT: async (content: string): Promise<ImportResult<T>> =>
+      importFromDelimited<T>(content, '|', mappings, sharedOptions)
   };
 }
 
@@ -250,14 +230,33 @@ function importFromDelimited<T>(
                 }
 
                 case 'integer': {
-                  const intValue = parseInt(trimmedValue, 10);
-                  recordMap[fieldName] = isNaN(intValue) ? 0 : intValue;
+                  // SUNAT usa coma como separador decimal en algunos campos. Normalizar antes de parsear.
+                  // Si el valor no es parseable como entero, dejarlo como null y reportar warning —
+                  // NUNCA forzarlo a 0, eso ocultaría montos inválidos como ceros reales en SIRE.
+                  const normalized = trimmedValue.replace(/[\s,]/g, '');
+                  if (!/^-?\d+$/.test(normalized)) {
+                    recordMap[fieldName] = null;
+                    warnings.push(
+                      `Fila ${index + 2}: valor no numérico en "${mapping.sunatHeader}" → "${trimmedValue}"`
+                    );
+                    break;
+                  }
+                  recordMap[fieldName] = parseInt(normalized, 10);
                   break;
                 }
 
                 case 'float': {
-                  const numberValue = parseFloat(trimmedValue.replace(',', '.'));
-                  recordMap[fieldName] = isNaN(numberValue) ? 0 : numberValue;
+                  // Reemplazar SOLO la coma decimal final, no separadores de miles.
+                  // Si quedan caracteres no numéricos, fallar a null con warning.
+                  const normalized = trimmedValue.replace(/,/g, '.');
+                  if (!/^-?\d+(\.\d+)?$/.test(normalized)) {
+                    recordMap[fieldName] = null;
+                    warnings.push(
+                      `Fila ${index + 2}: valor no numérico en "${mapping.sunatHeader}" → "${trimmedValue}"`
+                    );
+                    break;
+                  }
+                  recordMap[fieldName] = parseFloat(normalized);
                   break;
                 }
 
@@ -275,7 +274,11 @@ function importFromDelimited<T>(
 
             // Validate and sanitize (e.g., RUC validation, field truncation)
             if (options.validateRecord) {
-              options.validateRecord(record);
+              const rowNumber = index + 2;
+              const validationWarnings = options.validateRecord(record, rowNumber);
+              if (validationWarnings && validationWarnings.length > 0) {
+                warnings.push(...validationWarnings);
+              }
             }
 
             // Generate ID
@@ -333,54 +336,3 @@ function importFromDelimited<T>(
   });
 }
 
-/**
- * Validate imported data against business rules
- */
-export function validateImportedData<T>(
-  data: Partial<T>[],
-  validationRules: {
-    required?: (keyof T)[];
-    dateFields?: (keyof T)[];
-    numberFields?: (keyof T)[];
-    customValidators?: Array<(item: Partial<T>) => string | null>;
-  }
-): { valid: Partial<T>[]; invalid: Array<{ item: Partial<T>; reason: string }> } {
-  const valid: Partial<T>[] = [];
-  const invalid: Array<{ item: Partial<T>; reason: string }> = [];
-
-  data.forEach((item, index) => {
-    let isValid = true;
-    let reason = '';
-
-    // Check required fields
-    if (validationRules.required) {
-      for (const field of validationRules.required) {
-        if (!item[field]) {
-          isValid = false;
-          reason = `Falta campo requerido: ${String(field)}`;
-          break;
-        }
-      }
-    }
-
-    // Run custom validators
-    if (isValid && validationRules.customValidators) {
-      for (const validator of validationRules.customValidators) {
-        const error = validator(item);
-        if (error) {
-          isValid = false;
-          reason = error;
-          break;
-        }
-      }
-    }
-
-    if (isValid) {
-      valid.push(item);
-    } else {
-      invalid.push({ item, reason: `Fila ${index + 2}: ${reason}` });
-    }
-  });
-
-  return { valid, invalid };
-}
