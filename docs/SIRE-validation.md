@@ -8,7 +8,7 @@ Este documento describe el flujo para validar que los archivos TXT que genera Ta
 |---|---|---|---|
 | 1 | **Validador estructural in-app** (`src/shared/lib/export/sire-validator.ts`) | Conteo de columnas, headers byte-a-byte, códigos enumerados (Tabla 1/2/3), longitudes, caracteres prohibidos, RUC módulo 11, DNI, fechas, coherencia aritmética | Automático antes de cada export TXT |
 | 2 | **Script de regresión** (`scripts/validate-sire-export.ts`) | Estructura de exporters vs Excel oficial | A mano: `npx tsx scripts/validate-sire-export.ts` |
-| 3 | **Tests de regresión** (`src/shared/lib/export/__tests__/sire-compliance.test.ts`) | Mismas reglas estructurales, pero como tests automáticos | CI / `npm run test` |
+| 3 | **Tests de regresión** (`src/shared/lib/export/__tests__/sire-compliance.test.ts`) | Mismas reglas estructurales, pero como tests automáticos | CI / `pnpm test` |
 | 4 | **PVSIRE oficial** | Las reglas de #1-#3 + validez del CDR, CAR contra padrón, RUC contra padrón | Manual antes de cada envío a SUNAT |
 | 5 | **SIRE beta** | Envío real al backend de SUNAT (ambiente de pruebas) | Antes de shipear a producción |
 

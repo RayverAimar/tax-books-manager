@@ -53,6 +53,7 @@ A cross-platform desktop application (Windows, macOS, Linux) for registering and
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) 20+
+- [pnpm](https://pnpm.io/) 11+ (`npm install -g pnpm`)
 - [Rust](https://rustup.rs/) (stable toolchain)
 - [Tauri CLI prerequisites](https://tauri.app/start/prerequisites/) for your OS
 
@@ -62,35 +63,36 @@ A cross-platform desktop application (Windows, macOS, Linux) for registering and
 git clone https://github.com/RayverAimar/tax-books-manager.git
 cd tax-books-manager
 
-npm install
+pnpm install
 ```
 
 ### Run
 
 ```bash
 # Web-only (no SQLite, no file system — UI preview)
-npm run dev
+pnpm dev
 
 # Full desktop app with Tauri
-npm run tauri dev
+pnpm tauri dev
 ```
 
 ### Build
 
 ```bash
 # Type-check + frontend bundle
-npm run build:check
+pnpm build:check
 
 # Full desktop installer (outputs to src-tauri/target/release/bundle/)
-npm run tauri build
+pnpm tauri build
 ```
 
 ### Other commands
 
 ```bash
-npm run type-check     # TypeScript type validation
-npm run lint           # ESLint
-npm run format         # Prettier
+pnpm type-check     # TypeScript type validation
+pnpm lint           # ESLint
+pnpm format         # Prettier
+pnpm test           # Vitest (841 tests)
 ```
 
 ## Project structure
