@@ -21,6 +21,13 @@ src-tauri/target
 src-tauri/Cargo.lock
 src-tauri/gen
 
+# Vite cache
+.vite/
+
+# MCP / Claude Code local config
+.mcp.json
+.playwright-mcp/
+
 # Environment variables
 .env
 .env.local
