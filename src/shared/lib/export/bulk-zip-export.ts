@@ -1,13 +1,12 @@
 import JSZip from 'jszip';
 import { exportSalesCSV, exportPurchasesCSV, exportSalesTXT, exportPurchasesTXT } from './generic-export';
-import { exportSalesExcel, exportPurchasesExcel } from './excel-export';
 import type { SalesInvoice } from '@/features/sales/types/sales.types';
 import type { PurchaseInvoice } from '@/features/purchases/types/purchases.types';
 
 /**
  * Export format type
  */
-export type BulkExportFormat = 'csv' | 'txt' | 'excel';
+export type BulkExportFormat = 'csv' | 'txt';
 
 /**
  * Period data for export
@@ -39,36 +38,30 @@ function getFileExtension(format: BulkExportFormat): string {
       return 'csv';
     case 'txt':
       return 'txt';
-    case 'excel':
-      return 'xlsx';
   }
 }
 
 /**
  * Export sales records to the specified format
  */
-function exportSalesData(records: SalesInvoice[], format: BulkExportFormat): string | ArrayBuffer {
+function exportSalesData(records: SalesInvoice[], format: BulkExportFormat): string {
   switch (format) {
     case 'csv':
       return exportSalesCSV(records);
     case 'txt':
       return exportSalesTXT(records);
-    case 'excel':
-      return exportSalesExcel(records);
   }
 }
 
 /**
  * Export purchase records to the specified format
  */
-function exportPurchasesData(records: PurchaseInvoice[], format: BulkExportFormat): string | ArrayBuffer {
+function exportPurchasesData(records: PurchaseInvoice[], format: BulkExportFormat): string {
   switch (format) {
     case 'csv':
       return exportPurchasesCSV(records);
     case 'txt':
       return exportPurchasesTXT(records);
-    case 'excel':
-      return exportPurchasesExcel(records);
   }
 }
 
@@ -116,28 +109,14 @@ export async function createBulkExportZip(
         // Export sales if there are records
         if (periodData.salesRecords && periodData.salesRecords.length > 0) {
           const salesContent = exportSalesData(periodData.salesRecords, format);
-          const salesFileName = `${periodData.period}.${extension}`;
-
-          if (typeof salesContent === 'string') {
-            ventasFolder.file(salesFileName, salesContent);
-          } else {
-            ventasFolder.file(salesFileName, salesContent);
-          }
-
+          ventasFolder.file(`${periodData.period}.${extension}`, salesContent);
           result.salesFilesCreated++;
         }
 
         // Export purchases if there are records
         if (periodData.purchaseRecords && periodData.purchaseRecords.length > 0) {
           const purchasesContent = exportPurchasesData(periodData.purchaseRecords, format);
-          const purchasesFileName = `${periodData.period}.${extension}`;
-
-          if (typeof purchasesContent === 'string') {
-            comprasFolder.file(purchasesFileName, purchasesContent);
-          } else {
-            comprasFolder.file(purchasesFileName, purchasesContent);
-          }
-
+          comprasFolder.file(`${periodData.period}.${extension}`, purchasesContent);
           result.purchasesFilesCreated++;
         }
 

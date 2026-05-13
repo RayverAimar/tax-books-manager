@@ -46,7 +46,7 @@ export type Invoice =
 /**
  * Export formats supported by the application
  */
-export type ExportFormat = 'csv' | 'txt' | 'excel';
+export type ExportFormat = 'csv' | 'txt';
 
 /**
  * Import formats supported by the application

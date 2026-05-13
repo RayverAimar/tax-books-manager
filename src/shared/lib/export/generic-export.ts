@@ -38,7 +38,7 @@
  * formatExportValue('Say "Hello"', 'csv')
  * // Returns: '"Say ""Hello"""'
  */
-export function formatExportValue(value: unknown, format: 'csv' | 'txt'): string {
+export function formatExportValue(value: unknown, format: 'csv' | 'txt', decimals: number = 2): string {
   // Handle null/undefined/empty
   if (value === null || value === undefined || value === '') {
     return '';
@@ -58,9 +58,14 @@ export function formatExportValue(value: unknown, format: 'csv' | 'txt'): string
     return `${day}/${month}/${year}`;
   }
 
-  // Format numbers with 2 decimal places
+  // Importes: 2 decimales (default). Tipo de Cambio: 3 (regex SIRE `\d\.\d{3}`).
+  // SIRE espera negativos con formato "- #.##" (espacio entre signo y número).
+  // PVSIRE rechaza "-123.45" sin espacio.
   if (typeof value === 'number') {
-    return value.toFixed(2);
+    if (value < 0) {
+      return `- ${(-value).toFixed(decimals)}`;
+    }
+    return value.toFixed(decimals);
   }
 
   // Escape special characters for CSV if needed
@@ -81,6 +86,13 @@ export interface FieldMapping {
   tsField?: string; // Field name in the TypeScript object
   defaultValue?: string;
   excludeFromExport?: boolean; // Flag to exclude column from exports
+  /**
+   * Si es true, emite valor vacío sin importar lo que tenga en BD.
+   * Para posiciones SIRE que SUNAT completa automáticamente.
+   */
+  sireAutoFilled?: boolean;
+  /** Decimales al exportar (default 2; usar 3 para Tipo de Cambio). */
+  exportDecimals?: number;
 }
 
 /**
@@ -140,13 +152,15 @@ export function exportToCSV<T>(data: T[], mappings: readonly FieldMapping[]): st
     exportMappings.forEach((mapping) => {
       let value: unknown = '';
 
-      if (mapping.tsField && mapping.tsField in (item as object)) {
+      if (mapping.sireAutoFilled) {
+        value = '';
+      } else if (mapping.tsField && mapping.tsField in (item as object)) {
         value = (item as Record<string, unknown>)[mapping.tsField];
       } else if (mapping.defaultValue !== undefined) {
         value = mapping.defaultValue;
       }
 
-      row.push(formatExportValue(value, 'csv'));
+      row.push(formatExportValue(value, 'csv', mapping.exportDecimals));
     });
 
     rows.push(row.join(','));
@@ -195,14 +209,9 @@ export function exportToTXT<T>(data: T[], mappings: readonly FieldMapping[]): st
   // Filter out columns marked as excludeFromExport
   const exportMappings = mappings.filter((m) => !m.excludeFromExport);
 
-  // Build header row
-  const headers = exportMappings.map((mapping) => mapping.sunatHeader);
-
-  // Build data rows
+  // SIRE no espera cabecera en el TXT — solo filas de datos separadas por |.
+  // El CSV sí lleva cabecera (uso interno / Excel).
   const rows: string[] = [];
-
-  // Add header
-  rows.push(headers.join('|'));
 
   // Add data
   data.forEach((item) => {
@@ -211,13 +220,15 @@ export function exportToTXT<T>(data: T[], mappings: readonly FieldMapping[]): st
     exportMappings.forEach((mapping) => {
       let value: unknown = '';
 
-      if (mapping.tsField && mapping.tsField in (item as object)) {
+      if (mapping.sireAutoFilled) {
+        value = '';
+      } else if (mapping.tsField && mapping.tsField in (item as object)) {
         value = (item as Record<string, unknown>)[mapping.tsField];
       } else if (mapping.defaultValue !== undefined) {
         value = mapping.defaultValue;
       }
 
-      row.push(formatExportValue(value, 'txt'));
+      row.push(formatExportValue(value, 'txt', mapping.exportDecimals));
     });
 
     rows.push(row.join('|'));
@@ -227,65 +238,15 @@ export function exportToTXT<T>(data: T[], mappings: readonly FieldMapping[]): st
 }
 
 /**
- * Factory function to create export functions
+ * Factory para crear funciones de export. Solo expone CSV/TXT —
+ * cualquier otro formato (JSON, delimitador custom, batch) se agregará si
+ * aparece un consumidor real, no como API especulativa.
  */
 export function createExporter<T>(mappings: readonly FieldMapping[]) {
   return {
     toCSV: (data: T[]) => exportToCSV(data, mappings),
-    toTXT: (data: T[]) => exportToTXT(data, mappings),
-
-    // Future formats can be added here
-    toJSON: (data: T[]) => JSON.stringify(data, null, 2),
-
-    // Export with custom delimiter
-    toDelimited: (data: T[], delimiter: string) => {
-      if (!data || data.length === 0) return '';
-
-      // Filter out columns marked as excludeFromExport
-      const exportMappings = mappings.filter((m) => !m.excludeFromExport);
-
-      const headers = exportMappings.map((m) => m.sunatHeader);
-      const rows = [headers.join(delimiter)];
-
-      data.forEach((item) => {
-        const row = exportMappings.map((mapping) => {
-          let value: unknown = '';
-          if (mapping.tsField && mapping.tsField in (item as object)) {
-            value = (item as Record<string, unknown>)[mapping.tsField];
-          } else if (mapping.defaultValue !== undefined) {
-            value = mapping.defaultValue;
-          }
-          return formatExportValue(value, 'txt');
-        });
-        rows.push(row.join(delimiter));
-      });
-
-      return rows.join('\n');
-    }
+    toTXT: (data: T[]) => exportToTXT(data, mappings)
   };
-}
-
-/**
- * Batch export multiple datasets
- */
-export interface ExportDataset<T> {
-  name: string;
-  data: T[];
-  mappings: FieldMapping[];
-}
-
-export function batchExport<T>(datasets: ExportDataset<T>[], format: 'csv' | 'txt'): Record<string, string> {
-  const results: Record<string, string> = {};
-
-  datasets.forEach((dataset) => {
-    if (format === 'csv') {
-      results[dataset.name] = exportToCSV(dataset.data, dataset.mappings);
-    } else {
-      results[dataset.name] = exportToTXT(dataset.data, dataset.mappings);
-    }
-  });
-
-  return results;
 }
 
 // ============================================================================
