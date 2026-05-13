@@ -1,41 +1,53 @@
 import React, { useMemo } from 'react';
 import type { Table } from '@tanstack/react-table';
 import { TableFooter, TableRow, TableCell } from '@/shared/components/ui/table';
+import { DevProfiler } from '@/shared/lib/utils/perf-debug';
 
-/**
- * Configuration for footer column totals
- */
 export interface FooterTotalConfig {
-  /** Column ID to display the total */
   columnId: string;
-  /** Label to display (e.g., "TOTAL", "Total registros") */
   label?: string;
-  /** Function to calculate the total value from data */
   calculate: (data: unknown[]) => number;
-  /** Number of decimal places to show (default: 2) */
   decimals?: number;
 }
 
-/**
- * Data Table Footer Props
- */
 interface DataTableFooterProps<TData> {
   table: Table<TData>;
-  /** Configuration for columns that should display totals */
   totalsConfig?: FooterTotalConfig[];
 }
 
-/**
- * Data Table Footer Component
- * Displays table footer with summary information and column totals
- */
-export function DataTableFooter<TData>({ table, totalsConfig }: DataTableFooterProps<TData>) {
-  const totalRows = table.getFilteredRowModel().rows.length;
+function DataTableFooterInner<TData>({ table, totalsConfig }: DataTableFooterProps<TData>) {
+  // TanStack memoiza getFilteredRowModel() — el ref de `rows` solo cambia cuando
+  // realmente cambian datos/filtros/orden. Lo usamos como dep estable del useMemo
+  // en vez de `.map(r => r.original)` que asignaba un array fresco cada render
+  // y rompía el cache → con muchas filas y muchos re-renders del padre (botones
+  // del header cambiando isImporting/isExporting/selectedRows) costaba segundos.
+  const rows = table.getFilteredRowModel().rows;
+  const totalRows = rows.length;
   const allColumns = table.getAllColumns();
   const visibleColumns = table.getVisibleLeafColumns();
-  const data = table.getFilteredRowModel().rows.map((row) => row.original);
 
-  // If no totals config provided, show simple footer
+  // El ref de `rows` viene memoizado por TanStack — solo cambia cuando cambian
+  // filtros/orden/datos. La regla preserve-manual-memoization no puede probarlo
+  // estáticamente, pero el test de regresión en __tests__/DataTableFooter.test.tsx
+  // verifica en runtime que calculate() no se re-ejecuta entre renders cuando
+  // las filas son estables.
+  /* eslint-disable react-hooks/preserve-manual-memoization */
+  const totalsMap = useMemo(() => {
+    const map = new Map<string, { label?: string; value: number; decimals: number }>();
+    if (!totalsConfig || totalsConfig.length === 0) return map;
+    const data = rows.map((row) => row.original);
+    for (const config of totalsConfig) {
+      const total = config.calculate(data);
+      map.set(config.columnId, {
+        label: config.label,
+        value: total,
+        decimals: config.decimals ?? 2
+      });
+    }
+    return map;
+  }, [rows, totalsConfig]);
+  /* eslint-enable react-hooks/preserve-manual-memoization */
+
   if (!totalsConfig || totalsConfig.length === 0) {
     return (
       <TableFooter>
@@ -54,23 +66,6 @@ export function DataTableFooter<TData>({ table, totalsConfig }: DataTableFooterP
     );
   }
 
-  // Memoize expensive totals calculations - only recalculate when data changes
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const totalsMap = useMemo(() => {
-    const map = new Map<string, { label?: string; value: number; decimals: number }>();
-
-    for (const config of totalsConfig) {
-      const total = config.calculate(data);
-      map.set(config.columnId, {
-        label: config.label,
-        value: total,
-        decimals: config.decimals ?? 2
-      });
-    }
-
-    return map;
-  }, [data, totalsConfig]);
-
   return (
     <TableFooter>
       <TableRow className="hover:bg-primary">
@@ -78,12 +73,10 @@ export function DataTableFooter<TData>({ table, totalsConfig }: DataTableFooterP
           const columnId = column.id;
           const totalInfo = totalsMap.get(columnId);
 
-          // First column (checkbox/select) - empty
           if (index === 0) {
             return <TableCell key={columnId} className="text-xs font-semibold text-primary-foreground"></TableCell>;
           }
 
-          // Second column shows "TOTAL" label
           if (index === 1) {
             return (
               <TableCell key={columnId} className="text-xs font-semibold text-primary-foreground">
@@ -92,7 +85,6 @@ export function DataTableFooter<TData>({ table, totalsConfig }: DataTableFooterP
             );
           }
 
-          // Third column shows record count
           if (index === 2) {
             return (
               <TableCell key={columnId} className="text-xs font-semibold text-primary-foreground">
@@ -101,12 +93,9 @@ export function DataTableFooter<TData>({ table, totalsConfig }: DataTableFooterP
             );
           }
 
-          // Columns with totals show calculated values (only if > 0)
           if (totalInfo) {
-            // Handle both number and string values
             const numValue = typeof totalInfo.value === 'number' ? totalInfo.value : Number(totalInfo.value);
 
-            // Only display if total is greater than 0
             if (!isNaN(numValue) && numValue > 0) {
               const displayValue = numValue.toFixed(totalInfo.decimals);
 
@@ -118,14 +107,20 @@ export function DataTableFooter<TData>({ table, totalsConfig }: DataTableFooterP
               );
             }
 
-            // If total is 0, show empty cell
             return <TableCell key={columnId} className="text-xs text-primary-foreground" />;
           }
 
-          // Empty cells for other columns
           return <TableCell key={columnId} className="text-xs text-primary-foreground" />;
         })}
       </TableRow>
     </TableFooter>
+  );
+}
+
+export function DataTableFooter<TData>(props: DataTableFooterProps<TData>) {
+  return (
+    <DevProfiler id="DataTableFooter">
+      <DataTableFooterInner {...props} />
+    </DevProfiler>
   );
 }

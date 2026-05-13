@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Search, X } from 'lucide-react';
 import type { Table } from '@tanstack/react-table';
 import { Input } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
 import { Badge } from '@/shared/components/ui/badge';
+import { useDebouncedValue } from '@/shared/lib/utils/use-debounced-value';
 
 /**
  * Data Table Toolbar Props
@@ -27,7 +28,32 @@ export function DataTableToolbar<TData>({
   selectedRows,
   onDiscardSelected
 }: DataTableToolbarProps<TData>) {
+  // Local input state to keep typing responsive on slower machines.
+  // We propagate to the table's global filter only after 300ms of inactivity.
+  const [inputValue, setInputValue] = useState(globalFilter);
+  const debounced = useDebouncedValue(inputValue, 300);
+
+  useEffect(() => {
+    if (debounced !== globalFilter) {
+      setGlobalFilter(debounced);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debounced]);
+
+  // Keep local state in sync when the parent resets the filter (e.g. on data import).
+  useEffect(() => {
+    if (globalFilter !== inputValue && globalFilter === '') {
+      setInputValue('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [globalFilter]);
+
   const isFiltered = globalFilter.length > 0;
+
+  const handleClear = () => {
+    setInputValue('');
+    setGlobalFilter('');
+  };
 
   return (
     <div className="flex items-center justify-between gap-4 border-b bg-muted/30 px-4 py-3">
@@ -37,15 +63,15 @@ export function DataTableToolbar<TData>({
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Buscar en la tabla..."
-            value={globalFilter}
-            onChange={(e) => setGlobalFilter(e.target.value)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
             className="pl-9 pr-9"
           />
-          {isFiltered && (
+          {inputValue.length > 0 && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => setGlobalFilter('')}
+              onClick={handleClear}
               className="absolute right-1 top-1/2 h-7 w-7 -translate-y-1/2 p-0"
             >
               <X className="h-4 w-4" />
