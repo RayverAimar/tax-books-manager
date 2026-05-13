@@ -54,8 +54,13 @@ export class DatabaseService {
    */
   private async doInitialize(): Promise<void> {
     try {
-      // Load SQLite database
-      this.db = await Database.load('sqlite:registro_libros.db');
+      // DB separada para dev vs prod. Ambas viven en el mismo app data dir
+      // (Tauri usa el bundle identifier para resolver la ruta), pero con nombres
+      // distintos para que `pnpm tauri dev` no toque la base de tu app instalada
+      // de production. Cero impacto sobre updates: el binario se reemplaza pero
+      // el archivo .db queda intacto en su lugar.
+      const dbName = import.meta.env.DEV ? 'registro_libros_dev.db' : 'registro_libros.db';
+      this.db = await Database.load(`sqlite:${dbName}`);
 
       // Enable foreign keys and optimize for performance
       await this.execute('PRAGMA foreign_keys = ON');
