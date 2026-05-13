@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from '@/shared/components/ui/alert';
 import { useCompany } from '@/core/presentation/contexts/company.context';
 import { SettingsRepository } from '@/core/infrastructure/repositories/settings.repository';
 import { ApiPeruService } from '@/core/services/api-peru.service';
-import { toast } from 'sonner';
+import { showSuccess, showError } from '@/shared/lib/utils/toast';
 import type { CreateCompanyDto } from '@/core/domain/entities/company.entity';
 
 interface AddCompanyFlowProps {
@@ -105,7 +105,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
       const settingsRepo = new SettingsRepository();
       await settingsRepo.setApiKey(state.apiKey.trim());
 
-      toast.success('API Key guardada correctamente');
+      showSuccess('API Key guardada correctamente');
 
       setState((prev) => ({
         ...prev,
@@ -114,7 +114,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
         step: 2
       }));
     } catch {
-      toast.error('Error al guardar la API Key');
+      showError('Error al guardar la API Key');
       setState((prev) => ({ ...prev, savingApiKey: false }));
     }
   };
@@ -144,7 +144,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
       const apiKey = await settingsRepo.getApiKey();
 
       if (!apiKey) {
-        toast.error('No se ha configurado una API Key');
+        showError('No se ha configurado una API Key');
         setState((prev) => ({ ...prev, isLoadingRuc: false }));
         return;
       }
@@ -156,10 +156,10 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
         businessName: result.razon_social,
         isLoadingRuc: false
       }));
-      toast.success('Razón social encontrada');
+      showSuccess('Razón social encontrada');
     } catch {
       setState((prev) => ({ ...prev, isLoadingRuc: false }));
-      toast.error('Error al buscar el RUC. Por favor, ingrese la razón social manualmente.');
+      showError('Error al buscar el RUC. Por favor, ingrese la razón social manualmente.');
     }
   }, [state.ruc]);
 
@@ -212,17 +212,16 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
         showSuccess: true
       }));
 
-      toast.success('Empresa registrada correctamente');
+      showSuccess('Empresa registrada correctamente');
 
       // Complete after animation
       setTimeout(() => {
         onComplete();
       }, 2000);
-    } catch (error: any) {
+    } catch (error) {
       setState((prev) => ({ ...prev, isRegistering: false }));
 
-      // Convert error to string for checking
-      const errorMessage = error?.message || String(error);
+      const errorMessage = error instanceof Error ? error.message : String(error);
 
       // Handle duplicate RUC error
       if (
@@ -233,7 +232,7 @@ export const AddCompanyFlow: React.FC<AddCompanyFlowProps> = ({ onComplete, onCa
       ) {
         setErrors({ ruc: 'Este RUC ya está registrado en el sistema' });
       } else {
-        toast.error('Error al registrar la empresa');
+        showError('Error al registrar la empresa');
       }
     }
   };

@@ -145,8 +145,27 @@ export interface SunatSalesFields {
   /** DAM / CP reference - CSV Column 39 */
   damCp: string | null;
 
-  /** Free-use field for custom data - CSV Column 40 */
+  /** Free-use field for custom data (PLE clásico, conservado por compatibilidad) */
   freeUseField: string | null;
+
+  // Free-Use Fields SIRE (CLU1-CLU17) - posiciones 34 a 50 del RVIE
+  freeUseField1: string | null;
+  freeUseField2: string | null;
+  freeUseField3: string | null;
+  freeUseField4: string | null;
+  freeUseField5: string | null;
+  freeUseField6: string | null;
+  freeUseField7: string | null;
+  freeUseField8: string | null;
+  freeUseField9: string | null;
+  freeUseField10: string | null;
+  freeUseField11: string | null;
+  freeUseField12: string | null;
+  freeUseField13: string | null;
+  freeUseField14: string | null;
+  freeUseField15: string | null;
+  freeUseField16: string | null;
+  freeUseField17: string | null;
 }
 
 /**

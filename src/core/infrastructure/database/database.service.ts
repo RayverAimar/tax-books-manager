@@ -209,7 +209,7 @@ export class DatabaseService {
   /**
    * Executes a SQL query
    */
-  async execute(query: string, params: any[] = []): Promise<QueryResult> {
+  async execute(query: string, params: unknown[] = []): Promise<QueryResult> {
     if (!this.db) {
       throw new Error('Database not initialized');
     }
@@ -219,7 +219,7 @@ export class DatabaseService {
   /**
    * Selects data from the database
    */
-  async select<T = any>(query: string, params: any[] = []): Promise<T[]> {
+  async select<T = unknown>(query: string, params: unknown[] = []): Promise<T[]> {
     if (!this.db) {
       throw new Error('Database not initialized');
     }
@@ -233,91 +233,70 @@ export class DatabaseService {
     // Wait if database is busy
     const maxRetries = 5;
     let retries = 0;
-    let lastError: any;
+    let lastError: unknown;
 
     while (retries < maxRetries) {
+      this.transactionDepth++;
+
       try {
-        this.transactionDepth++;
-
-        try {
-          if (this.transactionDepth === 1) {
-            // Use IMMEDIATE to avoid lock conflicts
-            await this.execute('BEGIN IMMEDIATE');
-          } else {
-            await this.execute(`SAVEPOINT sp_${this.transactionDepth}`);
-          }
-
-          const result = await callback();
-
-          if (this.transactionDepth === 1) {
-            await this.execute('COMMIT');
-          } else {
-            await this.execute(`RELEASE SAVEPOINT sp_${this.transactionDepth}`);
-          }
-
-          this.transactionDepth--;
-          return result;
-        } catch (error: any) {
-          // Always try to rollback on error, but check if transaction is active
-          try {
-            // Check if we have an active transaction before attempting rollback
-            if (this.transactionDepth > 0) {
-              if (this.transactionDepth === 1) {
-                // Check if transaction is actually active before rollback
-                try {
-                  // Test if we're in a transaction by trying a harmless operation
-                  await this.execute('SELECT 1');
-                  await this.execute('ROLLBACK');
-                } catch (testError: any) {
-                  // If the test fails, transaction is likely already rolled back
-                  // Silently ignore "cannot rollback" errors
-                  if (
-                    !testError?.message?.includes('cannot rollback') &&
-                    !testError?.message?.includes('no transaction is active')
-                  ) {
-                    // Re-throw if it's a different error
-                    throw testError;
-                  }
-                  // Transaction was already rolled back - this is expected, don't log
-                }
-              } else {
-                await this.execute(`ROLLBACK TO SAVEPOINT sp_${this.transactionDepth}`);
-              }
-            }
-          } catch {
-            // Silently ignore all rollback errors - they are expected in various scenarios:
-            // 1. Transaction was already rolled back automatically
-            // 2. No transaction is active
-            // 3. Database locked situations
-            // The important thing is we tried to rollback, but if it fails it's usually
-            // because the transaction is already gone
-
-            // Reset transaction depth on any rollback failure
-            this.transactionDepth = 0;
-          }
-
-          this.transactionDepth = Math.max(0, this.transactionDepth - 1);
-
-          // Check if it's a database locked error
-          if (error?.message?.includes('database is locked')) {
-            lastError = error;
-            retries++;
-            // Exponential backoff
-            const delay = Math.min(100 * Math.pow(2, retries), 2000);
-            await new Promise((resolve) => setTimeout(resolve, delay));
-            continue; // Retry the transaction
-          }
-
-          throw error;
+        if (this.transactionDepth === 1) {
+          await this.execute('BEGIN IMMEDIATE');
+        } else {
+          await this.execute(`SAVEPOINT sp_${this.transactionDepth}`);
         }
-      } catch (error) {
-        if (retries >= maxRetries - 1) {
-          throw lastError || error;
+
+        const result = await callback();
+
+        if (this.transactionDepth === 1) {
+          await this.execute('COMMIT');
+        } else {
+          await this.execute(`RELEASE SAVEPOINT sp_${this.transactionDepth}`);
         }
+
+        this.transactionDepth--;
+        return result;
+      } catch (error: unknown) {
+        await this.attemptRollback();
+        this.transactionDepth = Math.max(0, this.transactionDepth - 1);
+
+        // Only retry on database-is-locked errors. Any other error propagates.
+        if (errorMessage(error).includes('database is locked')) {
+          lastError = error;
+          retries++;
+          const delay = Math.min(100 * Math.pow(2, retries), 2000);
+          await new Promise((resolve) => setTimeout(resolve, delay));
+          continue;
+        }
+
+        throw error;
       }
     }
 
-    throw new Error(`Transaction failed after ${maxRetries} attempts: ${lastError?.message}`);
+    throw new Error(`Transaction failed after ${maxRetries} attempts: ${errorMessage(lastError)}`);
+  }
+
+  /**
+   * Best-effort rollback. Swallows errors that simply mean the transaction is
+   * already gone (rolled back automatically, never started, etc.).
+   */
+  private async attemptRollback(): Promise<void> {
+    if (this.transactionDepth <= 0) return;
+    try {
+      if (this.transactionDepth === 1) {
+        await this.execute('ROLLBACK');
+      } else {
+        await this.execute(`ROLLBACK TO SAVEPOINT sp_${this.transactionDepth}`);
+      }
+    } catch (rbErr) {
+      const msg = errorMessage(rbErr);
+      if (!msg.includes('cannot rollback') && !msg.includes('no transaction is active')) {
+        // Log unexpected rollback failures but do not throw — the original
+        // error is more useful to surface.
+         
+        console.warn('[DB] Rollback failed:', msg);
+      }
+      this.transactionDepth = 0;
+    }
   }
 
   /**
@@ -338,4 +317,16 @@ export class DatabaseService {
     await this.execute('VACUUM');
     await this.execute('ANALYZE');
   }
+}
+
+/**
+ * Safely extracts an error message from an unknown thrown value.
+ */
+function errorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'object' && error !== null && 'message' in error) {
+    const msg = (error as { message: unknown }).message;
+    return typeof msg === 'string' ? msg : String(msg);
+  }
+  return String(error ?? '');
 }

@@ -9,6 +9,7 @@ import {
   removeStorageValue,
   StorageKeys
 } from '@/shared/lib/storage/local-storage';
+import { resetInvoiceIdCounter } from '@/shared/lib/utils/invoice';
 
 /**
  * Company context state
@@ -137,8 +138,9 @@ export const CompanyProvider: React.FC<CompanyProviderProps> = ({ children }) =>
 
       try {
         setError(null);
-        // Save to localStorage only
         setActiveCompanyId(companyId);
+        // Any unsaved (negative) ids from the previous company are now unreachable.
+        resetInvoiceIdCounter();
         const newCompany = await repository.getById(companyId);
         setCompany(newCompany);
       } catch (err) {

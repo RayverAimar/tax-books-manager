@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { WelcomeStep } from '../components/WelcomeStep';
 import { CompanyRegistrationStep } from '../components/CompanyRegistrationStep';
 import { useCompany } from '@/core/presentation/contexts/company.context';
-import { useToast } from '@/shared/hooks/useToast';
+import { showSuccess, showError } from '@/shared/lib/utils/toast';
 import { CheckCircle } from 'lucide-react';
 import type { CreateCompanyDto } from '@/core/domain/entities/company.entity';
 
@@ -23,7 +23,6 @@ interface OnboardingState {
  */
 export const OnboardingFlow: React.FC<{ onComplete: () => void }> = ({ onComplete }) => {
   const { createCompany } = useCompany();
-  const { toast } = useToast();
   const [state, setState] = useState<OnboardingState>({
     step: 1,
     isRegistering: false,
@@ -56,41 +55,35 @@ export const OnboardingFlow: React.FC<{ onComplete: () => void }> = ({ onComplet
           showSuccess: true
         }));
 
-        // Show success toast
-        toast({
-          title: '¡Empresa registrada!',
-          description: `${data.businessName} se ha registrado exitosamente.`,
-          variant: 'success'
+        showSuccess('¡Empresa registrada!', {
+          description: `${data.businessName} se ha registrado exitosamente.`
         });
 
         // Wait for animation and then complete
         setTimeout(() => {
           onComplete();
         }, 2000);
-      } catch (error: any) {
+      } catch (error: unknown) {
         setState((prev) => ({ ...prev, isRegistering: false }));
 
-        // Check for duplicate company error
-        if (
-          error?.message?.includes('UNIQUE constraint failed') ||
-          error?.message?.includes('already exists') ||
-          error?.message?.includes('duplicate')
-        ) {
-          toast({
-            title: 'Empresa ya registrada',
-            description: 'Esta empresa ya existe en el sistema. Por favor, verifica el RUC ingresado.',
-            variant: 'destructive'
+        const message = error instanceof Error ? error.message : '';
+        const isDuplicate =
+          message.includes('UNIQUE constraint failed') ||
+          message.includes('already exists') ||
+          message.includes('duplicate');
+
+        if (isDuplicate) {
+          showError('Empresa ya registrada', {
+            description: 'Esta empresa ya existe en el sistema. Por favor, verifica el RUC ingresado.'
           });
         } else {
-          toast({
-            title: 'Error al registrar empresa',
-            description: 'Ocurrió un problema al registrar la empresa. Por favor, intenta nuevamente.',
-            variant: 'destructive'
+          showError('Error al registrar empresa', {
+            description: 'Ocurrió un problema al registrar la empresa. Por favor, intenta nuevamente.'
           });
         }
       }
     },
-    [createCompany, toast, onComplete]
+    [createCompany, onComplete]
   );
 
   /**

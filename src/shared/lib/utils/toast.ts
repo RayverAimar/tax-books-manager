@@ -111,6 +111,34 @@ export function showExportCancelled() {
  * Show export error toast
  */
 export function showExportError(error: unknown) {
+  // Caso especial: SireValidationError (PVSIRE-parity).
+  // Estructura: validation.rowResults = [{ row, result: { errors: [{field, code, message}] }}]
+  if (error instanceof Error && error.name === 'SireValidationError') {
+    type PvsireIssue = { field: string; code: number; position?: number; message: string };
+    type PvsireRowResult = { row: number; result: { ok: boolean; errors: PvsireIssue[] } };
+    type PvsireValidation = { totalErrors: number; rowResults: PvsireRowResult[] };
+    const validation = (error as Error & { validation?: PvsireValidation }).validation;
+    if (validation && validation.totalErrors > 0) {
+      // Aplanar errores: tomar primeros 3 de filas con errores
+      const lines: string[] = [];
+      let count = 0;
+      for (const { row, result } of validation.rowResults) {
+        if (!result.ok) {
+          for (const e of result.errors) {
+            if (count >= 3) break;
+            lines.push(`Fila ${row} • ${e.field} (PVSIRE ${e.code}): ${e.message}`);
+            count++;
+          }
+        }
+        if (count >= 3) break;
+      }
+      const more = validation.totalErrors - count;
+      if (more > 0) lines.push(`...y ${more} errores más`);
+      return showError(`Validación PVSIRE: ${validation.totalErrors} errores`, {
+        description: lines.join('\n')
+      });
+    }
+  }
   const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
   return showError('Error al generar el archivo', {
     description: errorMessage
