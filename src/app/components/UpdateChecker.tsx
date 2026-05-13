@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 import { Download, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { check, type Update } from '@tauri-apps/plugin-updater';
 import { relaunch } from '@tauri-apps/plugin-process';
 import { getVersion } from '@tauri-apps/api/app';
@@ -105,31 +103,12 @@ export function UpdateChecker() {
           </DialogDescription>
         </DialogHeader>
 
-        {update.body && (
-          <div className="my-2 max-h-48 overflow-y-auto rounded-md border bg-muted/30 p-3">
-            {/* Notas vienen como markdown desde el body del release. Render con
-                react-markdown — sin allowDangerousHtml, así que solo elementos
-                estándar (headers, listas, links, énfasis) y nada de HTML raw. */}
-            <div
-              className={
-                'prose prose-sm max-w-none text-xs text-muted-foreground ' +
-                '[&_h1]:mb-1 [&_h1]:mt-0 [&_h1]:text-sm [&_h1]:font-semibold [&_h1]:text-foreground ' +
-                '[&_h2]:mb-1 [&_h2]:mt-2 [&_h2]:text-xs [&_h2]:font-semibold [&_h2]:text-foreground ' +
-                '[&_h3]:mb-0.5 [&_h3]:mt-1.5 [&_h3]:text-xs [&_h3]:font-medium [&_h3]:text-foreground ' +
-                '[&_p]:my-1 [&_ul]:my-1 [&_ul]:list-disc [&_ul]:pl-4 [&_li]:my-0 ' +
-                '[&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:py-0.5 [&_code]:text-[10px] ' +
-                '[&_a]:text-primary [&_a]:underline ' +
-                '[&_table]:my-2 [&_table]:w-full [&_table]:border-collapse [&_table]:text-[11px] ' +
-                '[&_th]:border [&_th]:border-border [&_th]:bg-muted [&_th]:px-2 [&_th]:py-1 ' +
-                '[&_th]:text-left [&_th]:font-semibold [&_th]:text-foreground ' +
-                '[&_td]:border [&_td]:border-border [&_td]:px-2 [&_td]:py-1 ' +
-                '[&_hr]:my-2 [&_hr]:border-border'
-              }
-            >
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{update.body}</ReactMarkdown>
-            </div>
-          </div>
-        )}
+        {/* Diseñado para usuarios finales (contadores), no devs.
+            No mostramos changelog / commit logs / install instructions:
+            el botón "Actualizar ahora" hace todo automáticamente. */}
+        <p className="my-2 text-sm text-muted-foreground">
+          La aplicación se actualizará automáticamente. Guarda los cambios abiertos antes de continuar.
+        </p>
 
         {stage === 'downloading' && (
           <div className="space-y-2">

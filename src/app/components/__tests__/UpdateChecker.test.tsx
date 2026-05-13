@@ -39,7 +39,8 @@ describe('UpdateChecker', () => {
     await waitFor(() => expect(screen.getByText('Nueva versión disponible')).toBeInTheDocument());
     expect(screen.getByText(/v0\.1\.0/)).toBeInTheDocument();
     expect(screen.getByText(/v0\.2\.0/)).toBeInTheDocument();
-    expect(screen.getByText(/SIRE validation/)).toBeInTheDocument();
+    // No mostramos el body / changelog — diseñado para usuarios finales.
+    expect(screen.getByText(/se actualizará automáticamente/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /actualizar ahora/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /más tarde/i })).toBeInTheDocument();
   });
